@@ -19,4 +19,25 @@ Then el repartidor debe ser considerado para asignación
 Scenario: Repartidor en entrega no disponible
 Given un repartidor en estado EN_ENTREGA
 When el sistema evaluá disponibilidad
+<<<<<<< Updated upstream
 Then el repartidor no debe ser considerado
+=======
+Then el repartidor no debe ser considerado
+```
+-----------------------------------------------------------------------------
+## HU2 - Filtrar repartidores por cercanía 
+
+**Como** sistema de asignación \
+**Quiero** filtrar repartidores dentro de un radio determinado \
+**Para** considerar solo candidatos cercanos 
+
+### Criterios de aceptación 
+
+```gherkin 
+Feature: Filtrado por distancia
+
+Scenario: Repartidores dentro del radio
+Given repartidores con coordenadas
+When el sistema calcula la distacia al restaurante
+Then solo debe considerar los que están dentro del radio permitido
+>>>>>>> Stashed changes
