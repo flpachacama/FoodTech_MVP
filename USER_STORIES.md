@@ -129,8 +129,8 @@ Then su estado debe cambiar a EN_ENTREGA
 -----------------------------------------------------------------------------
 ## HU7 - Generar pedido
 
-**Como** usuario consumidor
-**Quiero** seleccionar restaurante, comida y generar un pedido
+**Como** usuario consumidor \
+**Quiero** seleccionar restaurante, comida y generar un pedido \
 **Para** solicitar la entrega a mi ubicación
 
 ### Criterios de aceptación
@@ -184,8 +184,8 @@ Then el sistema debe mostrar los restaurantes en sus respectivas ubicaciones
 -----------------------------------------------------------------------------
 ## HU10 - Seleccionar restaurantes
 
-**Como** usuario consumidor
-**Quiero** seleccionar un restaurante en el mapa
+**Como** usuario consumidor \
+**Quiero** seleccionar un restaurante en el mapa \
 **Para** poder ver su menú y realizar un pedido
 
 ### Criterios de aceptación
@@ -201,8 +201,8 @@ Then el sistema debe mostrar la información del restaurante seleccionado
 -----------------------------------------------------------------------------
 ## HU11 - Mostrar tiempo estimado de entrega
 
-**Como** usuario consumidor
-**Quiero** ver el tiempo estimado de entrega
+**Como** usuario consumidor \
+**Quiero** ver el tiempo estimado de entrega \
 **Para** saber cuándo llegará mi pedido
 
 ### Criterios de aceptación
@@ -221,8 +221,8 @@ Then debe mostrar un tiempo estimado al usuario
 -----------------------------------------------------------------------------
 ## HU12 - Visualizar pedido asignado
 
-**Como** repartidor
-**Quiero** ver el pedido asignado
+**Como** repartidor \
+**Quiero** ver el pedido asignado \
 **Para** poder realizar la entrega
 
 ### Criterios de aceptación
@@ -236,3 +236,19 @@ When accede a su interfaz
 Then debe visualizar los detalles del pedido
 ```
 -----------------------------------------------------------------------------
+## HU13 - Marcar pedido como entregado
+
+**Como** repartidor \
+**Quiero** marcar el pedido como entregado \
+**Para** finalizar la entrega
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Finalización de entrega
+
+Scenario: Marcar pedido como entregado
+Given un pedido en curso
+When el repartidor presiona "Entregado"
+Then el pedido debe cambiar a estado completado
+```
