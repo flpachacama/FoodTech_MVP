@@ -215,5 +215,24 @@ Given un pedido asignado
 When el sistema calcula el tiempo
 Then debe mostrar un tiempo estimado al usuario
 ```
-   -----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+# FASE 5 - Interfaz del repartidor
 
+-----------------------------------------------------------------------------
+## HU12 - Visualizar pedido asignado
+
+**Como** repartidor
+**Quiero** ver el pedido asignado
+**Para** poder realizar la entrega
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Vista repartidor
+
+Scenario: Mostrar pedido asignado
+Given un repartidor con pedido asignado
+When accede a su interfaz
+Then debe visualizar los detalles del pedido
+```
+-----------------------------------------------------------------------------
