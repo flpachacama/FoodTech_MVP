@@ -145,3 +145,20 @@ When confirma el pedido
 Then el sistema debe registrar la orden correctamente
 ```
 -----------------------------------------------------------------------------
+## HU8 - Cancelar pedido
+
+**Como** usuario consumidor \
+**Quiero** cancelar un pedido \
+**Para** evitar que sea procesado
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Cancelación de pedido
+
+Scenario: Cancelar pedido antes de asignación
+Given que el usuario tiene un pedido activo
+When el usuario cancela el pedido
+Then el sistema debe marcar el pedido como cancelado
+```
+-----------------------------------------------------------------------------
