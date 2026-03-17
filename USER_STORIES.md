@@ -162,3 +162,22 @@ When el usuario cancela el pedido
 Then el sistema debe marcar el pedido como cancelado
 ```
 -----------------------------------------------------------------------------
+# FASE 4 - Interfaz de usuario consumidor
+
+-----------------------------------------------------------------------------
+## HU9 - Visualizar restaurantes en el mapa
+
+**Como** usurio consumidor \
+**Quiero** visualizar los restaurantes disponibles en un mapa \
+**Para** poder seleccionar uno y realizar un pedido
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Visualización de restaurantes
+
+Scenario: Mostrar restaurantes en el mapa
+Given que existen restaurantes con coordenadas predefinidas
+When el usuario accede al mapa
+Then el sistema debe mostrar los restaurantes en sus respectivas ubicaciones
+```
