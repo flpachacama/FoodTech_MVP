@@ -22,9 +22,13 @@ Nuestro objetivo es ser la plataforma con tiempos de entrega y asignación de pe
 6. Cambio de estado del repartidor al asignar.
 7. Validación en todo el mapa del repartidor más cercano.
 8. El usuario consumidor podrá seleccionar restaurante, seleccionar comida, generar esa orden, cancelar la orden.
+9. Manejo de tiempos(estimación por distancia y vehiculo), para mostrar a los clientes.
+10. Interfaz para repartidor. Solo vista de lo que fue asignado y botón de entregado.
 ### Out 
 1. LOGIN/REGISTER
 2. GPS y API clima
 3. El repartidor pueda rechazar el pedido
 4. Multiples pedidos para un repartidor
 5. Seguimiento en tiempo real
+6. Notificaciones push
+7. Estimación dinámica del tráfico
