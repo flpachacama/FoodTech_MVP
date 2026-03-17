@@ -1,11 +1,12 @@
-### FASE 1 - Bases del proyecto (Modelo y reglas base)
+# FASE 1 - Bases del proyecto (Modelo y reglas base)
 
-### HU1 - Gestionar estado de repartidores
+-----------------------------------------------------------------------------
+## HU1 - Gestionar estado de repartidores
 
 **Como** sistema \
 **Quiero** manejar estados de repartidores (ACTIVO, INACTIVO, EN_ENTREGA) \
 **Para** saber cuáles están disponibles para asignación
------------------------------------------------------------------------------
+
 ### Criterios de aceptación
 
 ```gherkin
@@ -19,9 +20,6 @@ Then el repartidor debe ser considerado para asignación
 Scenario: Repartidor en entrega no disponible
 Given un repartidor en estado EN_ENTREGA
 When el sistema evaluá disponibilidad
-<<<<<<< Updated upstream
-Then el repartidor no debe ser considerado
-=======
 Then el repartidor no debe ser considerado
 ```
 -----------------------------------------------------------------------------
@@ -40,4 +38,29 @@ Scenario: Repartidores dentro del radio
 Given repartidores con coordenadas
 When el sistema calcula la distacia al restaurante
 Then solo debe considerar los que están dentro del radio permitido
->>>>>>> Stashed changes
+```
+-----------------------------------------------------------------------------
+## HU3 - Aplicar restricciones por clima
+
+**Como** sistema de asignación \
+**Quiero** aplicar reglas según el clima \
+**Para** excluir transportes no aptos
+
+### Criterios de aceptación
+
+```gherkin 
+Feature: Restricciones por clima
+
+Scenario: Lluvia fuerte excluye bici y moto
+Given clima Lluvia_Fuerte
+And repartidores con transporte bicicleta y moto
+When el sistema evalúa candidatos
+Then estos repartidores no deben ser considerados
+
+Scenario: Lluvia excluye bici
+Given clima Lluvia
+And repartidores con transporte bicicleta 
+When el sistema evalúa candidatos
+Then estos repartidores no deben ser considerados
+```
+-----------------------------------------------------------------------------
