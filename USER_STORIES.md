@@ -181,3 +181,22 @@ Given que existen restaurantes con coordenadas predefinidas
 When el usuario accede al mapa
 Then el sistema debe mostrar los restaurantes en sus respectivas ubicaciones
 ```
+-----------------------------------------------------------------------------
+## HU10 - Seleccionar restaurantes
+
+**Como** usuario consumidor
+**Quiero** seleccionar un restaurante en el mapa
+**Para** poder ver su menú y realizar un pedido
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Selección de restaurante
+
+Scenario: Seleccionar restaurante desde la UI 
+Given que el usuario visualiza la lista de los restaurantes
+When el usuario selecciona un restaurante
+Then el sistema debe mostrar la información del restaurante seleccionado
+```
+-----------------------------------------------------------------------------
+
