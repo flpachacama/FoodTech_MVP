@@ -84,3 +84,26 @@ When el sistema evalúa distancia y tipo de transporte
 Then debe asignar mayor prioridad el más eficiente
 ```
 -----------------------------------------------------------------------------
+## HU5 - Asignar pedido automáticamente
+
+**Como** sistema de delivery \
+**Quiero** asignar el pedido al mejor repartidor \
+**Para** optimizar el tiempo de entrega
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Asignación de pedidos
+
+Scenario: Asignación exitosa
+Given un pedido pendiente
+And repartidores disponibles
+When el sistema ejecuta el algoritmo
+Then debe asignar el pedido al mejor candidato
+
+Scenario: Sin repartidores disponibles
+Given no hay repartidores válidos
+When el sistema intenta asignar
+Then el pedido debe quedar pendiente
+```
+-----------------------------------------------------------------------------
