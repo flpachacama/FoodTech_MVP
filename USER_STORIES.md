@@ -107,3 +107,18 @@ When el sistema intenta asignar
 Then el pedido debe quedar pendiente
 ```
 -----------------------------------------------------------------------------
+## HU6 - Actualizar estado del repartidor
+
+**Como** sistema \
+**Quiero** cambiar el estado del repartidor a EN_ENTREGA \
+**Para** evitar asignaciones duplicadas
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Cambio de estado
+
+Scenario: Repartidor asignado cambia estado
+Given un repartidor seleccionado 
+When se le asigna un pedido 
+Then su estado debe cambiar a EN_ENTREGA
