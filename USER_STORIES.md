@@ -122,3 +122,26 @@ Scenario: Repartidor asignado cambia estado
 Given un repartidor seleccionado 
 When se le asigna un pedido 
 Then su estado debe cambiar a EN_ENTREGA
+```
+-----------------------------------------------------------------------------
+# FASE 3 - Flujo de pedidos (Core del negocio)
+
+-----------------------------------------------------------------------------
+## HU7 - Generar pedido
+
+**Como** usuario consumidor
+**Quiero** seleccionar restaurante, comida y generar un pedido
+**Para** solicitar la entrega a mi ubicación
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Generación de pedido
+
+Scenario: Crear pedido correctamente
+Given que el usuario ha  seleccionado un restaurante
+And ha seleccionado productos del menú  
+When confirma el pedido
+Then el sistema debe registrar la orden correctamente
+```
+-----------------------------------------------------------------------------
