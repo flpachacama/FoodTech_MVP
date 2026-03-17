@@ -31,6 +31,8 @@ Nuestro objetivo es ser la plataforma con tiempos de entrega y asignación de pe
 9. Manejo de tiempos(estimación por distancia y vehiculo), para mostrar a los clientes.
 10. Interfaz para repartidor. Solo vista de lo que fue asignado y botón de entregado.
 11. El usuario puede agregar varias comidas que ofrezca el restaurante.
+12. Interfaz gráfica del mapa con interacción básica para seleccionar restaurante y hacer pedido.
+
 ### Out 
 1. LOGIN/REGISTER
 2. GPS y API clima
