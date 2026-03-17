@@ -64,3 +64,23 @@ When el sistema evalúa candidatos
 Then estos repartidores no deben ser considerados
 ```
 -----------------------------------------------------------------------------
+# FASE 2 - Lógica del algoritmo
+
+-----------------------------------------------------------------------------
+## HU4 - Calcular prioridad de repartidores
+
+**Como** sistema de asignación \
+**Quiero** priorizar repartidores por distancia y velocidad del transporte \
+**Para** seleccionar el más eficiente
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Priorización de repartidores
+
+Scenario: Selección por mejor combinación
+Given múltiples repartidores candidatos
+When el sistema evalúa distancia y tipo de transporte
+Then debe asignar mayor prioridad el más eficiente
+```
+-----------------------------------------------------------------------------
