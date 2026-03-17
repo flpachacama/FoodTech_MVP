@@ -199,4 +199,21 @@ When el usuario selecciona un restaurante
 Then el sistema debe mostrar la información del restaurante seleccionado
 ```
 -----------------------------------------------------------------------------
+## HU11 - Mostrar tiempo estimado de entrega
+
+**Como** usuario consumidor
+**Quiero** ver el tiempo estimado de entrega
+**Para** saber cuándo llegará mi pedido
+
+### Criterios de aceptación
+
+```gherkin
+Feature: Tiempo Estimado
+
+Scenario: Mostrar tiempo estimado 
+Given un pedido asignado
+When el sistema calcula el tiempo
+Then debe mostrar un tiempo estimado al usuario
+```
+   -----------------------------------------------------------------------------
 
