@@ -23,3 +23,8 @@ Nuestro objetivo es ser la plataforma con tiempos de entrega y asignación de pe
 7. Validación en todo el mapa del repartidor más cercano.
 8. El usuario consumidor podrá seleccionar restaurante, seleccionar comida, generar esa orden, cancelar la orden.
 ### Out 
+1. LOGIN/REGISTER
+2. GPS y API clima
+3. El repartidor pueda rechazar el pedido
+4. Multiples pedidos para un repartidor
+5. Seguimiento en tiempo real
