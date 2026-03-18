@@ -163,7 +163,7 @@ Then el estado del repartidor debe cambiar a ACTIVO
 ## HU7 - Generar pedido
 
 **Como** usuario consumidor \
-**Quiero** seleccionar restaurante, comida y generar un pedido \
+**Quiero** se \
 **Para** solicitar la entrega a mi ubicación
 
 ### Criterios de aceptación
@@ -172,8 +172,9 @@ Then el estado del repartidor debe cambiar a ACTIVO
 Feature: Generación de pedido
 
 Scenario: Crear pedido correctamente
-Given que el usuario ha  seleccionado un restaurante
+Given que el usuario ha seleccionado un restaurante
 And ha seleccionado productos del menú  
+And ha diligenciado su ubicación 
 When confirma el pedido
 Then el sistema debe registrar la orden correctamente
 ```
@@ -198,38 +199,30 @@ Then el sistema debe marcar el pedido como cancelado
 # FASE 4 - Interfaz de usuario consumidor
 
 -----------------------------------------------------------------------------
-## HU9 - Visualizar restaurantes en el mapa
-
-**Como** usurio consumidor \
-**Quiero** visualizar los restaurantes disponibles en un mapa \
-**Para** poder seleccionar uno y realizar un pedido
-
-### Criterios de aceptación
-
-```gherkin
-Feature: Visualización de restaurantes
-
-Scenario: Mostrar restaurantes en el mapa
-Given que existen restaurantes con coordenadas predefinidas
-When el usuario accede al mapa
-Then el sistema debe mostrar los restaurantes en sus respectivas ubicaciones
-```
------------------------------------------------------------------------------
-## HU10 - Seleccionar restaurantes
+## HU9 - Visualizar y seleccionar restaurante
 
 **Como** usuario consumidor \
-**Quiero** seleccionar un restaurante en el mapa \
-**Para** poder ver su menú y realizar un pedido
+**Quiero** ver los restaurantes disponibles en el mapa y seleccionar uno \
+**Para** ver su menú 
 
 ### Criterios de aceptación
-
 ```gherkin
-Feature: Selección de restaurante
+Feature: Visualización y selección de un restaurante
 
-Scenario: Seleccionar restaurante desde la UI 
-Given que el usuario visualiza la lista de los restaurantes
-When el usuario selecciona un restaurante
-Then el sistema debe mostrar la información del restaurante seleccionado
+Scenario: Usuario ve todos los restaurantes en el mapa
+Given existen restaurantes hardcodeados en el sistema
+When el usuario accede al mapa
+Then debe ver todos los restaurantes con su nombre y ubicación
+
+Scenario: Usuario selecciona un restaurante y ve su menú
+Given el usuario visualiza los restaurantes en el mapa
+When selecciona el restaurante "La Parrilla"
+Then debe ver el menú de "La Parrilla" con sus productos y precios
+
+Scenario: No hay restaurantes registrados
+Given no existen restaurantes en el sistema
+When el usuario accede al mapa
+Then debe ver un mensaje indicando que no hay restaurantes disponibles
 ```
 -----------------------------------------------------------------------------
 ## HU11 - Mostrar tiempo estimado de entrega
