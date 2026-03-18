@@ -184,11 +184,31 @@ Then el carrito debe quedar vacío
 Scenario: Usuario intenta validar un carrito vacío
 Given el usuario ha seleccionado un restaurante
 And no ha agregado ningún producto
-When intenta seguir para confirmar el pedido
+When intenta seguir el flujo del pedido
 Then el sistema no debe permitir avanzar en el proceso
-And debo indicarle al usuario que está vacío el carrito
+And debe indicarle al usuario que está vacío el carrito
 
 ```
+-----------------------------------------------------------------------------
+## HU8 - Ingresar datos y confirmar pedido
+
+**Como** usuario consumidor \
+**Quiero** ingresar mis datos personales y confirmar mi pedido\
+**Para** que el sistema genere la orden y asigne un repartidor
+
+### Criterios de aceptación
+```gherkin
+Feature: Confirmación de pedido
+
+Scenario: Pedido confirmado y asignado exitosamente a un repartidor
+Given el usuario tiene productos en el carrito
+And ingresa su nombre,sus coordenada "x",y teléfono "3001234567"
+When confirma el pedido
+Then el sistema registra la orden en estado ASIGNADO
+
+```
+
+---
 -----------------------------------------------------------------------------
 ## HU8 - Cancelar pedido
 
