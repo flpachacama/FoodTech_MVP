@@ -127,9 +127,9 @@ Then el pedido debe quedar pendiente
 ### Criterios de aceptación
 
 ```gherkin
-Feature: Cambio de estado
+Feature: Cambio de estados del repartidor
 
-Scenario: Repartidor asignado cambia estado
+Scenario: Repartidor asignado cambia estado En_ENTREGA
 Given un repartidor seleccionado 
 When se le asigna un pedido 
 Then su estado debe cambiar a EN_ENTREGA
