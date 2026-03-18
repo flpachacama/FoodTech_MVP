@@ -150,6 +150,11 @@ Given el repartidor tiene estado EN_ENTREGA
 When marca el pedido como entregado
 Then el estado del repartidor debe cambiar a ACTIVO
 
+Scenario: Repartidor vuelve a ACTIVO al ser cancelado el pedido
+Given el repartidor tiene estado EN_ENTREGA
+When el usuario consumidor cancela el pedido
+Then el estado del repartidor debe cambiar a ACTIVO
+
 ```
 -----------------------------------------------------------------------------
 # FASE 3 - Flujo de pedidos (Core del negocio)
