@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------
 ## HU1 - Gestionar estado de repartidores
 
-**Como** sistema \
+**Como** sistema de asignación\
 **Quiero** manejar los estados de los repartidores (ACTIVO, INACTIVO, EN_ENTREGA) \
 **Para** saber cuáles están disponibles para asignarlos a un domicilio y descartar los que no. 
 
@@ -39,6 +39,8 @@ Given repartidores con coordenadas
 When el sistema calcula la distacia al restaurante
 Then solo debe considerar los que están dentro del radio permitido
 ```
+
+En este sigo en duda porque como queremos validar todo el mapa no haría falta en esta primera versión, sería más enfocada en buscar al repartidor más cercano. 
 -----------------------------------------------------------------------------
 ## HU3 - Aplicar restricciones por clima
 
