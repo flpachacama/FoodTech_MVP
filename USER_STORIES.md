@@ -221,9 +221,8 @@ Then el sistema no debe permitir la generación y confirmación del pedido
 And debe indicar qué campos son obligatorios
 ```
 
----
 -----------------------------------------------------------------------------
-## HU8 - Cancelar pedido
+## HU9 - Cancelar pedido
 
 **Como** usuario consumidor \
 **Quiero** cancelar un pedido \
@@ -243,7 +242,7 @@ Then el sistema debe marcar el pedido como cancelado
 # FASE 4 - Interfaz de usuario consumidor
 
 -----------------------------------------------------------------------------
-## HU9 - Visualizar y seleccionar restaurante
+## HU10 - Visualizar y seleccionar restaurante
 
 **Como** usuario consumidor \
 **Quiero** ver los restaurantes disponibles en el mapa y seleccionar uno \
