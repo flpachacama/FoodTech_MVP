@@ -206,6 +206,19 @@ And ingresa su nombre,sus coordenada "x",y teléfono "3001234567"
 When confirma el pedido
 Then el sistema registra la orden en estado ASIGNADO
 
+Scenario: Pedido confirmado sin repartidores disponibles
+Given el usuario confirma un pedido con datos completos
+And no hay repartidores ACTIVOS en el sistema o que funcionen por criterio de clima
+When el sistema intenta asignar
+Then la orden queda en estado PENDIENTE
+And se informa al usuario que no hay repartidores disponibles en el momento
+
+Scenario: Usuario intenta confirmar sin llenar todos sus datos
+Given el usuario tiene productos en el carrito
+And deja el campo teléfono vacío
+When intenta confirmar
+Then el sistema no debe permitir la generación y confirmación del pedido
+And debe indicar qué campos son obligatorios
 ```
 
 ---
