@@ -163,20 +163,31 @@ Then el estado del repartidor debe cambiar a ACTIVO
 ## HU7 - Generar pedido
 
 **Como** usuario consumidor \
-**Quiero** se \
-**Para** solicitar la entrega a mi ubicación
+**Quiero** seleccionar productos del menú y agregarlos al carrito \
+**Para** armar mi pedido antes de confirmarlo
 
 ### Criterios de aceptación
 
 ```gherkin
 Feature: Generación de pedido
 
-Scenario: Crear pedido correctamente
-Given que el usuario ha seleccionado un restaurante
-And ha seleccionado productos del menú  
-And ha diligenciado su ubicación 
-When confirma el pedido
-Then el sistema debe registrar la orden correctamente
+Scenario: Usuario agrega varios productos al carrito
+Given el usuario ha seleccionado un restaurante 
+When agrega uno o más productos al carrito
+Then el carrito debe mostrar la cantidad de productos con su precio total
+
+Scenario: Usuario elimina un producto del carrito 
+Given un usuario tiene un sólo producto determinado en el carrito
+When elimina dicho producto
+Then el carrito debe quedar vacío 
+
+Scenario: Usuario intenta validar un carrito vacío
+Given el usuario ha seleccionado un restaurante
+And no ha agregado ningún producto
+When intenta seguir para confirmar el pedido
+Then el sistema no debe permitir avanzar en el proceso
+And debo indicarle al usuario que está vacío el carrito
+
 ```
 -----------------------------------------------------------------------------
 ## HU8 - Cancelar pedido
