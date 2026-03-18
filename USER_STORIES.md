@@ -76,7 +76,7 @@ Then estos repartidores no deben ser considerados
 ## HU4 - Calcular prioridad de repartidores
 
 **Como** sistema de asignación \
-**Quiero** priorizar repartidores por distancia y velocidad del transporte \
+**Quiero** priorizar repartidores por distancia y velocidad del transporte, \
 **Para** seleccionar el más eficiente
 
 ### Criterios de aceptación
@@ -88,6 +88,11 @@ Scenario: Selección por mejor combinación
 Given múltiples repartidores candidatos
 When el sistema evalúa distancia y tipo de transporte
 Then debe asignar mayor prioridad el más eficiente
+
+Scenario: Todos los candidatos tiene el mismo tiempo estimado
+Given dos repartidores con el mismo tiempo estimado 
+When el sistema prioriza 
+Then se elige cualquiera de los dos sin error
 ```
 -----------------------------------------------------------------------------
 ## HU5 - Asignar pedido automáticamente
