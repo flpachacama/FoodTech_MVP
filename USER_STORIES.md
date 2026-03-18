@@ -4,23 +4,23 @@
 ## HU1 - Gestionar estado de repartidores
 
 **Como** sistema \
-**Quiero** manejar estados de repartidores (ACTIVO, INACTIVO, EN_ENTREGA) \
-**Para** saber cuáles están disponibles para asignación
+**Quiero** manejar los estados de los repartidores (ACTIVO, INACTIVO, EN_ENTREGA) \
+**Para** saber cuáles están disponibles para asignarlos a un domicilio y descartar los que no. 
 
 ### Criterios de aceptación
 
 ```gherkin
 Feature: Estado de repartidores
 
-Scenario: Repartidor activo disponible
+Scenario: Repartidor activo está disponible
 Given un repartidor en estado ACTIVO
-When el sistema evaluá disponibilidad
+When el sistema verifica su disponibilidad
 Then el repartidor debe ser considerado para asignación
 
-Scenario: Repartidor en entrega no disponible
+Scenario: Repartidor en entrega no está disponible
 Given un repartidor en estado EN_ENTREGA
-When el sistema evaluá disponibilidad
-Then el repartidor no debe ser considerado
+When el sistema  valida su disponibilidad
+Then el repartidor no debe ser considerado para asignación
 ```
 -----------------------------------------------------------------------------
 ## HU2 - Filtrar repartidores por cercanía 
