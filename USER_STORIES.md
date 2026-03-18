@@ -17,10 +17,16 @@ Given un repartidor en estado ACTIVO
 When el sistema verifica su disponibilidad
 Then el repartidor debe ser considerado para asignación
 
-Scenario: Repartidor en entrega no está disponible
+Scenario: Repartidor en esta EN_ENTREGA no está disponible
 Given un repartidor en estado EN_ENTREGA
 When el sistema  valida su disponibilidad
 Then el repartidor no debe ser considerado para asignación
+
+Scenario: Repartidor INACTIVO no aparece como candidato
+Given el repartidor tiene estado INACTIVO
+When el sistema busca candidatos para un nuevo pedido
+Then el repartidor no debe aparecer en la lista de candidatos
+
 ```
 -----------------------------------------------------------------------------
 ## HU2 - Filtrar repartidores por cercanía 
@@ -130,9 +136,20 @@ Then el pedido debe quedar pendiente
 Feature: Cambio de estados del repartidor
 
 Scenario: Repartidor asignado cambia estado En_ENTREGA
-Given un repartidor seleccionado 
-When se le asigna un pedido 
-Then su estado debe cambiar a EN_ENTREGA
+Given un repartidor tiene estado ACTIVO
+When se le asigna un pedido por el sistema 
+Then el estado del repartidor debe cambiar a EN_ENTREGA
+
+Scenario: Repartidor vuelve a ACTIVO al completar entrega
+Given el repartidor tiene estado EN_ENTREGA
+When marca el pedido como entregado
+Then el estado del repartidor debe cambiar a ACTIVO
+
+Scenario: Repartidor vuelve a ACTIVO al completar entrega
+Given el repartidor tiene estado EN_ENTREGA
+When marca el pedido como entregado
+Then el estado del repartidor debe cambiar a ACTIVO
+
 ```
 -----------------------------------------------------------------------------
 # FASE 3 - Flujo de pedidos (Core del negocio)
