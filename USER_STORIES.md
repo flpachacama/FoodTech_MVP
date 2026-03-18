@@ -97,9 +97,9 @@ Then se elige cualquiera de los dos sin error
 -----------------------------------------------------------------------------
 ## HU5 - Asignar pedido automáticamente
 
-**Como** sistema de delivery \
-**Quiero** asignar el pedido al mejor repartidor \
-**Para** optimizar el tiempo de entrega
+**Como** sistema de asignación \
+**Quiero** asignar el pedido al repartidor con menor tiempo estimado de llegada \
+**Para** minimizar el tiempo de entraga al usuario 
 
 ### Criterios de aceptación
 
@@ -107,8 +107,8 @@ Then se elige cualquiera de los dos sin error
 Feature: Asignación de pedidos
 
 Scenario: Asignación exitosa
-Given un pedido pendiente
-And repartidores disponibles
+Given un pedido tiene estado pendiente
+And repartidores están disponibles
 When el sistema ejecuta el algoritmo
 Then debe asignar el pedido al mejor candidato
 
@@ -120,9 +120,9 @@ Then el pedido debe quedar pendiente
 -----------------------------------------------------------------------------
 ## HU6 - Actualizar estado del repartidor
 
-**Como** sistema \
-**Quiero** cambiar el estado del repartidor a EN_ENTREGA \
-**Para** evitar asignaciones duplicadas
+**Como** sistema de asignación \
+**Quiero** actualizar el estado del repartidor según los eventos del pedido \
+**Para** garantizar que solo repartidores disponibles sea asignados
 
 ### Criterios de aceptación
 
