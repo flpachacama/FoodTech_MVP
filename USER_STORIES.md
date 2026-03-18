@@ -50,21 +50,21 @@ Then se obtiene un lista vacia
 
 **Como** sistema de asignación \
 **Quiero** aplicar reglas según el clima \
-**Para** excluir transportes no aptos
+**Para** excluir transportes no aptos para el pedido
 
 ### Criterios de aceptación
 
 ```gherkin 
 Feature: Restricciones por clima
 
-Scenario: Lluvia fuerte excluye bici y moto
+Scenario: Lluvia fuerte excluye bicicleta y moto
 Given clima Lluvia_Fuerte
 And repartidores con transporte bicicleta y moto
 When el sistema evalúa candidatos
 Then estos repartidores no deben ser considerados
 
 Scenario: Lluvia excluye bici
-Given clima Lluvia
+Given clima Lluvia (LLUVIA_FUERTE,LLUVIA_SUAVE)
 And repartidores con transporte bicicleta 
 When el sistema evalúa candidatos
 Then estos repartidores no deben ser considerados
