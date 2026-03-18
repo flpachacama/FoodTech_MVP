@@ -26,21 +26,25 @@ Then el repartidor no debe ser considerado para asignación
 ## HU2 - Filtrar repartidores por cercanía 
 
 **Como** sistema de asignación \
-**Quiero** filtrar repartidores dentro de un radio determinado \
-**Para** considerar solo candidatos cercanos 
+**Quiero** validar la distancia de todos repartidores con respecto al restaurante \
+**Para** obtener un lista ordenada de los repartidores 
 
 ### Criterios de aceptación 
 
 ```gherkin 
 Feature: Filtrado por distancia
 
-Scenario: Repartidores dentro del radio
-Given repartidores con coordenadas
-When el sistema calcula la distacia al restaurante
-Then solo debe considerar los que están dentro del radio permitido
+Scenario: Repartidores en el mapa
+Given repartidores con coordenadas y estado ACTIVO
+When el sistema calcula la distacia al restaurante de todos los repartidores
+Then se obtiene un lista ordenada de más cercanos a más lejanos 
+
+Scenario: No hay repartidores ACTIVOS
+Given todos los repartidores con estado INACTIVO o EN_ENTREGA
+When el sistema intenta calcula la distacia
+Then se obtiene un lista vacia
 ```
 
-En este sigo en duda porque como queremos validar todo el mapa no haría falta en esta primera versión, sería más enfocada en buscar al repartidor más cercano. 
 -----------------------------------------------------------------------------
 ## HU3 - Aplicar restricciones por clima
 
