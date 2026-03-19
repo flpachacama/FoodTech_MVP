@@ -58,7 +58,7 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 
 ### FASE 3 - Flujo de pedidos (Core del negocio)
 
-#### HU7 - Generar pedido
+#### HU7 - Agregar productos al carrito
 
 * Crear entidad Pedido con id, estado, restauranteId, productos, clienteId, clienteNombre, ClienteCoordenadas(x,y), tiempoEstimado
 * Crear Enum EstadoPedido (PENDIENTE, ASIGNADO, ENTREGADO, CANCELADO)
@@ -68,4 +68,16 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Crear tabla para almacenar Restaurantes 
 * Insertar restaurantes con coodernadas, nombre y menus
 * Implementar logica del carrito en el frontend 
+
+#### HU8 - Confirmar pedido
+* Crear DTO para recibir el pedido con restauranteId, productos[], clienteNombre, clienteCoordenadas(x,y), clienteTelefono
+* Crear DTO para la respuesta del pedido con restauranteId, productos[], clienteNombre, clienteCoordenadas(x,y), clienteTelefono, tiempoEstimado, estadoPedido
+* Exponer endpoint POST /order en el servicio de orders
+* Al confirmar seguir el siguiente flujo
+    - Persistir el pedido 
+    - Llamar al servicio de delivery para asignar el pedido
+    - Actualizar el estado 
+    - Retornar tiempo estimado 
+* Comunicación entre servicios via REST 
+#### HU9 - Cancelar pedido
 
