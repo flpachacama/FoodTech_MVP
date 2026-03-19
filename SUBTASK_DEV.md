@@ -108,3 +108,18 @@ Nota: Para la comunicación entre servicios, si esta llega a fallar se debe cont
 * Al dar click en el botón llamar a PUT/orders/{id}/delivered en order
 * El servicio order cambia el pedido a ENTREGADO y notifica al servicio delivery para cambiar el estado del repartidor a ACTIVOy liberarlo. 
 
+| HU   | Puntos |
+|------|--------|
+| HU1  | 3      |
+| HU2  | 2      |
+| HU3  | 2      |
+| HU4  | 3      |
+| HU5  | 5      |
+| HU6  | 2      |
+| HU7  | 5      |
+| HU8  | 5      |
+| HU9  | 3      |
+| HU10 | 5      |
+| HU11 | 2      |
+| HU12 | 1      |
+| **Total** | **38** | 
