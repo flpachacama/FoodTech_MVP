@@ -33,4 +33,10 @@
 * Validar que siempre se elige el mejor candidato
 * Verificar consistencia del flujo
 ------------------------------------------------------------
+## HU6 - Actualizar estado del repartidor
 
+* Probar transición ACTIVO -> EN_ENTREGA
+* Probar transición EN_ENTREGA -> ACTIVO
+* Validar cambios en cancelación
+* Detectar estados inconsistentes
+------------------------------------------------------------
