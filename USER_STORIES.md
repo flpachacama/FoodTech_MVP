@@ -202,15 +202,24 @@ Feature: Confirmación de pedido
 
 Scenario: Pedido confirmado y asignado exitosamente a un repartidor
 Given el usuario tiene productos en el carrito
-And ingresa su nombre,sus coordenada "x",y teléfono "3001234567"
+And ingresa su nombre,sus coordenada "x","y" y su número de teléfono
 When confirma el pedido
 Then el sistema registra la orden en estado ASIGNADO
+And muestra el tiempo estimado de entrega al usuario
+
+Scenario: Tiempo estimado visible hasta que el repartidor entrega
+Given el usuario tiene una orden en estado ASIGNADO
+When consulta su pedido activo
+Then debe ver el tiempo estimado de entrega
+And este desaparece cuando la orden cambia a estado ENTREGADO
+
 
 Scenario: Pedido confirmado sin repartidores disponibles
 Given el usuario confirma un pedido con datos completos
 And no hay repartidores ACTIVOS en el sistema o que funcionen por criterio de clima
 When el sistema intenta asignar
 Then la orden queda en estado PENDIENTE
+And no se muestra tiempo estimado al usuario
 And se informa al usuario que no hay repartidores disponibles en el momento
 
 Scenario: Usuario intenta confirmar sin llenar todos sus datos
@@ -266,23 +275,6 @@ Scenario: No hay restaurantes registrados
 Given no existen restaurantes en el sistema
 When el usuario accede al mapa
 Then debe ver un mensaje indicando que no hay restaurantes disponibles
-```
------------------------------------------------------------------------------
-## HU11 - Mostrar tiempo estimado de entrega
-
-**Como** usuario consumidor \
-**Quiero** ver el tiempo estimado de entrega \
-**Para** saber cuándo llegará mi pedido
-
-### Criterios de aceptación
-
-```gherkin
-Feature: Tiempo Estimado
-
-Scenario: Mostrar tiempo estimado 
-Given un pedido asignado
-When el sistema calcula el tiempo
-Then debe mostrar un tiempo estimado al usuario
 ```
 -----------------------------------------------------------------------------
 # FASE 5 - Interfaz del repartidor
