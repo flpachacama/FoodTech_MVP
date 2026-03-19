@@ -83,7 +83,7 @@ Nota: Para esta versión las asignaciones pendientes quedán en ese estado, en f
 
 Nota: Para la comunicación entre servicios, si esta llega a fallar se debe contemplar entre dos opciones politica de reintentos usar un broker de mensajeria como RabbitMQ para manejar estos eventos. 
 #### HU9 - Cancelar pedido
-* Exponer endpoint PUT /orders/id/cancel
+* Exponer endpoint PUT /orders/{id}/cancel
 * Validar que el pedido no esté en ENTREGADO
 * Cambiar estado a CANCELADO
 * Si tenia repartidor asignado seguir el siguiente flujo
@@ -101,10 +101,10 @@ Nota: Para la comunicación entre servicios, si esta llega a fallar se debe cont
 * Crear componente RepartidorPageComponent
 * Crear servicio para consultar el estado del pedido y repartidor asignado
 * Mostrar datos del cliente y tiempo estimado
-* Exponer el endpoint GET/orders/id/active-order en el servicios de orders
+* Exponer el endpoint GET/orders/{id}/active-order en el servicios de orders
 
 ### HU12 Marcar como entregado 
 * Agregar Botón "Entregar" en el  componente de RepartidosPageComponente
-* Al dar click en el botón llamar a PUT/orders/id/delivered en order
+* Al dar click en el botón llamar a PUT/orders/{id}/delivered en order
 * El servicio order cambia el pedido a ENTREGADO y notifica al servicio delivery para cambiar el estado del repartidor a ACTIVOy liberarlo. 
 
