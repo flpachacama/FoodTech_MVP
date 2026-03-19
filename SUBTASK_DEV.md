@@ -54,7 +54,7 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Llamar automaticamente al asignar un pedido a un repartidor y cambié a EN_ENTREGA
 * Llamar al dar detectar el evento de entregado y colocarl el repartido en ACTIVO
 * Llmar al detectar evento de cancelación y colocar al repartidor en ACTIVO
-* Exponer endpoint PUT/delivery/id/estado 
+* Exponer endpoint PUT/delivery/id/state 
 
 ### FASE 3 - Flujo de pedidos (Core del negocio)
 
@@ -81,7 +81,7 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Comunicación entre servicios via REST 
 
 #### HU9 - Cancelar pedido
-* Exponer endpoint PUT /order/id/cancelar
+* Exponer endpoint PUT /order/id/cancel
 * Validar que el pedido no esté en ENTREGADO
 * Cambiar estado a CANCELADO
 * Si tenia repartidor asignado seguir el siguiente flujo
@@ -93,5 +93,18 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Crear componente MapaComponent con Canvas para visualizar el mapa
 * Crear un servicio para consultar los restaurantes
 * Renderizar posiciones x,y  en el mapa de repartidores y restaurantes con simbolos especificos
-* Al dar click en restaurante, abrir datos del restaurante y mostrar menú. 
+* Al dar click en restaurante, abrir un modal con datos del restaurante y mostrar menú. 
+* Proteger que solo los usuarios puedan ver esta interfaz
+
+#### HU11 Visualizar pedido asignado
+* Crear componente RepartidorPageComponent
+* Crear servicio para consultar el estado del pedido y repartidor asignado
+* Mostrar datos del cliente y tiempo estimado
+* Exponer el endpoint GET/order/id/order-active en el servicios de orders
+* Proteger que solo repartidores puedan entrar a esta interfaz 
+
+### HU12 Marcar como entregado 
+* Agregar Botón "Entregar" en el  componente de RepartidosPageComponente
+* Al dar click en el botón llamar a PUT/order/id/delivered en order
+* El servicio order cambia el pedido a ENTREGADO y notifica al servicio delivery para cambiar el estado del repartidor a ACTIVOy liberarlo. 
 
