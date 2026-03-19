@@ -280,7 +280,7 @@ Then debe ver un mensaje indicando que no hay restaurantes disponibles
 # FASE 5 - Interfaz del repartidor
 
 -----------------------------------------------------------------------------
-## HU12 - Visualizar pedido asignado
+## HU11 - Visualizar pedido asignado
 
 **Como** repartidor \
 **Quiero** ver el pedido asignado \
@@ -291,13 +291,20 @@ Then debe ver un mensaje indicando que no hay restaurantes disponibles
 ```gherkin
 Feature: Vista repartidor
 
-Scenario: Mostrar pedido asignado
-Given un repartidor con pedido asignado
+Scenario: Mostrar pedido asignado con datos del usuario
+Given un repartidor con pedido asignado con estado EN_ENTREGA
+And tiene asignado el pedido de un usuario 
 When accede a su interfaz
-Then debe visualizar los detalles del pedido
+Then debe visualizar los datos del usuario con nombre, telefon y coordenadas
+And el tiempo estimado de entrega
+
+Scenario: Repartidor sin pedido asignado
+Given un repartidor sin pedido asignado
+When accede a su interfaz
+Then debe ver un mensaje indicando que no tiene pedidos asignados
 ```
 -----------------------------------------------------------------------------
-## HU13 - Marcar pedido como entregado
+## HU12 - Marcar pedido como entregado
 
 **Como** repartidor \
 **Quiero** marcar el pedido como entregado \
@@ -309,7 +316,9 @@ Then debe visualizar los detalles del pedido
 Feature: Finalización de entrega
 
 Scenario: Marcar pedido como entregado
-Given un pedido en curso
+Given el repartidor tiene un pedido asignado con estado EN_ENTREGA
 When el repartidor presiona "Entregado"
-Then el pedido debe cambiar a estado completado
+Then el pedido debe cambiar a estado ENTREGADO
+And el repartidor debe volver a estado ACTIVO
+And el tiempo debe desaparecer de la vista del usuario consumidor
 ```
