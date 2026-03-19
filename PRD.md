@@ -1,6 +1,6 @@
 # FoodTech - MVP
-
------------------------------------------------------------------------------------------------
+## Problematica
+En la actualidad muchas plataformas de entraga de comida pasan por el dilema de asignar pedidos a repartidores sin tener en cuenta su vehiculo y las condiciones climaticas, lo que puede resultar en tiempos de entrega prolongados y una experiencia insatisfactoria para los usuarios.
 ## Visión
 
 Foodtech es una plataforma web en la cual los usuarios pueden hacer pedidos de comida a domicilio, con variedad de restaurentes previamente registrados, igualmente repartidores que se movilizan en 3 modalidades, bicicleta, moto y carro, para entregar los pedidos a los clientes.
@@ -10,9 +10,9 @@ Nuestro objetivo es ser la plataforma con tiempos de entrega y asignación de pe
 -----------------------------------------------------------------------------------------------
 
 ## Objetivos
-1. Asignar automaticamente al repartirdor más cercano al restaurante
-2. Considerar la distancia, el vehiculo y el clima al momento de asignar.
-3. El usuario tendrá un interfaz para elegir el resturante, hacer su pedido, y el repartidor tendrá un interfaz para ver el pedido que tiene y para darlo como entregado cuando así sea.
+1. Asignar automaticamente al repartidor con menor tiempo estimado de entrega, considerando distancia, vehículo y clima.
+2. Considerar la distancia, el vehículo y el clima al momento de asignar.
+3. El usuario tendrá un interfaz para elegir el restaurante, hacer su pedido, y el repartidor tendrá un interfaz para ver el pedido que tiene y para darlo como entregado cuando así sea.
 -----------------------------------------------------------------------------------------------
 
 ## Alcance
