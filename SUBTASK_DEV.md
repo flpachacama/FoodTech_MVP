@@ -19,3 +19,14 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Implementar capa de acceso a datos para gestionar repartidores
 * Insertar datos iniciales de repartidores en la base de datos
 
+#### HU2 - Filtrar repartidores por cercanía
+* Implementar función calcularDistancia(x1,y1,x2,y2) con distancia euclidiana
+* Implementar función obtenerCandidatosCercanos()
+* Filtrar solo repartidores con estado ACTIVO antes de calcular
+* Ordenar lista por distancia descendente
+
+#### HU3 - Aplicar restricciones por clima
+* Crear Enums para el clima (SOLEADO, LLUVIA_SUAVE, LLUVIA_FUERTE)
+* Implemementar función aplicarFiltroClima(candidatos, clima) 
+* Crear reglas LLUVIA_FUERTE excluye BICICLETA y MOTO, LLUVIA_SUAVE excluye solo BICICLETA
+
