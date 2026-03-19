@@ -69,7 +69,7 @@ And repartidores con transporte bicicleta y moto
 When el sistema evalúa candidatos
 Then estos repartidores no deben ser considerados
 
-Scenario: Lluvia excluye bici
+Scenario: Cualquier caso de lluvia excluye bicicleta 
 Given clima Lluvia (LLUVIA_FUERTE,LLUVIA_SUAVE)
 And repartidores con transporte bicicleta 
 When el sistema evalúa candidatos
@@ -90,15 +90,23 @@ Then estos repartidores no deben ser considerados
 ```gherkin
 Feature: Priorización de repartidores
 
-Scenario: Selección por mejor combinación
-Given múltiples repartidores candidatos
-When el sistema evalúa distancia y tipo de transporte
-Then debe asignar mayor prioridad el más eficiente
+Scenario: Moto más lejos supera a bici más cerca
+Given un repartidor en BICICLETA a distancia 10
+And un repartidor en MOTO a distancia 15
+When el sistema calcula el tiempo estimado de cada uno
+Then el repartidor en MOTO debe tener mayor prioridad
+And su tiempo estimado debe ser menor que el de BICICLETA
 
-Scenario: Todos los candidatos tiene el mismo tiempo estimado
-Given dos repartidores con el mismo tiempo estimado 
-When el sistema prioriza 
-Then se elige cualquiera de los dos sin error
+Scenario: Mismo vehículo, gana el más cercano
+Given dos repartidores en MOTO
+And el primero está a distancia 10 y el segundo a distancia 20
+When el sistema calcula el tiempo estimado
+Then el repartidor a distancia 10 debe tener mayor prioridad
+
+Scenario: Dos repartidores con el mismo tiempo estimado
+Given dos repartidores con el mismo tiempo estimado de llegada
+When el sistema prioriza
+Then se selecciona cualquiera de los dos sin error
 ```
 -----------------------------------------------------------------------------
 ## HU5 - Asignar pedido automáticamente
@@ -139,11 +147,6 @@ Scenario: Repartidor asignado cambia estado En_ENTREGA
 Given un repartidor tiene estado ACTIVO
 When se le asigna un pedido por el sistema 
 Then el estado del repartidor debe cambiar a EN_ENTREGA
-
-Scenario: Repartidor vuelve a ACTIVO al completar entrega
-Given el repartidor tiene estado EN_ENTREGA
-When marca el pedido como entregado
-Then el estado del repartidor debe cambiar a ACTIVO
 
 Scenario: Repartidor vuelve a ACTIVO al completar entrega
 Given el repartidor tiene estado EN_ENTREGA
@@ -246,6 +249,12 @@ Scenario: Cancelar pedido antes de asignación
 Given que el usuario tiene un pedido activo
 When el usuario cancela el pedido
 Then el sistema debe marcar el pedido como cancelado
+
+Scenario: Cancelar pedido con repartidor ya asignado
+Given el usuario tiene un pedido en estado ASIGNADO
+When el usuario cancela el pedido
+Then el sistema marca el pedido como CANCELADO
+And el repartidor asignado vuelve a estado ACTIVO
 ```
 -----------------------------------------------------------------------------
 # FASE 4 - Interfaz de usuario consumidor
