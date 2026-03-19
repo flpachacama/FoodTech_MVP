@@ -20,10 +20,10 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Insertar datos iniciales de repartidores en la base de datos
 
 #### HU2 - Filtrar repartidores por cercanía
-* Implementar función calcularDistancia(x1,y1,x2,y2) con distancia euclidiana
+* Implementar función calcularDistancia(restauranteCoordenadas(x,y), repartidorCoordenadas(x,y)) con distancia euclidiana
 * Implementar función obtenerCandidatosCercanos()
 * Filtrar solo repartidores con estado ACTIVO antes de calcular
-* Ordenar lista por distancia descendente
+* Ordenar lista por distancia ascedente (el de menor distancia primerio)
 
 #### HU3 - Aplicar restricciones por clima
 * Crear Enums para el clima (SOLEADO, LLUVIA_SUAVE, LLUVIA_FUERTE)
@@ -48,6 +48,7 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Si la lista está vacía retornar PENDIENTE
 * Si hay candidato -> Asignar repartidor al pedido y actualizar estado
 
+Nota: Para esta versión las asignaciones pendientes quedán en ese estado, en futuras versiones se añadirá un (CRON) para reintentos automáticos cada cierto tiempo. 
 #### HU6 - Actualizar estado del repartidor
 
 * Implementar función cambiarEstado(repartidorId, nuevoEstado) en el servicio de repartidores
@@ -80,6 +81,7 @@ Se hará una interfaz gráfica que consuma ambos microservicios
     - Retornar tiempo estimado 
 * Comunicación entre servicios via REST 
 
+Nota: Para la comunicación entre servicios, si esta llega a fallar se debe contemplar entre dos opciones politica de reintentos usar un broker de mensajeria como RabbitMQ para manejar estos eventos. 
 #### HU9 - Cancelar pedido
 * Exponer endpoint PUT /order/id/cancel
 * Validar que el pedido no esté en ENTREGADO
@@ -94,14 +96,12 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Crear un servicio para consultar los restaurantes
 * Renderizar posiciones x,y  en el mapa de repartidores y restaurantes con simbolos especificos
 * Al dar click en restaurante, abrir un modal con datos del restaurante y mostrar menú. 
-* Proteger que solo los usuarios puedan ver esta interfaz
 
 #### HU11 Visualizar pedido asignado
 * Crear componente RepartidorPageComponent
 * Crear servicio para consultar el estado del pedido y repartidor asignado
 * Mostrar datos del cliente y tiempo estimado
 * Exponer el endpoint GET/order/id/order-active en el servicios de orders
-* Proteger que solo repartidores puedan entrar a esta interfaz 
 
 ### HU12 Marcar como entregado 
 * Agregar Botón "Entregar" en el  componente de RepartidosPageComponente
