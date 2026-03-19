@@ -40,3 +40,10 @@
 * Validar cambios en cancelación
 * Detectar estados inconsistentes
 ------------------------------------------------------------
+## HU7 - Generar Pedido
+
+* Probar agregar múltiples productos
+* Validar eliminación de productos
+* Verificar cálculo de total
+* Validar restricción de carrito vacío
+------------------------------------------------------------
