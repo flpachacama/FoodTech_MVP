@@ -121,3 +121,20 @@ Nota: Para la comunicación entre servicios, si esta llega a fallar se debe cont
 * Al dar click en el botón llamar a PUT/orders/{id}/delivered en order
 * El servicio order cambia el pedido a ENTREGADO y notifica al servicio delivery para cambiar el estado del repartidor a ACTIVOy liberarlo. 
 
+## Estimación del esfuerzo de desarrollo – Story Points
+
+| HU   | SP (DEV) | Justificación                                                                                                                                                                                                     |
+|------|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| HU1  | 3        | Se estima en este valor debido a que crear entidades y enums no tiene gran complejidad usando IA y haciendo bien los tests. Aumenta a 3 por la conexión a base de datos, ya que toca configurar puertos, crear tablas y hacer configuraciones adicionales que pueden demorar un poco más. |
+| HU2  | 2        | El peso de esta HU se deriva de solo implementar funciones con lógica matemática y algoritmos de ordenamiento, los cuales con IA agilizan bastante el trabajo.                                                    |
+| HU3  | 2        | En esta HU solo se implementan enums y reglas de relación entre vehículos y clima, es ágil de hacer con IA.                                                                                                      |
+| HU4  | 2        | En este caso es un enum con valores y otro algoritmo de ordenamiento, por tal motivo el peso técnico no es tan alto.                                                                                              |
+| HU5  | 5        | Esta HU tiene una mayor complejidad al tener que integrar varios procesos y métodos encadenados, y tiene varios caminos que tomar según cada paso.                                                                |
+| HU6  | 2        | En esta HU solo se debe implementar un método y crear criterios de activación que lleven a un siguiente método. La complejidad está en exponer el endpoint y hacer pruebas que validen que esté bien ejecutado.    |
+| HU7  | 5        | Esta HU también tiene una complejidad alta por la creación de entidades, enums, configuración de varias tablas e inserción de datos, así como tener presente que hay lógica que debería tenerse en cuenta en los issues de interfaces. |
+| HU8  | 5        | Esta HU tiene un peso considerable porque toca crear DTOs y además exponer el endpoint, lo que llevará a pruebas externas con POST para saber que está funcionando bien. Además se debe dejar lista la comunicación con el otro servicio. |
+| HU9  | 3        | La ventaja de esta HU es que en una HU previa ya se hizo trabajo que se puede reutilizar y solo es hacer lógica y validaciones.                                                                                  |
+| HU10 | 5        | Esta HU puede tener una complejidad variable según cómo se implemente el mapa virtual que verá el usuario y que además sea interactivo.                                                                          |
+| HU11 | 2        | Esta página es únicamente un dashboard con un botón que solo consumiendo bien el servicio no debería tener mayor complejidad.                                                                                     |
+| HU12 | 1        | Se crea el botón y se envía el evento de orden entregada. Debe validar varios factores para lograrlo, pero en sí solo es conectar el botón con la acción de entregar pedido.                                     |
+| **Total** | **37** |                                                                                                                                                                                                              |
