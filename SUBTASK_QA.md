@@ -47,3 +47,10 @@
 * Verificar cálculo de total
 * Validar restricción de carrito vacío
 ------------------------------------------------------------
+## HU8 - Ingresar datos y confirmar pedido
+
+* Validar campos obligatorios
+* Probar confirmación exitosa
+* Probar sin repartidores disponibles
+* Validar visualización del tiempo estimado
+------------------------------------------------------------
