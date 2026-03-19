@@ -82,3 +82,20 @@
 * Validar desaparición del tiempo
 * Probar flujo completo de entrega
 ------------------------------------------------------------
+
+## Estimación del esfuerzo de pruebas – Story Points
+
+| HU    | SP (QA) | Justificación                                                                               |
+|-------|---------|---------------------------------------------------------------------------------------------|
+| HU1   | 3 | Validación de múltiples estados y su impacto en el sistema                                  |
+| HU2   | 5 | Validación de cálculos, ordenamiento y casos límite                                         |
+| HU3   | 3 | Validación de combinaciones clima-transporte y exclusión correcta                           |
+| HU4   | 5 | Validación de fórmula, comparaciones y casos de empate                                      |
+| HU5   | 5 | Validación del flujo completo de asignación y selección correcta del mejor candidato        |
+| HU6   | 3 | Validación de transiciones de estado en múltiples escenarios                                |
+| HU7   | 5 | Validación de múltiples interacciones del usuario                                           |
+| HU8   | 8 | Alta cantidad de escenarios: validaciones, asignación, sin repartidores, errores de usuario |
+| HU9   | 3 | Validación de flujo alterno y consistencia del estado del sistema                           |
+| HU10  | 3 | Validación visual y comportamiento                                                          |
+| HU11  | 3 | Validación de datos mostrados y escenarios con o sin pedido                                 |
+| HU12  | 3 | Validación end-to-end del flujo de entrega y cambios de estado                              |
