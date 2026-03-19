@@ -61,3 +61,10 @@
 * Validar liberación del repartidor
 * Probar multiples cancelaciones
 ------------------------------------------------------------
+## HU10 - Visualizar y seleccionar restaurante
+
+* Validar visualización en mapa
+* Probar selección de restaurante
+* Verificar carga de menú
+* Validar caso sin restaurantes
+------------------------------------------------------------
