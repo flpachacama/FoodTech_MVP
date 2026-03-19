@@ -26,4 +26,11 @@
 * Validar comportamiento en empates
 * Verificar consistencia de resultados
 ------------------------------------------------------------
+## HU5 - Asignar pedido automaticamente
+
+* Validar asignación correcta
+* Probar escenarios sin repartidores
+* Validar que siempre se elige el mejor candidato
+* Verificar consistencia del flujo
+------------------------------------------------------------
 
