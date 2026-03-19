@@ -55,7 +55,7 @@ Nota: Para esta versión las asignaciones pendientes quedán en ese estado, en f
 * Llamar automaticamente al asignar un pedido a un repartidor y cambié a EN_ENTREGA
 * Llamar al dar detectar el evento de entregado y colocarl el repartido en ACTIVO
 * Llmar al detectar evento de cancelación y colocar al repartidor en ACTIVO
-* Exponer endpoint PUT/delivery/id/state 
+* Exponer endpoint PUT/delivery/{id}/state 
 
 ### FASE 3 - Flujo de pedidos (Core del negocio)
 
@@ -73,7 +73,7 @@ Nota: Para esta versión las asignaciones pendientes quedán en ese estado, en f
 #### HU8 - Confirmar pedido
 * Crear DTO para recibir el pedido con restauranteId, productos[], clienteNombre, clienteCoordenadas(x,y), clienteTelefono
 * Crear DTO para la respuesta del pedido con restauranteId, productos[], clienteNombre, clienteCoordenadas(x,y), clienteTelefono, tiempoEstimado, estadoPedido
-* Exponer endpoint POST /order en el servicio de orders
+* Exponer endpoint POST /orders en el servicio de orders
 * Al confirmar seguir el siguiente flujo
     - Persistir el pedido 
     - Llamar al servicio de delivery para asignar el pedido
@@ -83,11 +83,11 @@ Nota: Para esta versión las asignaciones pendientes quedán en ese estado, en f
 
 Nota: Para la comunicación entre servicios, si esta llega a fallar se debe contemplar entre dos opciones politica de reintentos usar un broker de mensajeria como RabbitMQ para manejar estos eventos. 
 #### HU9 - Cancelar pedido
-* Exponer endpoint PUT /order/id/cancel
+* Exponer endpoint PUT /orders/id/cancel
 * Validar que el pedido no esté en ENTREGADO
 * Cambiar estado a CANCELADO
 * Si tenia repartidor asignado seguir el siguiente flujo
-    - Llamar al servicio de delivery para liberar al repartidor (cambiar estado a ACTIVO)
+    - Llamar al endpoint PUT /delivery/{id}/state del servicio delivery para liberar al repartidor    (cambiar estado a ACTIVO)
     - Retornar confirmación de cancelación
 
 ### FASE 4 - Interfaz de usuario consumidor
@@ -101,10 +101,10 @@ Nota: Para la comunicación entre servicios, si esta llega a fallar se debe cont
 * Crear componente RepartidorPageComponent
 * Crear servicio para consultar el estado del pedido y repartidor asignado
 * Mostrar datos del cliente y tiempo estimado
-* Exponer el endpoint GET/order/id/order-active en el servicios de orders
+* Exponer el endpoint GET/orders/id/active-order en el servicios de orders
 
 ### HU12 Marcar como entregado 
 * Agregar Botón "Entregar" en el  componente de RepartidosPageComponente
-* Al dar click en el botón llamar a PUT/order/id/delivered en order
+* Al dar click en el botón llamar a PUT/orders/id/delivered en order
 * El servicio order cambia el pedido a ENTREGADO y notifica al servicio delivery para cambiar el estado del repartidor a ACTIVOy liberarlo. 
 
