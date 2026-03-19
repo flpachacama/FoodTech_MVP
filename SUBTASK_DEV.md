@@ -87,3 +87,11 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Si tenia repartidor asignado seguir el siguiente flujo
     - Llamar al servicio de delivery para liberar al repartidor (cambiar estado a ACTIVO)
     - Retornar confirmación de cancelación
+
+### FASE 4 - Interfaz de usuario consumidor
+#### HU10  Visualizar y seleccionar restaurante
+* Crear componente MapaComponent con Canvas para visualizar el mapa
+* Crear un servicio para consultar los restaurantes
+* Renderizar posiciones x,y  en el mapa de repartidores y restaurantes con simbolos especificos
+* Al dar click en restaurante, abrir datos del restaurante y mostrar menú. 
+
