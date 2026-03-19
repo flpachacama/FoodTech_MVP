@@ -68,3 +68,10 @@
 * Verificar carga de menú
 * Validar caso sin restaurantes
 ------------------------------------------------------------
+## HU11 - Visualizar pedido asignado
+
+* Validar datos mostrados
+* Probar repartidor sin pedidos
+* Verificar consistencia de información
+* Validar visualización del tiempo
+------------------------------------------------------------
