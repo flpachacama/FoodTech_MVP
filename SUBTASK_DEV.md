@@ -30,3 +30,9 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Implemementar función aplicarFiltroClima(candidatos, clima) 
 * Crear reglas LLUVIA_FUERTE excluye BICICLETA y MOTO, LLUVIA_SUAVE excluye solo BICICLETA
 
+### Fase 2 - Lógica del algortimo
+#### HU4 - Calcular prioridad de repartidores
+* Definir velocidades de los vehiculos (BICICLETA=15, MOTO=20, AUTO=30)
+* Implementar función calcularTiempoEstimado(distancia, vehiculo)
+* Ordenar candidatos por tiempo estimado de menor a mayor
+
