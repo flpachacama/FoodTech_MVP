@@ -3,8 +3,8 @@
 ## Visión general 
 
 Se harán 2 microservicios 
-    1. Microservicio para ordenes que gestionará pedidos, estados y flujos del cliente
-    2. Microservicio para repartidores que gestionará estados, ubicaciones y algoritmo de asignación
+    1. Microservicio para ordenes que gestionará pedidos, estados y flujos del cliente (order)
+    2. Microservicio para repartidores que gestionará estados, ubicaciones y algoritmo de asignación(delivery)
 Se hará una interfaz gráfica que consuma ambos microservicios 
 -----------------------------------------------------------------------------
 
@@ -49,3 +49,10 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Si hay candidato -> Asignar repartidor al pedido y actualizar estado
 
 #### HU6 - Actualizar estado del repartidor
+
+* Implementar función cambiarEstado(repartidorId, nuevoEstado) en el servicio de repartidores
+* Llamar automaticamente al asignar un pedido a un repartidor y cambié a EN_ENTREGA
+* Llamar al dar detectar el evento de entregado y colocarl el repartido en ACTIVO
+* Llmar al detectar evento de cancelación y colocar al repartidor en ACTIVO
+* Exponer endpoint PUT/delivery/id/estado 
+
