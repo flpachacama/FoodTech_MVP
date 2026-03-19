@@ -75,3 +75,10 @@
 * Verificar consistencia de información
 * Validar visualización del tiempo
 ------------------------------------------------------------
+## HU12 - Marcar pedido como entregado
+
+* Validar cambio de estado
+* Verificar retorno a Activo
+* Validar desaparición del tiempo
+* Probar flujo completo de entrega
+------------------------------------------------------------
