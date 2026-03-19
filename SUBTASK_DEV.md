@@ -16,4 +16,6 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Crear entidad del Repartidor con atributos como id, nombre, estado, vehiculo y coordenadas (x,y)
 * Crear ENUM para los estados del repartidor (ACTIVO, INACTIVO, EN_ENTREGA)
 * Crear ENUM para los vehículos (BICICLETA, MOTO, AUTO)
-* Crear 
+* Implementar capa de acceso a datos para gestionar repartidores
+* Insertar datos iniciales de repartidores en la base de datos
+
