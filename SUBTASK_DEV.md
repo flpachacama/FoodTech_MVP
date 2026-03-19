@@ -56,3 +56,16 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Llmar al detectar evento de cancelación y colocar al repartidor en ACTIVO
 * Exponer endpoint PUT/delivery/id/estado 
 
+### FASE 3 - Flujo de pedidos (Core del negocio)
+
+#### HU7 - Generar pedido
+
+* Crear entidad Pedido con id, estado, restauranteId, productos, clienteId, clienteNombre, ClienteCoordenadas(x,y), tiempoEstimado
+* Crear Enum EstadoPedido (PENDIENTE, ASIGNADO, ENTREGADO, CANCELADO)
+* Crear entidad ProductoPedido con id, nombre, precio
+* Crear capa de acceso a datos para gestionar pedidos 
+* Crear tabla para pedidos 
+* Crear tabla para almacenar Restaurantes 
+* Insertar restaurantes con coodernadas, nombre y menus
+* Implementar logica del carrito en el frontend 
+
