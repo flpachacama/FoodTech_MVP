@@ -54,3 +54,10 @@
 * Probar sin repartidores disponibles
 * Validar visualización del tiempo estimado
 ------------------------------------------------------------
+## HU9 - Cancelar pedido
+
+* Validar cancelación antes de asignación
+* Verificar cambio de estado
+* Validar liberación del repartidor
+* Probar multiples cancelaciones
+------------------------------------------------------------
