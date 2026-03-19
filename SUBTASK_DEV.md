@@ -36,3 +36,16 @@ Se hará una interfaz gráfica que consuma ambos microservicios
 * Implementar función calcularTiempoEstimado(distancia, vehiculo)
 * Ordenar candidatos por tiempo estimado de menor a mayor
 
+#### HU5 - Asignar pedido automáticamente
+* Crear endpoint POST /delivery 
+* Recibir pedidoId, restauranteId
+* Ejecutar lógica de filtrado siguiendo el flujo 
+    - Filtrar por estado ACTIVO
+    - Filtrar por clima
+    - Calcular tiempos
+    - Ordenarpor tiempo estimado
+    - Tomar al primero
+* Si la lista está vacía retornar PENDIENTE
+* Si hay candidato -> Asignar repartidor al pedido y actualizar estado
+
+#### HU6 - Actualizar estado del repartidor
