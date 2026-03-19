@@ -79,5 +79,11 @@ Se hará una interfaz gráfica que consuma ambos microservicios
     - Actualizar el estado 
     - Retornar tiempo estimado 
 * Comunicación entre servicios via REST 
-#### HU9 - Cancelar pedido
 
+#### HU9 - Cancelar pedido
+* Exponer endpoint PUT /order/id/cancelar
+* Validar que el pedido no esté en ENTREGADO
+* Cambiar estado a CANCELADO
+* Si tenia repartidor asignado seguir el siguiente flujo
+    - Llamar al servicio de delivery para liberar al repartidor (cambiar estado a ACTIVO)
+    - Retornar confirmación de cancelación
