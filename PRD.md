@@ -1,6 +1,10 @@
 # FoodTech - MVP
+
+-----------------------------------------------------------------------------------------------
 ## Problematica
 En la actualidad muchas plataformas de entraga de comida pasan por el dilema de asignar pedidos a repartidores sin tener en cuenta su vehiculo y las condiciones climaticas, lo que puede resultar en tiempos de entrega prolongados y una experiencia insatisfactoria para los usuarios.
+
+-----------------------------------------------------------------------------------------------
 ## Visión
 
 Foodtech es una plataforma web en la cual los usuarios pueden hacer pedidos de comida a domicilio, con variedad de restaurentes previamente registrados, igualmente repartidores que se movilizan en 3 modalidades, bicicleta, moto y carro, para entregar los pedidos a los clientes.
