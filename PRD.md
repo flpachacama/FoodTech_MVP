@@ -1,4 +1,5 @@
 # FoodTech - MVP
+
 ## Problematica
 En la actualidad muchas plataformas de entrega de comida pasan por el dilema de asignar pedidos a repartidores sin tener en cuenta su vehiculo y las condiciones climaticas, lo que puede resultar en tiempos de entrega prolongados y una experiencia insatisfactoria para los usuarios.
 ## Visión
