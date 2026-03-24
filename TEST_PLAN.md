@@ -1,81 +1,76 @@
 # TEST PLAN - FoodTech MVP
 
-## 1. Identificacion del Plan
+## 1. Identificación del Plan
 
 - **Nombre del proyecto:** FoodTech MVP
-- **Sistema bajo prueba (SUT):** Plataforma de delivery con algoritmo de asignacion automatica de repartidores
-- **Version del plan:** 1.0
+- **Sistema bajo prueba (SUT):** Plataforma de delivery con algoritmo de asignación automática de repartidores
+- **Version del plan:** 1.1
 - **Fecha:** 24 de marzo de 2026
 - **Equipo:**
-  - QA Lead
-  - QA Automation Engineer
-  - QA Manual (apoyo exploratorio)
-  - Backend Developer (Order/Delivery)
-  - Frontend Developer
-  - Product Owner
-  - Scrum Master
+  - QA : Freddy Leonel
+  - DEV : Omar Ortiz
 
 ## 2. Contexto
 
-FoodTech MVP busca reducir tiempos de entrega y mejorar la asignacion de pedidos mediante reglas de negocio claras:
+FoodTech MVP busca reducir tiempos de entrega y mejorar la asignación de pedidos mediante reglas de negocio claras:
 
-- Seleccionar repartidores por cercania al restaurante.
-- Priorizar por tiempo estimado segun tipo de transporte.
-- Aplicar restricciones por clima (por ejemplo, excluir bicicleta y moto en lluvia fuerte).
-- Controlar estado operativo del repartidor (solo `ACTIVO` puede recibir pedidos).
+- Seleccionar repartidores por cercanía al restaurante.
+- Priorizar por tiempo estimado según tipo de transporte.
+- Aplicar restricciones por clima.
+- Controlar estado operativo del repartidor.
 
-El problema de negocio que resuelve es la asignacion ineficiente de pedidos en escenarios de alta variabilidad (clima, disponibilidad y demanda), disminuyendo retrasos, reasignaciones y cancelaciones.
+El problema de negocio que resuelve es la asignación ineficiente de pedidos en escenarios de alta variabilidad, disminuyendo retrasos, reasignaciones y cancelaciones.
 
 ## 3. Alcance de las Pruebas
 
-### IN (dentro del alcance)
+### IN 
 
 Se cubren historias de usuario funcionales del MVP:
 
 - HU1 Gestion de estado de repartidores
-- HU2 Filtrado por cercania
+- HU2 Filtrado por cercanía
 - HU3 Restricciones por clima
-- HU4 Calculo de prioridad
-- HU5 Asignacion automatica de pedidos
-- HU6 Actualizacion de estado del repartidor
-- HU7 Generacion de pedido
-- HU8 Confirmacion de pedido y tiempo estimado
-- HU9 Cancelacion de pedido
-- HU10 Visualizacion y seleccion de restaurantes
-- HU11 Visualizacion del pedido en interfaz repartidor
-- HU12 Marcar pedido como entregado
+- HU4 Cálculo de prioridad
+- HU5 Asignación automática de pedidos
+- HU6 Actualización de estado del repartidor
+- HU7 Generación de pedido
+- HU8 Confirmación de pedido y tiempo estimado
+- HU9 Cancelación de pedido
+- HU10 Visualización y selección de restaurantes
 
-### OUT (fuera del alcance)
+### OUT
 
-- Login/registro y seguridad de autenticacion
-- GPS real y geolocalizacion en tiempo real
+- Login/registro y seguridad de autenticación
+- GPS real y geolocalización en tiempo real
 - Integraciones con APIs externas
 - Tracking en vivo del repartidor en mapa
+- HU11 Visualización del pedido en interfaz repartidor
+- HU12 Marcar pedido como entregado
 
 ## 4. Estrategia de Pruebas
 
-Se aplicara una estrategia por capas para detectar defectos temprano y reducir retrabajo.
+Se aplicará una estrategia por capas para detectar defectos temprano y reducir trabajo repetitivo.
 
-### 4.1 Pruebas funcionales E2E y de aceptacion - Serenity BDD + Cucumber
+### 4.1 Pruebas funcionales E2E y de aceptación - Serenity BDD + Cucumber
 
 **Objetivo:** validar flujos de negocio completos desde perspectiva usuario/sistema usando criterios Gherkin de `USER_STORIES.md`.
 
-**Aplicacion en el proyecto:**
+**Aplicación en el proyecto:**
 
-- Definir features por HU prioritaria (HU1-HU12).
-- Automatizar escenarios criticos:
-  - Asignacion exitosa con repartidor valido
+- Definir features por HU prioritaria (HU1-HU10).
+- Automatizar escenarios críticos:
+  - Asignación exitosa con repartidor valido
   - Sin repartidores disponibles
-  - Restriccion por clima en `LLUVIA_FUERTE`
+  - Restricción por clima en `LLUVIA_FUERTE`
   - Cambio de estado `ACTIVO -> EN_ENTREGA -> ACTIVO`
-  - Cancelacion y liberacion de repartidor
+  - Cancelación y liberación de repartidor
 - Generar evidencia ejecutiva en reportes Serenity para demo de sprint y gate de release.
 
 ### 4.2 Pruebas de API - Karate
 
 **Objetivo:** validar contratos, reglas de negocio y respuestas de microservicios `order` y `delivery`.
 
-**Aplicacion en el proyecto:**
+**Aplicación en el proyecto:**
 
 - Pruebas de endpoints principales:
   - `POST /orders`
@@ -86,26 +81,26 @@ Se aplicara una estrategia por capas para detectar defectos temprano y reducir r
   - `GET /orders/{id}/active-order`
 - Cobertura de casos positivos, negativos y bordes:
   - Campos obligatorios
-  - Estado invalido
+  - Estado inválido
   - Sin candidatos
   - Reglas de clima
-- Validar consistencia de estados entre servicios (order y delivery).
+- Validar consistencia de estados entre servicios.
 
 ### 4.3 Pruebas de rendimiento baseline - k6
 
 **Objetivo:** medir comportamiento bajo carga controlada para detectar cuellos de botella temprano.
 
-**Aplicacion en el proyecto:**
+**Aplicación en el proyecto:**
 
 - Escenarios iniciales:
-  - Rampa de creacion de pedidos
+  - Rampa de creación de pedidos
   - Cancelaciones concurrentes
-  - Picos de asignacion en clima adverso
-- Metricas observadas:
+  - Picos de asignación en clima adverso
+- Métricas observadas:
   - `p95` de tiempo de respuesta por endpoint critico
   - tasa de error
   - throughput
-- Resultado esperado del MVP: establecer linea base y riesgos de escalabilidad para siguientes iteraciones.
+- Resultado esperado del MVP: establecer línea base y riesgos de escalabilidad para siguientes iteraciones.
 
 ## 5. Criterios de Entrada y Salida
 
@@ -113,51 +108,51 @@ Se aplicara una estrategia por capas para detectar defectos temprano y reducir r
 
 Para iniciar pruebas de una HU/sprint se requiere:
 
-- Historia refinada con criterios de aceptacion claros.
+- Historia refinada con criterios de aceptación claros.
 - Ambiente local estable y accesible para QA.
 - Datos de prueba disponibles (repartidores, restaurantes, clima, pedidos).
 - Build desplegable del sprint con cambios integrados.
-- Casos de prueba revisados por QA Lead y PO (cuando aplique).
+- Casos de prueba revisados por QA.
 
 ### Criterios de Salida
 
 Para cerrar pruebas de una HU/sprint se requiere:
 
-- 100% de escenarios criticos ejecutados.
+- 100% de escenarios críticos ejecutados.
 - 100% de pruebas bloqueantes en estado aprobado.
-- Sin defectos criticos ni altos abiertos (o con plan de mitigacion aprobado por PO/DEV).
-- Evidencia publicada (reportes Serenity, resultados Karate, reporte k6 baseline).
+- Sin defectos críticos ni altos abiertos.
+- Evidencia publicada.
 - Trazabilidad HU -> caso de prueba -> resultado.
 
 ## 6. Entorno de Pruebas
 
-### Configuracion del entorno
+### Configuración del entorno
 
-- Ejecucion local en entorno de desarrollo (MVP).
+- Ejecución local en entorno de desarrollo (MVP).
 - Dos microservicios activos:
   - `order`
   - `delivery`
-- Frontend web para flujo consumidor y repartidor.
+- Frontend web para flujo consumidor.
 
 ### Datos simulados
 
 - Repartidores con estados: `ACTIVO`, `INACTIVO`, `EN_ENTREGA`.
-- Vehiculos: `BICICLETA`, `MOTO`, `AUTO`.
+- Vehículos: `BICICLETA`, `MOTO`, `AUTO`.
 - Clima: `SOLEADO`, `LLUVIA_SUAVE`, `LLUVIA_FUERTE`.
 - Coordenadas `X,Y` simuladas para restaurantes, clientes y repartidores.
 - Pedidos en estados: `PENDIENTE`, `ASIGNADO`, `ENTREGADO`, `CANCELADO`.
 
-### Ejecucion local
+### Ejecución local
 
-- Ejecucion por suite funcional (Serenity+Cucumber), API (Karate) y rendimiento (k6).
-- Corridas minimas por HU en pipeline local de QA antes de cierre de sprint.
+- Ejecución por suite funcional (Serenity+Cucumber), API (Karate) y rendimiento (k6).
+- Corridas mínimas por HU en pipeline local de QA antes de cierre de sprint.
 
 ## 7. Herramientas
 
-- **Serenity BDD:** Orquesta pruebas de aceptacion y genera reportes ejecutivos con evidencia clara para negocio y equipo tecnico.
-- **Cucumber:** Define escenarios en lenguaje natural (Gherkin), facilitando alineacion entre PO, QA y DEV.
-- **Karate:** Automatiza pruebas API y validacion de contratos sin alta complejidad de codigo.
-- **k6:** Ejecuta pruebas de carga y rendimiento para identificar latencia, errores bajo concurrencia y limites del MVP.
+- **Serenity BDD:** Orquesta pruebas de aceptación y genera reportes ejecutivos con evidencia clara para negocio y equipo técnico.
+- **Cucumber:** Define escenarios en lenguaje natural (Gherkin), facilitando alineación entre QA y DEV.
+- **Karate:** Automatiza pruebas API y validación de contratos sin alta complejidad de código.
+- **k6:** Ejecuta pruebas de carga y rendimiento para identificar latencia, errores bajo concurrencia y límites del MVP.
 
 ## 8. Roles y Responsabilidades
 
@@ -167,36 +162,34 @@ Para cerrar pruebas de una HU/sprint se requiere:
 - Definir y mantener casos de prueba manuales/automatizados.
 - Automatizar suites con Serenity+Cucumber y Karate.
 - Ejecutar pruebas funcionales, API y baseline de rendimiento.
-- Reportar defectos con evidencia, severidad y criterio de reproduccion.
-- Gestionar metricas de calidad y recomendar decision de salida (Go/No-Go).
+- Reportar defectos con evidencia, severidad y criterio de reproducción.
+- Gestionar métricas de calidad y recomendar decision de salida (Go/No-Go).
 
 ### DEV
 
-- Implementar funcionalidades y criterios de aceptacion acordados.
+- Implementar funcionalidades y criterios de aceptación acordados.
 - Corregir defectos priorizados dentro del sprint.
-- Mantener estabilidad tecnica del entorno para pruebas.
-- Soportar analisis de causa raiz en defectos criticos.
-- Participar en definicion de datos de prueba y observabilidad basica.
+- Mantener estabilidad técnica del entorno para pruebas.
+- Soportar análisis de causa raíz en defectos críticos.
+- Participar en definición de datos de prueba y observabilidad básica.
 
-## 9. Cronograma y Estimacion
+## 9. Cronograma y Estimación
 
-La planificacion QA se alinea a Story Points del backlog y se ejecuta de forma incremental por fases.
+La planificación QA se alinea a Story Points del backlog y se ejecuta de forma incremental por fases.
 
-| Fase | HU incluidas | SP QA estimados |
-|---|---|---:|
-| Fase 1 - Modelo base | HU1, HU2, HU3 | 11 |
-| Fase 2 - Algoritmo | HU4, HU5, HU6 | 13 |
-| Fase 3 - Flujo de pedidos | HU7, HU8, HU9 | 16 |
-| Fase 4 - UX consumidor | HU10 | 3 |
-| Fase 5 - UX repartidor | HU11, HU12 | 6 |
-| **Total QA** | **HU1-HU12** | **49** |
+| Fase                         | HU incluidas | SP QA estimados |
+|------------------------------|---|---:|
+| Fase 1 - Modelo base         | HU1, HU2, HU3 | 11 |
+| Fase 1 - Algoritmo           | HU4, HU5, HU6 | 13 |
+| Fase 2 - Flujo de pedidos    | HU7, HU8, HU9 | 16 |
+| Fase 2 - UX consumidor       | HU10 | 3 |
+| Fase 5 - UX repartidor (out) | HU11, HU12 | 6 |
+| **Total QA**                 | **HU1-HU12** | **49** |
 
-### Distribucion recomendada por sprint (referencial)
+### Distribución recomendada por micro - sprint
 
-- **Sprint 1:** HU1-HU3 + automatizacion base (11 SP QA)
-- **Sprint 2:** HU4-HU6 + regresion parcial (13 SP QA)
-- **Sprint 3:** HU7-HU9 + pruebas de integracion de flujo completo (16 SP QA)
-- **Sprint 4:** HU10-HU12 + regresion final + baseline k6 (9 SP QA)
+- **Micro - sprint 1:** HU1-HU5 + automatización base + regresión parcial (21 SP QA / 14 SP DEV)
+- **Micro - sprint 2:** HU6-HU10 + prueba de integración de flujo completo + regresión lineal + baseline k6 (22 SP QA / 20 SP DEV)
 
 ## 10. Entregables de Prueba
 
@@ -206,13 +199,13 @@ La planificacion QA se alinea a Story Points del backlog y se ejecuta de forma i
   - Serenity BDD + Cucumber
   - Karate
   - k6
-- Reportes de ejecucion por sprint y reporte final de regresion.
+- Reportes de ejecución por sprint y reporte final de regresión.
 - Registro de defectos con severidad/prioridad y estado.
-- Metricas de calidad:
+- Métricas de calidad:
   - porcentaje de escenarios aprobados
   - defectos por severidad
-  - tendencia de retrabajo
-  - estabilidad de endpoints criticos
+  - tendencia de trabajo repetitivo
+  - estabilidad de endpoints críticos
 
 ## 11. Riesgos y Contingencias
 
@@ -228,4 +221,4 @@ La planificacion QA se alinea a Story Points del backlog y se ejecuta de forma i
 
 ## Enfoque de mejora continua
 
-Este plan se revisa al cierre de cada sprint en retrospectiva tecnica QA-DEV para ajustar cobertura, priorizacion de riesgo y deuda de automatizacion. El objetivo es prevenir defectos desde refinamiento, no solo detectarlos en validacion final.
+Este plan se revisa al cierre de cada micro - sprint en retrospectiva técnica QA-DEV para ajustar cobertura, priorización de riesgo y deuda de automatización. El objetivo es prevenir defectos desde refinamiento, no solo detectarlos en validación final.
