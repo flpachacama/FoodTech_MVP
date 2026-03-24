@@ -13,4 +13,11 @@ public record Coordenada(int x, int y) {
 			throw new IllegalArgumentException("Coordenada fuera de rango (0-100)");
 		}
 	}
+
+	public double distanciaA(Coordenada otra) {
+		if (otra == null) {
+			throw new IllegalArgumentException("Coordenada destino no puede ser null");
+		}
+		return Math.sqrt(Math.pow(this.x - otra.x(), 2) + Math.pow(this.y - otra.y(), 2));
+	}
 }
