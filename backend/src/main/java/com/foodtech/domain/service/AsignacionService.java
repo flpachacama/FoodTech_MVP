@@ -23,18 +23,26 @@ public class AsignacionService {
         this.repartidorRepository = Objects.requireNonNull(repartidorRepository);
     }
 
-    public List<Repartidor> obtenerRepartidoresCercanos(Coordenada restauranteUbicacion, Clima clima) {
+    public List<Repartidor> obtenerRepartidoresPriorizados(Coordenada restauranteUbicacion, Clima clima) {
         List<Repartidor> activos = repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO);
         if (activos == null || activos.isEmpty()) {
             return Collections.emptyList();
         }
 
         return activos.stream()
-                .filter(r -> esVehiculoApto(r.getVehiculo(), clima))
-                .sorted((r1, r2) -> Double.compare(
-                        r1.getUbicacion().distanciaA(restauranteUbicacion),
-                        r2.getUbicacion().distanciaA(restauranteUbicacion)))
-                .collect(Collectors.toList());
+            .filter(r -> esVehiculoApto(r.getVehiculo(), clima))
+            .sorted((r1, r2) -> {
+                double d1 = r1.getUbicacion().distanciaA(restauranteUbicacion);
+                double d2 = r2.getUbicacion().distanciaA(restauranteUbicacion);
+                double t1 = calcularTiempoEstimado(d1, r1.getVehiculo().getVelocidadKmH());
+                double t2 = calcularTiempoEstimado(d2, r2.getVehiculo().getVelocidadKmH());
+                return Double.compare(t1, t2);
+            })
+            .collect(Collectors.toList());
+    }
+
+    private double calcularTiempoEstimado(double distancia, int velocidad) {
+        return distancia / velocidad;
     }
 
     private boolean esVehiculoApto(TipoVehiculo vehiculo, Clima clima) {
