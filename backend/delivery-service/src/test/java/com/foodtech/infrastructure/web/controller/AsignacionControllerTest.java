@@ -26,8 +26,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AsignacionControllerTest {
 
-    @Mock
-    private AsignacionUseCase asignacionUseCase;
+        @Mock
+        private AsignacionUseCase asignacionUseCase;
+
+        @Mock
+        private com.foodtech.application.service.AsignacionApplicationService asignacionApplicationService;
+
+        @Mock
+        private com.foodtech.domain.port.input.RepartidorUseCase repartidorUseCase;
 
     @InjectMocks
     private AsignacionController controller;
@@ -49,8 +55,8 @@ class AsignacionControllerTest {
                 .ubicacion(new Coordenada(25, 40))
                 .build();
 
-        when(asignacionUseCase.obtenerRepartidoresPriorizados(eq(new Coordenada(25, 40)), eq(Clima.SOLEADO)))
-                .thenReturn(List.of(candidato));
+        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(25, 40)), eq(Clima.SOLEADO)))
+                .thenReturn(candidato);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
 
@@ -69,8 +75,8 @@ class AsignacionControllerTest {
                 .clima(Clima.LLUVIA_SUAVE.name())
                 .build();
 
-        when(asignacionUseCase.obtenerRepartidoresPriorizados(eq(new Coordenada(10, 10)), eq(Clima.LLUVIA_SUAVE)))
-                .thenReturn(Collections.emptyList());
+        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(10, 10)), eq(Clima.LLUVIA_SUAVE)))
+                .thenReturn(null);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
 
@@ -89,12 +95,12 @@ class AsignacionControllerTest {
                 .clima(null)
                 .build();
 
-        when(asignacionUseCase.obtenerRepartidoresPriorizados(eq(new Coordenada(5, 5)), isNull()))
-                .thenReturn(Collections.emptyList());
+        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(5, 5)), isNull()))
+                .thenReturn(null);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
 
         assertThat(resp.getEstado()).isEqualTo("PENDIENTE");
-        verify(asignacionUseCase).obtenerRepartidoresPriorizados(eq(new Coordenada(5, 5)), isNull());
+        verify(asignacionApplicationService).asignarRepartidor(eq(new Coordenada(5, 5)), isNull());
     }
 }

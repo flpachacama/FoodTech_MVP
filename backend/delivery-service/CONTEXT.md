@@ -1,3 +1,41 @@
+Ejemplo:
+
+Request POST /delivery
+
+```json
+{ "pedidoId": 1, "restauranteX": 99, "restauranteY": 45, "clima": "SOLEADO" }
+```
+
+Response 200 OK (ejemplo):
+
+```json
+{
+  "pedidoId": 1,
+  "estado": "ASIGNADO",
+  "repartidorId": 2,
+  "nombreRepartidor": "Ana Rodríguez"
+}
+```
+Ejemplo:
+
+Request PUT /delivery/11/state
+
+```json
+{ "evento": "ENTREGADO" }
+```
+
+Response 200 OK (ejemplo):
+
+```json
+{
+  "id": 11,
+  "nombre": "Carlos Mendoza",
+  "estado": "ACTIVO",
+  "vehiculo": "MOTO",
+  "x": 25,
+  "y": 40
+}
+```
 **Delivery Service Context**
 
 - **Description:**: Servicio microservicio responsable de la asignación inteligente de repartidores a pedidos según ubicación y condiciones climáticas.
