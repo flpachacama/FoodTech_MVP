@@ -35,6 +35,9 @@ class AsignacionApplicationServiceTest {
     @Mock
     private AsignacionService asignacionService;
 
+    @Mock
+    private com.foodtech.domain.port.input.RepartidorUseCase repartidorUseCase;
+
     @InjectMocks
     private AsignacionApplicationService applicationService;
 
