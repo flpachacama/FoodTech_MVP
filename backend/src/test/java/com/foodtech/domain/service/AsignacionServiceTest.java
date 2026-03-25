@@ -92,4 +92,63 @@ class AsignacionServiceTest {
 
         verify(repartidorRepository, times(1)).findByEstado(eq(EstadoRepartidor.ACTIVO));
     }
+
+    @Test
+    void debePriorizarMotoLejanaSobreBiciCercana() {
+
+        Repartidor bici = Repartidor.builder().id(1L).nombre("Bici").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.BICICLETA).ubicacion(new Coordenada(10,0)).build();
+        Repartidor moto = Repartidor.builder().id(2L).nombre("Moto").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(12,0)).build();
+
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(bici, moto));
+
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.SOLEADO);
+
+        assertFalse(result.isEmpty());
+        assertEquals("Moto", result.get(0).getNombre());
+        verify(repartidorRepository, times(1)).findByEstado(eq(EstadoRepartidor.ACTIVO));
+    }
+
+    @Test
+    void debePriorizarPorCercaniaSiEsMismoVehiculo() {
+        Repartidor near = Repartidor.builder().id(1L).nombre("Near").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(5,0)).build();
+        Repartidor far = Repartidor.builder().id(2L).nombre("Far").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(15,0)).build();
+
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(far, near));
+
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.SOLEADO);
+
+        assertEquals(2, result.size());
+        assertEquals("Near", result.get(0).getNombre());
+        verify(repartidorRepository, times(1)).findByEstado(eq(EstadoRepartidor.ACTIVO));
+    }
+
+    @Test
+    void debeManejarEmpateDeTiempoEstimado() {
+        Repartidor auto = Repartidor.builder().id(1L).nombre("Auto").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.AUTO).ubicacion(new Coordenada(30,0)).build();
+        Repartidor moto = Repartidor.builder().id(2L).nombre("Moto").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(20,0)).build();
+
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(auto, moto));
+
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.SOLEADO);
+
+        assertEquals(2, result.size());
+        assertTrue(result.stream().anyMatch(r -> r.getNombre().equals("Auto")));
+        assertTrue(result.stream().anyMatch(r -> r.getNombre().equals("Moto")));
+        verify(repartidorRepository, times(1)).findByEstado(eq(EstadoRepartidor.ACTIVO));
+    }
+
+    @Test
+    void debeCombinarFiltroClimaYPrioridadTiempo() {
+        Repartidor bici = Repartidor.builder().id(1L).nombre("Bici").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.BICICLETA).ubicacion(new Coordenada(1,0)).build();
+        Repartidor moto = Repartidor.builder().id(2L).nombre("Moto").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(5,0)).build();
+        Repartidor auto = Repartidor.builder().id(3L).nombre("Auto").estado(EstadoRepartidor.ACTIVO).vehiculo(TipoVehiculo.AUTO).ubicacion(new Coordenada(20,0)).build();
+
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(bici, moto, auto));
+
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.LLUVIA_SUAVE);
+        assertEquals(2, result.size());
+        assertEquals("Moto", result.get(0).getNombre());
+        assertEquals("Auto", result.get(1).getNombre());
+        verify(repartidorRepository, times(1)).findByEstado(eq(EstadoRepartidor.ACTIVO));
+    }
 }
