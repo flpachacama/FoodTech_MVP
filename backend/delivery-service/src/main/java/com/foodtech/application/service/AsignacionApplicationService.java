@@ -53,4 +53,16 @@ public class AsignacionApplicationService implements AsignacionUseCase {
         Repartidor candidato = priorizados.get(0);
         return repartidorUseCase.cambiarEstado(candidato.getId(), EstadoRepartidor.EN_ENTREGA);
     }
+
+    /**
+     * Procesa un evento externo relacionado con la orden y actualiza el estado
+     * del repartidor correspondiente.
+     * <p>
+     * Delegamos el mapeo del evento a {@code EventMapper} para mantener la
+     * lógica de negocio fuera del controlador.
+     */
+    public Repartidor procesarEventoRepartidor(Long repartidorId, String evento) {
+        EstadoRepartidor nuevoEstado = EventMapper.mapToEstado(evento);
+        return repartidorUseCase.cambiarEstado(repartidorId, nuevoEstado);
+    }
 }

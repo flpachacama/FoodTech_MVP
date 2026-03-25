@@ -56,19 +56,9 @@ public class AsignacionController {
     @PutMapping("/{id}/state")
     public ResponseEntity<?> updateEstado(@PathVariable("id") Long id, @RequestBody EstadoUpdateRequest request) {
         String evento = request == null ? null : request.evento();
-        if (!"ENTREGADO".equals(evento) && !"CANCELADO".equals(evento)) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Evento inválido"));
-        }
-
-        EstadoRepartidor nuevoEstado;
-        if ("ENTREGADO".equals(evento)) {
-            nuevoEstado = EstadoRepartidor.ACTIVO;
-        } else { // CANCELADO
-            nuevoEstado = EstadoRepartidor.ACTIVO;
-        }
 
         try {
-            Repartidor actualizado = repartidorUseCase.cambiarEstado(id, nuevoEstado);
+            Repartidor actualizado = asignacionApplicationService.procesarEventoRepartidor(id, evento);
 
             if (actualizado == null) {
                 return ResponseEntity.status(404).body(Map.of("error", "Repartidor no encontrado"));
@@ -85,7 +75,7 @@ public class AsignacionController {
 
             return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Error interno del servidor"));
         }
