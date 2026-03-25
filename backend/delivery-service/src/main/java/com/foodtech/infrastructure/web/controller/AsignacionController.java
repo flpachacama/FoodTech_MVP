@@ -7,6 +7,7 @@ import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.port.input.RepartidorUseCase;
 import com.foodtech.infrastructure.web.dto.AsignacionRequestDTO;
 import com.foodtech.infrastructure.web.dto.AsignacionResponseDTO;
+import com.foodtech.infrastructure.web.dto.RepartidorResponseDTO;
 import com.foodtech.application.service.AsignacionApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,34 @@ public class AsignacionController {
             return ResponseEntity.badRequest().body(Map.of("error", "Evento inválido"));
         }
 
-        Repartidor actualizado = repartidorUseCase.cambiarEstado(id, EstadoRepartidor.ACTIVO);
-        return ResponseEntity.ok(actualizado);
+        EstadoRepartidor nuevoEstado;
+        if ("ENTREGADO".equals(evento)) {
+            nuevoEstado = EstadoRepartidor.ACTIVO;
+        } else { // CANCELADO
+            nuevoEstado = EstadoRepartidor.ACTIVO;
+        }
+
+        try {
+            Repartidor actualizado = repartidorUseCase.cambiarEstado(id, nuevoEstado);
+
+            if (actualizado == null) {
+                return ResponseEntity.status(404).body(Map.of("error", "Repartidor no encontrado"));
+            }
+
+            RepartidorResponseDTO dto = RepartidorResponseDTO.builder()
+                    .id(actualizado.getId())
+                    .nombre(actualizado.getNombre())
+                    .estado(actualizado.getEstado() != null ? actualizado.getEstado().name() : null)
+                    .vehiculo(actualizado.getVehiculo() != null ? actualizado.getVehiculo().name() : null)
+                    .x(actualizado.getUbicacion() != null ? actualizado.getUbicacion().x() : null)
+                    .y(actualizado.getUbicacion() != null ? actualizado.getUbicacion().y() : null)
+                    .build();
+
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Error interno del servidor"));
+        }
     }
 }
