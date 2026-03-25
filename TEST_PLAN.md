@@ -6,9 +6,6 @@
 - **Sistema bajo prueba (SUT):** Plataforma de delivery con algoritmo de asignación automática de repartidores
 - **Version del plan:** 1.1
 - **Fecha:** 24 de marzo de 2026
-- **Equipo:**
-  - QA : Freddy Leonel
-  - DEV : Omar Ortiz
 
 ## 2. Contexto
 
@@ -40,10 +37,6 @@ Se cubren historias de usuario funcionales del MVP:
 
 ### OUT
 
-- Login/registro y seguridad de autenticación
-- GPS real y geolocalización en tiempo real
-- Integraciones con APIs externas
-- Tracking en vivo del repartidor en mapa
 - HU11 Visualización del pedido en interfaz repartidor
 - HU12 Marcar pedido como entregado
 
@@ -178,13 +171,12 @@ Para cerrar pruebas de una HU/sprint se requiere:
 La planificación QA se alinea a Story Points del backlog y se ejecuta de forma incremental por fases.
 
 | Fase                         | HU incluidas | SP QA estimados |
-|------------------------------|---|---:|
-| Fase 1 - Modelo base         | HU1, HU2, HU3 | 11 |
-| Fase 1 - Algoritmo           | HU4, HU5, HU6 | 13 |
-| Fase 2 - Flujo de pedidos    | HU7, HU8, HU9 | 16 |
-| Fase 2 - UX consumidor       | HU10 | 3 |
-| Fase 5 - UX repartidor (out) | HU11, HU12 | 6 |
-| **Total QA**                 | **HU1-HU12** | **49** |
+|------------------------------|---|----------------:|
+| Fase 1 - Modelo base         | HU1, HU2, HU3 |              11 |
+| Fase 1 - Algoritmo           | HU4, HU5, HU6 |              13 |
+| Fase 2 - Flujo de pedidos    | HU7, HU8, HU9 |              16 |
+| Fase 2 - UX consumidor       | HU10 |               3 |
+| **Total QA**                 | **HU1-HU12** |          **43** |
 
 ### Distribución recomendada por micro - sprint
 
@@ -222,3 +214,8 @@ La planificación QA se alinea a Story Points del backlog y se ejecuta de forma 
 ## Enfoque de mejora continua
 
 Este plan se revisa al cierre de cada micro - sprint en retrospectiva técnica QA-DEV para ajustar cobertura, priorización de riesgo y deuda de automatización. El objetivo es prevenir defectos desde refinamiento, no solo detectarlos en validación final.
+
+---
+- **Equipo:**
+  - QA : Freddy Leonel
+  - DEV : Omar Ortiz
