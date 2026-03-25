@@ -35,7 +35,7 @@ class AsignacionServiceTest {
     void obtenerCercanos_NoActivos_returnsEmptyListSingleton() {
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Collections.emptyList());
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0, 0), Clima.SOLEADO);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0, 0), Clima.SOLEADO);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -52,7 +52,7 @@ class AsignacionServiceTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(r1, r2, r3));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0,0), Clima.SOLEADO);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.SOLEADO);
 
         assertEquals(3, result.size());
         assertEquals("R3", result.get(0).getNombre());
@@ -69,7 +69,7 @@ class AsignacionServiceTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(r1, r2));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0,0), Clima.SOLEADO);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.SOLEADO);
 
         assertEquals(2, result.size());
         // order is not important in a tie, but both must be present
@@ -85,7 +85,7 @@ class AsignacionServiceTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Collections.singletonList(r));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(10,10), Clima.SOLEADO);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(10,10), Clima.SOLEADO);
 
         assertEquals(1, result.size());
         assertEquals("R", result.get(0).getNombre());

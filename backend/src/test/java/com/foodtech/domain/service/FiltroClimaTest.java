@@ -39,7 +39,7 @@ class FiltroClimaTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(rMoto, rBici, rAuto));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0,0), Clima.LLUVIA_FUERTE);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.LLUVIA_FUERTE);
 
         assertEquals(1, result.size());
         assertEquals(TipoVehiculo.AUTO, result.get(0).getVehiculo());
@@ -53,7 +53,7 @@ class FiltroClimaTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(rMoto, rBici));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0,0), Clima.LLUVIA_SUAVE);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.LLUVIA_SUAVE);
 
         assertEquals(1, result.size());
         assertEquals(TipoVehiculo.MOTO, result.get(0).getVehiculo());
@@ -68,7 +68,7 @@ class FiltroClimaTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(r1, r2, r3));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0,0), Clima.SOLEADO);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.SOLEADO);
 
         assertEquals(3, result.size());
         verify(repartidorRepository, times(1)).findByEstado(eq(EstadoRepartidor.ACTIVO));
@@ -81,7 +81,7 @@ class FiltroClimaTest {
 
         when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Arrays.asList(bici1, bici2));
 
-        List<Repartidor> result = asignacionService.obtenerRepartidoresCercanos(new Coordenada(0,0), Clima.LLUVIA_FUERTE);
+        List<Repartidor> result = asignacionService.obtenerRepartidoresPriorizados(new Coordenada(0,0), Clima.LLUVIA_FUERTE);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
