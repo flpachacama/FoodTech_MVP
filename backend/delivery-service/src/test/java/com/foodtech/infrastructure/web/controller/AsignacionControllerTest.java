@@ -66,10 +66,10 @@ class AsignacionControllerTest {
                 .pedidoId(2L)
                 .restauranteX(10)
                 .restauranteY(10)
-                .clima(Clima.LLOVIZNA.name())
+                .clima(Clima.LLUVIA_SUAVE.name())
                 .build();
 
-        when(asignacionUseCase.obtenerRepartidoresPriorizados(eq(new Coordenada(10, 10)), eq(Clima.LLOVIZNA)))
+        when(asignacionUseCase.obtenerRepartidoresPriorizados(eq(new Coordenada(10, 10)), eq(Clima.LLUVIA_SUAVE)))
                 .thenReturn(Collections.emptyList());
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
