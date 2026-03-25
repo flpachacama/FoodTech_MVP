@@ -157,4 +157,50 @@ class AsignacionApplicationServiceTest {
         assertEquals(1, result.size());
         verify(asignacionService).priorizarRepartidores(activos, restaurante, null);
     }
+
+    @Test
+    void asignarRepartidor_NoActivos_returnsNull() {
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Collections.emptyList());
+
+        Repartidor result = applicationService.asignarRepartidor(new Coordenada(0,0), Clima.SOLEADO);
+
+        assertNull(result);
+        verify(repartidorUseCase, never()).cambiarEstado(any(), any());
+    }
+
+    @Test
+    void asignarRepartidor_PriorizadosVacio_returnsNull() {
+        Repartidor r1 = Repartidor.builder()
+            .id(1L).nombre("R1").estado(EstadoRepartidor.ACTIVO)
+            .vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(10,10)).build();
+
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(List.of(r1));
+        when(asignacionService.priorizarRepartidores(anyList(), any(), any())).thenReturn(Collections.emptyList());
+
+        Repartidor result = applicationService.asignarRepartidor(new Coordenada(5,5), Clima.SOLEADO);
+
+        assertNull(result);
+        verify(repartidorUseCase, never()).cambiarEstado(any(), any());
+    }
+
+    @Test
+    void asignarRepartidor_ConCandidato_llamaCambiarEstadoYRetornaActualizado() {
+        Repartidor candidato = Repartidor.builder()
+            .id(10L).nombre("C").estado(EstadoRepartidor.ACTIVO)
+            .vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(2,2)).build();
+
+        Repartidor actualizado = Repartidor.builder()
+            .id(10L).nombre("C").estado(EstadoRepartidor.EN_ENTREGA)
+            .vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(2,2)).build();
+
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(List.of(candidato));
+        when(asignacionService.priorizarRepartidores(anyList(), any(), any())).thenReturn(List.of(candidato));
+        when(repartidorUseCase.cambiarEstado(eq(10L), eq(EstadoRepartidor.EN_ENTREGA))).thenReturn(actualizado);
+
+        Repartidor result = applicationService.asignarRepartidor(new Coordenada(1,1), Clima.SOLEADO);
+
+        assertNotNull(result);
+        assertEquals(EstadoRepartidor.EN_ENTREGA, result.getEstado());
+        verify(repartidorUseCase, times(1)).cambiarEstado(eq(10L), eq(EstadoRepartidor.EN_ENTREGA));
+    }
 }
