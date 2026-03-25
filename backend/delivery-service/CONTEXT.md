@@ -1,3 +1,66 @@
+**Delivery Service Context**
+
+- **Description:**: Servicio microservicio responsable de la asignación inteligente de repartidores a pedidos según ubicación y condiciones climáticas.
+- **Responsibility:**: Exponer un endpoint REST que recibe una solicitud de asignación y devuelve el repartidor asignado (o estado PENDIENTE) usando reglas de negocio encapsuladas en la capa de dominio.
+
+**Stack & Runtime**
+- **Language / Frameworks:**: Java 17, Spring Boot 3.x, Spring Data JPA, Jakarta Validation, Lombok
+- **Persistence:**: PostgreSQL (JPA / Hibernate)
+- **Build / CI:**: Maven
+- **Code coverage:**: JaCoCo (configured in pom.xml)
+
+**Endpoints**
+- **POST /delivery:**: Recibe una solicitud de asignación y responde con el repartidor seleccionado o estado pendiente. Controller: [AsignacionController.java](backend/delivery-service/src/main/java/com/foodtech/infrastructure/web/controller/AsignacionController.java)
+
+**Request / Response DTOs**
+- **Request:**: [AsignacionRequestDTO.java](backend/delivery-service/src/main/java/com/foodtech/infrastructure/web/dto/AsignacionRequestDTO.java) — campos validados: `pedidoId`, `restauranteX`, `restauranteY`, `clima` (opcional).
+- **Response:**: [AsignacionResponseDTO.java](backend/delivery-service/src/main/java/com/foodtech/infrastructure/web/dto/AsignacionResponseDTO.java) — `pedidoId`, `estado`, `repartidorId`, `nombreRepartidor`.
+
+**Domain Model (principal)**
+- `Repartidor` (domain model): [Repartidor.java](backend/delivery-service/src/main/java/com/foodtech/domain/model/Repartidor.java)
+- `Coordenada` value object: [Coordenada.java](backend/delivery-service/src/main/java/com/foodtech/domain/model/Coordenada.java)
+- `Clima`, `TipoVehiculo`, `EstadoRepartidor`: enums under domain model.
+
+**Architecture: Hexagonal / Ports & Adapters**
+- **Input port (use case):**: [AsignacionUseCase.java](backend/delivery-service/src/main/java/com/foodtech/domain/port/input/AsignacionUseCase.java)
+- **Application Service (orchestrator):**: [AsignacionApplicationService.java](backend/delivery-service/src/main/java/com/foodtech/application/service/AsignacionApplicationService.java) — coordina repositorio y servicio de dominio.
+- **Domain Service (business rules):**: [AsignacionService.java](backend/delivery-service/src/main/java/com/foodtech/domain/service/AsignacionService.java) — contiene la lógica de filtrado por clima y priorización por tiempo estimado.
+- **Output adapter (persistence):**: [RepartidorPersistenceAdapter.java](backend/delivery-service/src/main/java/com/foodtech/infrastructure/persistence/adapter/RepartidorPersistenceAdapter.java) con entidad JPA [RepartidorEntity.java](backend/delivery-service/src/main/java/com/foodtech/infrastructure/persistence/entity/RepartidorEntity.java) y repository [JpaRepartidorRepository.java](backend/delivery-service/src/main/java/com/foodtech/infrastructure/persistence/repository/JpaRepartidorRepository.java).
+
+**Important Config & Data**
+- **application.properties:**: deferred datasource initialization and datasource URL (see [application.properties](backend/delivery-service/src/main/resources/application.properties)).
+- **Seed data:**: `data.sql` used to initialize a small set of repartidores (migrated from import.sql for Spring Boot 3.x): [data.sql](backend/delivery-service/src/main/resources/data.sql)
+
+**Tests & Coverage**
+- **Unit tests:**: Tests cover domain service, value objects, persistence adapter, application service, controller DTOs and exception handler. Key tests live under `src/test/java`.
+- **Last run results:**: All tests passed. Line coverage: **93.66%**. Branch coverage: **87.10%**. JaCoCo report: `target/site/jacoco/index.html`.
+
+**High-level Flow**
+- 1) `POST /delivery` receives AsignacionRequestDTO → controller converts to Coordenada + Clima.
+- 2) Controller calls `AsignacionUseCase.obtenerRepartidoresPriorizados`.
+- 3) Application service fetches activos via `RepartidorRepository` and delegates prioritization to `AsignacionService`.
+- 4) `AsignacionService` filters por aptitud de vehículo según `Clima` y ordena por tiempo estimado (distancia / velocidad), devuelve lista priorizada.
+- 5) Controller responde `ASIGNADO` con primer candidato o `PENDIENTE` si no hay candidatos.
+
+**External Dependencies**
+- PostgreSQL database (configured in Docker Compose at repository root). Ensure the `SPRING_DATASOURCE_URL` environment variable or application properties point to the running DB.
+
+**Files I updated / created during analysis**
+- Tests added: `src/test/java/com/foodtech/infrastructure/web/controller/AsignacionControllerTest.java`, `src/test/java/com/foodtech/infrastructure/web/dto/AsignacionRequestDTOTest.java`, `src/test/java/com/foodtech/infrastructure/web/dto/AsignacionResponseDTOTest.java`, `src/test/java/com/foodtech/infrastructure/web/exception/GlobalExceptionHandlerTest.java`.
+
+**How to run locally**
+- Run tests and generate JaCoCo report:
+
+  mvn clean test
+
+- Open coverage report: `backend/delivery-service/target/site/jacoco/index.html`.
+
+**Notes & Next steps**
+- Controller is light-weight and covered by unit tests; consider adding `@WebMvcTest` integration tests for true HTTP layer coverage if needed.
+- Keep `spring.jpa.defer-datasource-initialization=true` when using `data.sql` with `ddl-auto=update`.
+
+---
+Generated on 2026-03-25 (automated scan).
 # Backend – Documento de Contexto Actual
 > Generado: 25 de marzo de 2026
 
