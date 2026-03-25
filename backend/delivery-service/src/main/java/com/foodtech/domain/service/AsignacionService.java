@@ -2,34 +2,20 @@ package com.foodtech.domain.service;
 
 import com.foodtech.domain.model.Coordenada;
 import com.foodtech.domain.model.Clima;
-import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.model.Repartidor;
 import com.foodtech.domain.model.TipoVehiculo;
-import com.foodtech.domain.port.output.RepartidorRepository;
+import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Servicio de asignación que ofrece métodos para obtener repartidores cercanos.
- */
+@Component
 public class AsignacionService {
 
-    private final RepartidorRepository repartidorRepository;
-
-    public AsignacionService(RepartidorRepository repartidorRepository) {
-        this.repartidorRepository = Objects.requireNonNull(repartidorRepository);
-    }
-
-    public List<Repartidor> obtenerRepartidoresPriorizados(Coordenada restauranteUbicacion, Clima clima) {
-        List<Repartidor> activos = repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO);
-        if (activos == null || activos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return activos.stream()
+    public List<Repartidor> priorizarRepartidores(List<Repartidor> repartidores,
+                                                   Coordenada restauranteUbicacion,
+                                                   Clima clima) {
+        return repartidores.stream()
             .filter(r -> esVehiculoApto(r.getVehiculo(), clima))
             .sorted((r1, r2) -> {
                 double d1 = r1.getUbicacion().distanciaA(restauranteUbicacion);
