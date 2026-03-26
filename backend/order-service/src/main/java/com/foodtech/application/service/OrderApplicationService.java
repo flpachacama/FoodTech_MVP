@@ -5,6 +5,7 @@ import com.foodtech.order.domain.model.Pedido;
 import com.foodtech.order.domain.model.ProductoPedido;
 import com.foodtech.order.domain.port.input.OrderUseCase;
 import com.foodtech.order.domain.port.output.DeliveryClient;
+import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentRequest;
 import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.order.domain.port.output.PedidoRepository;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
@@ -37,12 +38,13 @@ public class OrderApplicationService implements OrderUseCase {
         // ── 4. Solicitar asignación al delivery-service ──────────────────────
         DeliveryAssignmentResponse deliveryResponse;
         try {
-            deliveryResponse = deliveryClient.assignOrder(
+            DeliveryAssignmentRequest deliveryRequest = new DeliveryAssignmentRequest(
                     pedidoGuardado.getId(),
-                    pedidoGuardado.getRestauranteId(),
                     pedidoGuardado.getClienteCoordenadasX(),
-                    pedidoGuardado.getClienteCoordenadasY()
+                    pedidoGuardado.getClienteCoordenadasY(),
+                    "SOLEADO"
             );
+            deliveryResponse = deliveryClient.assign(deliveryRequest);
         } catch (Exception ex) {
             throw new IllegalStateException(
                     "Error al comunicarse con el servicio de delivery: " + ex.getMessage(), ex
@@ -51,7 +53,6 @@ public class OrderApplicationService implements OrderUseCase {
 
         // ── 5. Actualizar estado según respuesta de delivery ─────────────────
         EstadoPedido estadoFinal = resolveEstado(deliveryResponse.estado());
-        Integer tiempoEstimado  = deliveryResponse.tiempoEstimado();
 
         Pedido pedidoActualizado = Pedido.builder()
                 .id(pedidoGuardado.getId())
@@ -62,7 +63,6 @@ public class OrderApplicationService implements OrderUseCase {
                 .clienteCoordenadasY(pedidoGuardado.getClienteCoordenadasY())
                 .productos(pedidoGuardado.getProductos())
                 .estado(estadoFinal)
-                .tiempoEstimado(tiempoEstimado)
                 .build();
 
         pedidoRepository.save(pedidoActualizado);
