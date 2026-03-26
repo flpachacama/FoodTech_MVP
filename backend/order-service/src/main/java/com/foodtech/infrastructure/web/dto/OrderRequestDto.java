@@ -14,6 +14,9 @@ import java.util.List;
 public class OrderRequestDto {
 
     private Long restauranteId;
+    private Integer restauranteX;
+    private Integer restauranteY;
+    private String clima;
     private List<ProductoPedidoDto> productos;
     private String clienteNombre;
     private Integer clienteCoordenadasX;

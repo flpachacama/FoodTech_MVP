@@ -40,9 +40,9 @@ public class OrderApplicationService implements OrderUseCase {
         try {
             DeliveryAssignmentRequest deliveryRequest = new DeliveryAssignmentRequest(
                     pedidoGuardado.getId(),
-                    pedidoGuardado.getClienteCoordenadasX(),
-                    pedidoGuardado.getClienteCoordenadasY(),
-                    "SOLEADO"
+                    request.getRestauranteX(),
+                    request.getRestauranteY(),
+                    request.getClima() != null ? request.getClima() : "SOLEADO"
             );
             deliveryResponse = deliveryClient.assign(deliveryRequest);
         } catch (Exception ex) {
