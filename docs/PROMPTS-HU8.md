@@ -78,25 +78,22 @@ Paquete base: `com.foodtech.order`
 - Manejar excepciones de cliente REST devolviendo `IllegalStateException` o excepciones custom (se crearán en Paso 4).
 ```
 
-## Prompt Paso 3 — Cliente REST hacia delivery-service
-```
-Tengo un microservicio Spring Boot (Java 17) con Arquitectura Hexagonal.
-Paquete base: `com.foodtech.order`
+## Prompt Paso 3 — Cliente REST (CORREGIDO con contrato real)
 
-### Contexto existente
-- El `delivery-service` es otro microservicio que expone un endpoint REST para asignar pedidos (p.ej. `POST /delivery/assign`).
-- En este proyecto existen DTOs y `OrderApplicationService` (Paso 2) que dependerá del cliente.
+Tengo un microservicio Spring Boot (Java 17). Paquete base: `com.foodtech.order`.
+Necesito implementar la comunicación real con el `delivery-service`.
 
-### Lo que necesito
-- Crear `com.foodtech.order.infrastructure.web.client.DeliveryClient` como componente Spring con un método `AssignResponse assignOrder(Long pedidoId, OrderAssignRequest)` que llame vía `RestTemplate` o `WebClient` al servicio de delivery.
-- Crear `com.foodtech.order.infrastructure.config.RestTemplateConfig` que expone un `@Bean RestTemplate` y lee la URL base de `delivery.service.url` desde variables de entorno (`DELIVERY_SERVICE_URL`).
-- Definir clases auxiliares `OrderAssignRequest` y `AssignResponse` (internas o en paquete client) con los campos mínimos: `boolean assigned`, `Integer tiempoEstimado`, `String error`.
+### Requerimientos Técnicos:
+1. **Configuración:** Crear `com.foodtech.order.infrastructure.config.RestTemplateConfig` que exponga un `@Bean RestTemplate`. Debe leer la URL de `${delivery.service.url:http://localhost:8080}`.
+2. **Cliente:** Crear `com.foodtech.order.infrastructure.web.client.DeliveryClientAdapter` (implementando la interfaz `DeliveryClient` del Paso 2).
+3. **Contrato POST /delivery (IMPORTANTE):** - El JSON de salida DEBE ser: `{"pedidoId": Long, "restauranteX": Integer, "restauranteY": Integer, "clima": "SOLEADO"}`.
+   - Nota: Por ahora, hardcodea `"clima": "SOLEADO"` en el envío.
+4. **Respuesta:** Mapear la respuesta del delivery: `{"pedidoId": Long, "estado": "ASIGNADO", "repartidorId": Long, "nombreRepartidor": String}` a mi record `DeliveryAssignmentResponse`.
 
-### Reglas
-- No modificar otros microservicios ni sus properties.
-- Usar `@Value("${delivery.service.url:http://localhost:8081}")` para la URL por defecto.
-- Manejar errores HTTP lanzando una excepción propia que la capa de aplicación tratará.
-```
+### Reglas:
+- Usa `restTemplate.postForObject`.
+- Si el servicio de delivery responde algo distinto a 200 OK, lanza una `RuntimeException` con el mensaje de error.
+- Asegúrate de que los tipos de coordenadas sean `Integer` para coincidir con el otro microservicio.
 
 ## Prompt Paso 4 — Controller y excepciones HTTP
 ```

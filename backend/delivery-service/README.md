@@ -101,4 +101,3 @@ Notas rápidas
 - Los datos de ejemplo provienen de `src/main/resources/data.sql` que se carga al iniciar la aplicación.
 - Si el endpoint devuelve 400/404/500 revisa los logs (`docker compose logs delivery-service`) y la tabla `repartidores`.
 
-¿Quieres que genere una colección de Postman/Insomnia con estos ejemplos?
