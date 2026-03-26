@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
-description: Revisa los cambios del git diff y valida cumplimiento de SOLID, Arquitectura Hexagonal y DDD. Reporta solo problemas críticos.
-argument-hint: Opcional: rama o commit a comparar. Por defecto compara contra HEAD.
+description: Revisa los cambios del git diff y valida cumplimiento de SOLID, Arquitectura Hexagonal y DDD. Reporta solo problemas críticos. También puede aceptar una lista de archivos que el usuario pasa directamente y, en ese caso, revisará únicamente esos archivos.
+argument-hint: Opcional: rama o commit a comparar, o lista de rutas de archivos a revisar. Por defecto compara contra HEAD.
 tools: ['execute', 'read', 'edit']
 model: GPT-5 mini (copilot)
 ---
@@ -21,6 +21,14 @@ Si el usuario pasó una rama específica, usa:
 git diff main..[rama]
 ```
 Lee únicamente los archivos `.java` modificados o creados.
+
+Si el usuario proporciona archivos explícitamente (por ejemplo los adjunta en el prompt o pasa rutas), NO ejecutes `git diff`. En ese caso:
+
+- Lee únicamente los archivos proporcionados por el usuario.
+- Filtra los archivos para procesar solo aquellos que terminan en `.java`.
+- Si se incluyen rutas de directorio, realiza un listado recursivo y procesa solo los `.java` dentro.
+
+Cuando se use la opción de archivos proporcionados, considera la lista como la fuente única de verdad para la revisión.
 
 ### Fase 2 — Análisis
 Revisa cada archivo cambiado contra estas reglas:
