@@ -15,6 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,6 +84,51 @@ public class PedidoDataAdapterTest {
 
         assertEquals(1, lista.size());
         assertEquals(201L, lista.get(0).getId());
+    }
+
+    @Test
+    void debeLanzarIllegalStateException_cuandoSerializacionFalla_enSave() throws Exception {
+        ProductoPedido prod = new ProductoPedido(2L, "Taco", null);
+        Pedido pedido = new Pedido(102L, EstadoPedido.PENDIENTE, 12L, List.of(prod), 22L, "Cliente2", null, null, 10);
+
+        ObjectMapper mockMapper = Mockito.mock(ObjectMapper.class);
+        when(mockMapper.writeValueAsString(any())).thenThrow(new JsonProcessingException("boom"){});
+
+        PedidoDataAdapter adapterWithBadMapper = new PedidoDataAdapter(pedidoJpaRepository, mockMapper);
+
+        assertThrows(IllegalStateException.class, () -> adapterWithBadMapper.save(pedido));
+        verify(pedidoJpaRepository, never()).save(any());
+    }
+
+    @Test
+    void debeLanzarIllegalStateException_cuandoDeserializacionFalla_enFindAll() throws Exception {
+        PedidoEntity e1 = new PedidoEntity(300L, EstadoPedido.PENDIENTE, 31L, 41L, "C2", null, null, 5, "[{\"id\":1}]");
+        when(pedidoJpaRepository.findAll()).thenReturn(List.of(e1));
+
+        ObjectMapper mockMapper = Mockito.mock(ObjectMapper.class);
+        when(mockMapper.readValue(anyString(), any(TypeReference.class))).thenThrow(new JsonProcessingException("boom"){});
+
+        PedidoDataAdapter adapterWithBadMapper = new PedidoDataAdapter(pedidoJpaRepository, mockMapper);
+
+        assertThrows(IllegalStateException.class, adapterWithBadMapper::findAll);
+    }
+
+    @Test
+    void findById_debeRetornarVacio_cuandoNoExiste() {
+        when(pedidoJpaRepository.findById(999L)).thenReturn(Optional.empty());
+
+        Optional<Pedido> r = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findById(999L);
+        assertTrue(r.isEmpty());
+    }
+
+    @Test
+    void deserialize_debeRetornarListaVacia_cuandoProductosBlank() {
+        PedidoEntity e = new PedidoEntity(400L, EstadoPedido.PENDIENTE, 31L, 41L, "C2", null, null, 5, "   ");
+        when(pedidoJpaRepository.findAll()).thenReturn(List.of(e));
+
+        List<Pedido> lista = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findAll();
+        assertEquals(1, lista.size());
+        assertTrue(lista.get(0).getProductos().isEmpty());
     }
 
 }
