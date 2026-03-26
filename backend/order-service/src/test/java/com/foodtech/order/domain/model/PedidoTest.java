@@ -14,7 +14,7 @@ public class PedidoTest {
     void debeCrearPedidoYtenerCamposCorrectos() throws Exception {
         ProductoPedido producto = new ProductoPedido(1L, "Burger", null);
         List<ProductoPedido> productos = List.of(producto);
-        Pedido pedido = new Pedido(10L, EstadoPedido.PENDIENTE, 2L, productos, 5L, "Juan", 1.0, 2.0, 30);
+        Pedido pedido = new Pedido(10L, EstadoPedido.PENDIENTE, 2L, productos, 5L, "Juan", 1, 2, 30);
 
         Field idField = Pedido.class.getDeclaredField("id");
         idField.setAccessible(true);

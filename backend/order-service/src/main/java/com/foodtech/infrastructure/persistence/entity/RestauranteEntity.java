@@ -20,10 +20,10 @@ public class RestauranteEntity {
     private String nombre;
 
     @Column(name = "coordenada_x")
-    private Double coordenadaX;
+    private Integer coordenadaX;
 
     @Column(name = "coordenada_y")
-    private Double coordenadaY;
+    private Integer coordenadaY;
 
     /**
      * Menú del restaurante serializado como JSON.

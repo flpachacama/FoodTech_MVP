@@ -9,7 +9,7 @@ public class PedidoEntityTest {
 
     @Test
     void debeConstruirPedidoEntity_conConstructorYtenerCampos() {
-        PedidoEntity e = new PedidoEntity(1L, EstadoPedido.PENDIENTE, 2L, 3L, "Juan", 1.0, 2.0, 30, "[]");
+        PedidoEntity e = new PedidoEntity(1L, EstadoPedido.PENDIENTE, 2L, 3L, "Juan", 1, 2, 30, "[]");
 
         assertEquals(1L, e.getId());
         assertEquals(EstadoPedido.PENDIENTE, e.getEstado());
