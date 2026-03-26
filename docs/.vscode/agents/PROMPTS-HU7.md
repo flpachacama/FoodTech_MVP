@@ -66,6 +66,12 @@ Paquete base: `com.foodtech`
 - No modificar clases no mencionadas
 - Usar Lombok donde aplique
 - Seguir la nomenclatura del proyecto
+
+### Ubicación del proyecto
+- Este código pertenece al microservicio: `order-service`
+- Path base en el workspace: `backend/order-service/src/main/java/`
+- Paquete base: `com.foodtech.order`
+- Todos los archivos deben crearse dentro de `backend/order-service/`
 ```
 
 ## Prompt Paso 3 — Adaptador de Persistencia y Tablas
@@ -88,6 +94,12 @@ Paquete base: `com.foodtech`
 - No modificar clases no mencionadas
 - Usar Lombok donde aplique
 - Seguir la nomenclatura del proyecto
+
+### Ubicación del proyecto
+- Este código pertenece al microservicio: `order-service`
+- Path base en el workspace: `backend/order-service/src/main/java/`
+- Paquete base: `com.foodtech.order`
+- Todos los archivos deben crearse dentro de `backend/order-service/`
 ```
 
 ## Prompt Paso 4 — Entidad y tabla Restaurante
@@ -109,6 +121,12 @@ No existe aún la entidad Restaurante ni su tabla.
 - No modificar clases no mencionadas
 - Usar Lombok donde aplique
 - Seguir la nomenclatura del proyecto
+
+### Ubicación del proyecto
+- Este código pertenece al microservicio: `order-service`
+- Path base en el workspace: `backend/order-service/src/main/java/`
+- Paquete base: `com.foodtech.order`
+- Todos los archivos deben crearse dentro de `backend/order-service/`
 ```
 
 ## Prompt Paso 5 — Insertar Restaurantes de ejemplo
@@ -127,4 +145,10 @@ Paquete base: `com.foodtech`
 - No crear ningún archivo fuera de los mencionados
 - No modificar clases no mencionadas
 - Seguir la nomenclatura del proyecto
+
+### Ubicación del proyecto
+- Este código pertenece al microservicio: `order-service`
+- Path base en el workspace: `backend/order-service/src/main/java/`
+- Paquete base: `com.foodtech.order`
+- Todos los archivos deben crearse dentro de `backend/order-service/`
 ```
