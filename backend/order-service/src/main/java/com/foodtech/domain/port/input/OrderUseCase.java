@@ -1,6 +1,7 @@
 package com.foodtech.order.domain.port.input;
 
 import com.foodtech.order.infrastructure.web.dto.CancelOrderResponseDto;
+import com.foodtech.order.infrastructure.web.dto.DeliverOrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 
@@ -13,4 +14,6 @@ public interface OrderUseCase {
     OrderResponseDto createOrder(OrderRequestDto request);
 
     CancelOrderResponseDto cancelOrder(Long pedidoId);
+
+    DeliverOrderResponseDto deliverOrder(Long pedidoId);
 }

@@ -37,15 +37,15 @@ public class DeliveryClientAdapter implements DeliveryClient {
     }
 
     @Override
-    public void releaseRepartidor(Long repartidorId) {
+    public void releaseRepartidor(Long repartidorId, String evento) {
         String url = deliveryServiceUrl + "/delivery/" + repartidorId + "/state";
-        Map<String, String> requestBody = Map.of("evento", "CANCELADO");
+        Map<String, String> requestBody = Map.of("evento", evento);
         
-        log.info("Liberando repartidor {} con evento CANCELADO", repartidorId);
+        log.info("Liberando repartidor {} con evento {}", repartidorId, evento);
         
         try {
             restTemplate.put(url, requestBody);
-            log.info("Repartidor {} liberado exitosamente", repartidorId);
+            log.info("Repartidor {} liberado exitosamente con evento {}", repartidorId, evento);
         } catch (RestClientResponseException e) {
             log.error("Error al liberar repartidor {} - Status: {}, Body: {}", 
                     repartidorId, e.getStatusCode(), e.getResponseBodyAsString());

@@ -4,7 +4,7 @@ public interface DeliveryClient {
 
     DeliveryAssignmentResponse assign(DeliveryAssignmentRequest request);
 
-    void releaseRepartidor(Long repartidorId);
+    void releaseRepartidor(Long repartidorId, String evento);
 
     record DeliveryAssignmentRequest(
             Long pedidoId,

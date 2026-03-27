@@ -2,6 +2,7 @@ package com.foodtech.order.infrastructure.web.controller;
 
 import com.foodtech.order.domain.port.input.OrderUseCase;
 import com.foodtech.order.infrastructure.web.dto.CancelOrderResponseDto;
+import com.foodtech.order.infrastructure.web.dto.DeliverOrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,12 @@ public class OrderController {
     @PutMapping("/{id}/cancel")
     public ResponseEntity<CancelOrderResponseDto> cancelOrder(@PathVariable Long id) {
         CancelOrderResponseDto response = orderUseCase.cancelOrder(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/deliver")
+    public ResponseEntity<DeliverOrderResponseDto> deliverOrder(@PathVariable Long id) {
+        DeliverOrderResponseDto response = orderUseCase.deliverOrder(id);
         return ResponseEntity.ok(response);
     }
 }

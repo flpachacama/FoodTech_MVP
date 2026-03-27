@@ -1,6 +1,7 @@
 package com.foodtech.order.infrastructure.web.exception;
 
 import com.foodtech.order.domain.exception.PedidoCancelException;
+import com.foodtech.order.domain.exception.PedidoDeliverException;
 import com.foodtech.order.domain.exception.PedidoNotFoundException;
 import com.foodtech.order.domain.exception.RestauranteNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,11 @@ public class OrderExceptionHandler {
     @ExceptionHandler(PedidoCancelException.class)
     public ResponseEntity<Map<String, Object>> handlePedidoCancel(PedidoCancelException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, "No se puede cancelar el pedido", ex.getMessage());
+    }
+
+    @ExceptionHandler(PedidoDeliverException.class)
+    public ResponseEntity<Map<String, Object>> handlePedidoDeliver(PedidoDeliverException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, "No se puede marcar como entregado", ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -1,6 +1,7 @@
 package com.foodtech.order.application.service;
 
 import com.foodtech.order.domain.exception.PedidoCancelException;
+import com.foodtech.order.domain.exception.PedidoDeliverException;
 import com.foodtech.order.domain.exception.PedidoNotFoundException;
 import com.foodtech.order.domain.exception.RestauranteNotFoundException;
 import com.foodtech.order.domain.model.EstadoPedido;
@@ -13,6 +14,7 @@ import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentRe
 import com.foodtech.order.domain.port.output.PedidoRepository;
 import com.foodtech.order.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.order.infrastructure.web.dto.CancelOrderResponseDto;
+import com.foodtech.order.infrastructure.web.dto.DeliverOrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.ProductoPedidoDto;
@@ -176,7 +178,7 @@ public class OrderApplicationService implements OrderUseCase {
 
         if (pedido.getRepartidorId() != null) {
             log.info("[cancelOrder] Liberando repartidor id={}", pedido.getRepartidorId());
-            deliveryClient.releaseRepartidor(pedido.getRepartidorId());
+            deliveryClient.releaseRepartidor(pedido.getRepartidorId(), "CANCELADO");
         }
 
         Pedido pedidoCancelado = Pedido.builder()
@@ -199,6 +201,62 @@ public class OrderApplicationService implements OrderUseCase {
                 .id(pedidoCancelado.getId())
                 .estado(pedidoCancelado.getEstado())
                 .mensaje("Pedido cancelado exitosamente")
+                .build();
+    }
+
+    @Override
+    public DeliverOrderResponseDto deliverOrder(Long pedidoId) {
+        log.info("[deliverOrder] Iniciando marcado como entregado del pedido id={}", pedidoId);
+
+        // ── 1. Buscar pedido ─────────────────────────────────────────────────────────
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> {
+                    log.error("[deliverOrder] Pedido no encontrado id={}", pedidoId);
+                    return new PedidoNotFoundException(pedidoId);
+                });
+
+        // ── 2. Validar que pueda ser marcado como entregado ──────────────────────────
+        if (pedido.getEstado() == EstadoPedido.ENTREGADO) {
+            log.error("[deliverOrder] No se puede marcar pedido {} - ya está ENTREGADO", pedidoId);
+            throw new PedidoDeliverException(pedidoId, "el pedido ya ha sido entregado");
+        }
+        if (pedido.getEstado() == EstadoPedido.CANCELADO) {
+            log.error("[deliverOrder] No se puede marcar pedido {} - está CANCELADO", pedidoId);
+            throw new PedidoDeliverException(pedidoId, "el pedido fue cancelado");
+        }
+        if (pedido.getEstado() == EstadoPedido.PENDIENTE) {
+            log.error("[deliverOrder] No se puede marcar pedido {} - está PENDIENTE sin repartidor", pedidoId);
+            throw new PedidoDeliverException(pedidoId, "el pedido no tiene repartidor asignado");
+        }
+
+        // ── 3. Liberar repartidor ────────────────────────────────────────────────────
+        if (pedido.getRepartidorId() != null) {
+            log.info("[deliverOrder] Liberando repartidor id={}", pedido.getRepartidorId());
+            deliveryClient.releaseRepartidor(pedido.getRepartidorId(), "ENTREGADO");
+        }
+
+        // ── 4. Actualizar pedido a ENTREGADO ─────────────────────────────────────────
+        Pedido pedidoEntregado = Pedido.builder()
+                .id(pedido.getId())
+                .restauranteId(pedido.getRestauranteId())
+                .repartidorId(pedido.getRepartidorId())
+                .clienteId(pedido.getClienteId())
+                .clienteNombre(pedido.getClienteNombre())
+                .clienteCoordenadasX(pedido.getClienteCoordenadasX())
+                .clienteCoordenadasY(pedido.getClienteCoordenadasY())
+                .productos(pedido.getProductos())
+                .estado(EstadoPedido.ENTREGADO)
+                .tiempoEstimado(null)
+                .build();
+
+        pedidoRepository.save(pedidoEntregado);
+        log.info("[deliverOrder] Pedido {} marcado como ENTREGADO exitosamente", pedidoId);
+
+        // ── 5. Retornar respuesta ────────────────────────────────────────────────────
+        return DeliverOrderResponseDto.builder()
+                .id(pedidoEntregado.getId())
+                .estado(pedidoEntregado.getEstado())
+                .mensaje("Pedido marcado como entregado exitosamente")
                 .build();
     }
 }
