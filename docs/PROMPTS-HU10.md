@@ -115,6 +115,8 @@ Then retorna el repartidor con id 1 con su estado, vehículo y coordenadas
 
 ## Prompt Paso 3.1 — Crear servicios HTTP (Angular 19) ✅ COMPLETADO
 
+**Proyecto creado:** `/home/omar/proyectos/semana7/FoodTech_MVP/frontend/foodtech-app`
+
 ```
 Tengo una aplicación Angular 19 standalone.
 
@@ -156,7 +158,7 @@ Tengo una aplicación Angular 19 standalone.
 
 ---
 
-## Prompt Paso 3.2 — Crear componente MapaComponent con Canvas
+## Prompt Paso 3.2 — Crear componente MapaComponent con Canvas ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone.
@@ -287,13 +289,17 @@ Tengo una aplicación Angular 19 standalone.
 
 | Paso | Archivo | Descripción | Estado |
 |------|---------|-------------|--------|
+| 3.1 | **Proyecto Angular 19** | `frontend/foodtech-app/` | ✅ Creado |
 | 3.1 | `src/environments/environment.ts` | URLs de los servicios | ✅ Creado |
 | 3.1 | `src/app/models/restaurante.model.ts` | Interface Restaurante | ✅ Creado |
 | 3.1 | `src/app/models/producto-menu.model.ts` | Interface ProductoMenu | ✅ Creado |
 | 3.1 | `src/app/models/deliver.model.ts` | Interface Deliver | ✅ Creado |
 | 3.1 | `src/app/services/restaurante.service.ts` | Servicio HTTP restaurantes | ✅ Creado |
 | 3.1 | `src/app/services/deliver.service.ts` | Servicio HTTP delivers | ✅ Creado |
-| 3.2 | `src/app/components/mapa/mapa.component.ts` | Componente Canvas del mapa | ⏳ Pendiente |
+| 3.1 | `src/app/app.config.ts` | Configuración HttpClient | ✅ Modificado |
+| 3.2 | `src/app/components/mapa/mapa.component.ts` | Componente Canvas del mapa | ✅ Creado |
+| 3.2 | `src/app/components/mapa/mapa.component.html` | Template del mapa | ✅ Creado |
+| 3.2 | `src/app/components/mapa/mapa.component.css` | Estilos del mapa | ✅ Creado |
 | 3.3 | `src/app/components/menu-modal/menu-modal.component.ts` | Modal del menú | ⏳ Pendiente |
 | 3.4 | `src/app/app.component.ts` | Integración de componentes | ⏳ Pendiente |
 
@@ -463,7 +469,7 @@ El trabajo backend de HU10 está terminado. Los endpoints están funcionando y l
 | Paso | Descripción | Estado |
 |------|-------------|--------|
 | 3.1 | Servicios HTTP y modelos | ✅ Completado |
-| 3.2 | MapaComponent con Canvas | ⏳ Pendiente |
+| 3.2 | MapaComponent con Canvas | ✅ Completado |
 | 3.3 | MenuModalComponent | ⏳ Pendiente |
 | 3.4 | Integración en AppComponent | ⏳ Pendiente |
 
