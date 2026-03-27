@@ -263,27 +263,40 @@ And el repartidor asignado vuelve a estado ACTIVO
 ## HU10 - Visualizar y seleccionar restaurante
 
 **Como** usuario consumidor \
-**Quiero** ver los restaurantes disponibles en el mapa y seleccionar uno \
-**Para** ver su menú 
+**Quiero** ver los restaurantes y repartidores disponibles en el mapa y seleccionar un restaurante \
+**Para** ver su menú y hacer un pedido
 
 ### Criterios de aceptación
+
 ```gherkin
 Feature: Visualización y selección de un restaurante
 
 Scenario: Usuario ve todos los restaurantes en el mapa
-Given existen restaurantes hardcodeados en el sistema
+Given existen restaurantes en el sistema
 When el usuario accede al mapa
 Then debe ver todos los restaurantes con su nombre y ubicación
+And debe ver todos los repartidores con su estado y vehículo
 
 Scenario: Usuario selecciona un restaurante y ve su menú
 Given el usuario visualiza los restaurantes en el mapa
 When selecciona el restaurante "La Parrilla"
 Then debe ver el menú de "La Parrilla" con sus productos y precios
+And puede agregar productos al carrito
 
 Scenario: No hay restaurantes registrados
 Given no existen restaurantes en el sistema
 When el usuario accede al mapa
 Then debe ver un mensaje indicando que no hay restaurantes disponibles
+
+Scenario: API retorna lista de restaurantes
+Given el servicio order-service está activo
+When se hace GET /restaurants
+Then retorna lista de restaurantes con id, nombre, coordenadas y menú
+
+Scenario: API retorna lista de repartidores
+Given el servicio delivery-service está activo
+When se hace GET /delivery/repartidores
+Then retorna lista de repartidores con id, nombre, estado, vehículo y coordenadas
 ```
 -----------------------------------------------------------------------------
 # FASE 5 - Interfaz del repartidor
