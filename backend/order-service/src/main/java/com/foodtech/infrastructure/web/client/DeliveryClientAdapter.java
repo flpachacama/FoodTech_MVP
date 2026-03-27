@@ -2,11 +2,15 @@ package com.foodtech.order.infrastructure.web.client;
 
 import com.foodtech.order.domain.port.output.DeliveryClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DeliveryClientAdapter implements DeliveryClient {
@@ -29,6 +33,25 @@ public class DeliveryClientAdapter implements DeliveryClient {
         } catch (RestClientResponseException e) {
             throw new RuntimeException(
                     "Error en delivery-service [" + e.getStatusCode() + "]: " + e.getResponseBodyAsString(), e);
+        }
+    }
+
+    @Override
+    public void releaseRepartidor(Long repartidorId) {
+        String url = deliveryServiceUrl + "/delivery/" + repartidorId + "/state";
+        Map<String, String> requestBody = Map.of("evento", "ENTREGA_COMPLETADA");
+        
+        log.info("Liberando repartidor {} con evento ENTREGA_COMPLETADA", repartidorId);
+        
+        try {
+            restTemplate.put(url, requestBody);
+            log.info("Repartidor {} liberado exitosamente", repartidorId);
+        } catch (RestClientResponseException e) {
+            log.error("Error al liberar repartidor {} - Status: {}, Body: {}", 
+                    repartidorId, e.getStatusCode(), e.getResponseBodyAsString());
+        } catch (Exception e) {
+            log.error("Error inesperado al liberar repartidor {}: {}", 
+                    repartidorId, e.getMessage());
         }
     }
 }
