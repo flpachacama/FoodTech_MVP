@@ -64,8 +64,13 @@ ng serve
 - Scroll para listas largas de productos
 - Responsive design
 
-### ⏳ Próximos pasos
-- **Paso 3.4:** Integración en AppComponent
+### ✅ Paso 3.4 - COMPLETADO
+- AppComponent modificado con signals para estado
+- Integración de MapaComponent y MenuModalComponent
+- Métodos onRestauranteSelected() y onCloseModal()
+- Template principal con container, título y componentes integrados
+- Estilos globales en styles.css con gradiente de fondo y container centrado
+- Aplicación completamente funcional
 
 ## Conexión con Backend
 

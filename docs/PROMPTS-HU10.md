@@ -240,7 +240,7 @@ Tengo una aplicación Angular 19 standalone.
 
 ---
 
-## Prompt Paso 3.4 — Integrar componentes en página principal
+## Prompt Paso 3.4 — Integrar componentes en página principal ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone.
@@ -303,7 +303,9 @@ Tengo una aplicación Angular 19 standalone.
 | 3.3 | `src/app/components/menu-modal/menu-modal.component.ts` | Modal del menú | ✅ Creado |
 | 3.3 | `src/app/components/menu-modal/menu-modal.component.html` | Template del modal | ✅ Creado |
 | 3.3 | `src/app/components/menu-modal/menu-modal.component.css` | Estilos del modal | ✅ Creado |
-| 3.4 | `src/app/app.component.ts` | Integración de componentes | ⏳ Pendiente |
+| 3.4 | `src/app/app.component.ts` | Integración de componentes | ✅ Modificado |
+| 3.4 | `src/app/app.component.html` | Template principal | ✅ Modificado |
+| 3.4 | `src/styles.css` | Estilos globales | ✅ Modificado |
 
 ---
 
@@ -466,14 +468,14 @@ curl -s http://localhost:8080/delivers/1 | jq
 
 El trabajo backend de HU10 está terminado. Los endpoints están funcionando y listos para ser consumidos por el frontend.
 
-**Frontend:** 🔄 **PROMPTS LISTOS - LISTO PARA IMPLEMENTAR**
+**Frontend:** ✅ **COMPLETADO**
 
 | Paso | Descripción | Estado |
 |------|-------------|--------|
 | 3.1 | Servicios HTTP y modelos | ✅ Completado |
 | 3.2 | MapaComponent con Canvas | ✅ Completado |
 | 3.3 | MenuModalComponent | ✅ Completado |
-| 3.4 | Integración en AppComponent | ⏳ Pendiente |
+| 3.4 | Integración en AppComponent | ✅ Completado |
 
 **Endpoints disponibles:**
 - ✅ `GET /restaurants` → Lista todos los restaurantes con sus menús (puerto 8081)
