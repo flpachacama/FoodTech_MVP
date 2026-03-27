@@ -88,8 +88,7 @@ public class OrderApplicationService implements OrderUseCase {
         if (request.getRestauranteId() == null) {
             throw new IllegalArgumentException("El restauranteId es obligatorio");
         }
-        
-        // Validar que el restaurante existe
+
         if (!restauranteRepository.existsById(request.getRestauranteId())) {
             throw new RestauranteNotFoundException(request.getRestauranteId());
         }
