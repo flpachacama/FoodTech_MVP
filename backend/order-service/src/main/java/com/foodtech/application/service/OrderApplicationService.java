@@ -12,12 +12,14 @@ import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.ProductoPedidoDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderApplicationService implements OrderUseCase {
 
     private final PedidoRepository pedidoRepository;
@@ -28,12 +30,15 @@ public class OrderApplicationService implements OrderUseCase {
 
         // ── 1. Validar campos obligatorios ───────────────────────────────────
         validateRequest(request);
+        log.info("[createOrder] Creando pedido para cliente='{}' restauranteId={}",
+                request.getClienteNombre(), request.getRestauranteId());
 
         // ── 2. Mapear DTO → dominio con estado inicial PENDIENTE ─────────────
         Pedido pedido = toDomain(request);
 
         // ── 3. Persistir pedido ──────────────────────────────────────────────
         Pedido pedidoGuardado = pedidoRepository.save(pedido);
+        log.info("[createOrder] Pedido persistido con id={}", pedidoGuardado.getId());
 
         // ── 4. Solicitar asignación al delivery-service ──────────────────────
         DeliveryAssignmentResponse deliveryResponse;
@@ -45,7 +50,10 @@ public class OrderApplicationService implements OrderUseCase {
                     request.getClima() != null ? request.getClima() : "SOLEADO"
             );
             deliveryResponse = deliveryClient.assign(deliveryRequest);
+            log.info("[createOrder] Respuesta delivery: estado={} repartidorId={}",
+                    deliveryResponse.estado(), deliveryResponse.repartidorId());
         } catch (Exception ex) {
+            log.error("[createOrder] Fallo al llamar delivery-service: {}", ex.getMessage());
             throw new IllegalStateException(
                     "Error al comunicarse con el servicio de delivery: " + ex.getMessage(), ex
             );
