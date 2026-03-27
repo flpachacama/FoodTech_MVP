@@ -15,6 +15,7 @@ public class Pedido {
     private Long id;
     private EstadoPedido estado;
     private Long restauranteId;
+    private Long repartidorId;
     private List<ProductoPedido> productos;
     private Long clienteId;
     private String clienteNombre;
