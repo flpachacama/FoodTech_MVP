@@ -55,8 +55,16 @@ ng serve
 - Signals para estado reactivo
 - Grid de fondo para referencia visual
 
+### ✅ Paso 3.3 - COMPLETADO
+- MenuModalComponent creado para mostrar menú de restaurante
+- Modal con overlay oscuro y card centrada
+- Lista de productos con nombre y precio formateado (COP)
+- Botón "Agregar" en cada producto
+- Animaciones de entrada (fadeIn, slideIn)
+- Scroll para listas largas de productos
+- Responsive design
+
 ### ⏳ Próximos pasos
-- **Paso 3.3:** MenuModalComponent (mostrar menú del restaurante)
 - **Paso 3.4:** Integración en AppComponent
 
 ## Conexión con Backend
@@ -98,3 +106,27 @@ El componente de mapa visualiza en un canvas de 800x800 pixels:
 - Cursor pointer al pasar sobre restaurantes
 - Tooltip al hacer hover
 - Evento `restauranteSelected` al hacer click
+
+## Características del MenuModalComponent
+
+Modal para mostrar el menú de un restaurante seleccionado:
+
+**Funcionalidad:**
+- Recibe restaurante seleccionado como @Input()
+- Muestra/oculta con @Input() visible
+- Emite evento `close` al cerrar
+- Emite evento `agregarProducto` con producto seleccionado
+
+**Diseño:**
+- Overlay oscuro con blur de fondo
+- Card centrada con animación de entrada
+- Header con gradiente morado y nombre del restaurante
+- Botón X para cerrar
+- Lista scrolleable de productos
+- Formato de precios: $18.000 COP
+
+**Interacción:**
+- Click en overlay o X cierra el modal
+- Botón "Agregar" en cada producto con hover effect
+- Responsive: en móvil ocupa 95% del ancho
+- Animaciones suaves (fadeIn, slideIn)

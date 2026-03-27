@@ -201,7 +201,7 @@ Tengo una aplicación Angular 19 standalone.
 
 ---
 
-## Prompt Paso 3.3 — Crear modal de menú del restaurante
+## Prompt Paso 3.3 — Crear modal de menú del restaurante ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone.
@@ -300,7 +300,9 @@ Tengo una aplicación Angular 19 standalone.
 | 3.2 | `src/app/components/mapa/mapa.component.ts` | Componente Canvas del mapa | ✅ Creado |
 | 3.2 | `src/app/components/mapa/mapa.component.html` | Template del mapa | ✅ Creado |
 | 3.2 | `src/app/components/mapa/mapa.component.css` | Estilos del mapa | ✅ Creado |
-| 3.3 | `src/app/components/menu-modal/menu-modal.component.ts` | Modal del menú | ⏳ Pendiente |
+| 3.3 | `src/app/components/menu-modal/menu-modal.component.ts` | Modal del menú | ✅ Creado |
+| 3.3 | `src/app/components/menu-modal/menu-modal.component.html` | Template del modal | ✅ Creado |
+| 3.3 | `src/app/components/menu-modal/menu-modal.component.css` | Estilos del modal | ✅ Creado |
 | 3.4 | `src/app/app.component.ts` | Integración de componentes | ⏳ Pendiente |
 
 ---
@@ -470,7 +472,7 @@ El trabajo backend de HU10 está terminado. Los endpoints están funcionando y l
 |------|-------------|--------|
 | 3.1 | Servicios HTTP y modelos | ✅ Completado |
 | 3.2 | MapaComponent con Canvas | ✅ Completado |
-| 3.3 | MenuModalComponent | ⏳ Pendiente |
+| 3.3 | MenuModalComponent | ✅ Completado |
 | 3.4 | Integración en AppComponent | ⏳ Pendiente |
 
 **Endpoints disponibles:**
