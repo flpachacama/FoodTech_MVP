@@ -18,6 +18,7 @@ public class OrderRequestDto {
     private Integer restauranteY;
     private String clima;
     private List<ProductoPedidoDto> productos;
+    private Long clienteId;
     private String clienteNombre;
     private Integer clienteCoordenadasX;
     private Integer clienteCoordenadasY;

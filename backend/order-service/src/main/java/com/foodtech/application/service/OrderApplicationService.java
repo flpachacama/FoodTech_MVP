@@ -110,6 +110,7 @@ public class OrderApplicationService implements OrderUseCase {
 
         return Pedido.builder()
                 .restauranteId(request.getRestauranteId())
+                .clienteId(request.getClienteId())
                 .clienteNombre(request.getClienteNombre())
                 .clienteCoordenadasX(request.getClienteCoordenadasX())
                 .clienteCoordenadasY(request.getClienteCoordenadasY())
@@ -137,6 +138,7 @@ public class OrderApplicationService implements OrderUseCase {
         return OrderResponseDto.builder()
                 .id(pedido.getId())
                 .restauranteId(pedido.getRestauranteId())
+                .clienteId(pedido.getClienteId())
                 .clienteNombre(pedido.getClienteNombre())
                 .clienteCoordenadasX(request.getClienteCoordenadasX())
                 .clienteCoordenadasY(request.getClienteCoordenadasY())
