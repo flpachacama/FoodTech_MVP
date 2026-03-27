@@ -1,8 +1,24 @@
+-- =============================================================
 -- Datos iniciales para la tabla repartidores
--- Estos datos se cargan automáticamente al iniciar la aplicación
+-- Idempotente: no inserta si ya existen (basado en nombre único)
+-- =============================================================
 
-INSERT INTO repartidores (nombre, estado, vehiculo, x, y) VALUES ('Carlos Mendoza', 'ACTIVO', 'MOTO', 25, 40);
-INSERT INTO repartidores (nombre, estado, vehiculo, x, y) VALUES ('Ana Rodríguez', 'ACTIVO', 'BICICLETA', 60, 15);
-INSERT INTO repartidores (nombre, estado, vehiculo, x, y) VALUES ('Luis Fernández', 'EN_ENTREGA', 'AUTO', 80, 75);
-INSERT INTO repartidores (nombre, estado, vehiculo, x, y) VALUES ('María González', 'EN_ENTREGA', 'MOTO', 10, 90);
-INSERT INTO repartidores (nombre, estado, vehiculo, x, y) VALUES ('Pedro Sánchez', 'INACTIVO', 'AUTO', 45, 55);
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (1, 'Carlos Mendoza', 'ACTIVO', 'MOTO', 25, 40)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (2, 'Ana Rodríguez', 'ACTIVO', 'BICICLETA', 60, 15)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (3, 'Luis Fernández', 'EN_ENTREGA', 'AUTO', 80, 75)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (4, 'María González', 'EN_ENTREGA', 'MOTO', 10, 90)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (5, 'Pedro Sánchez', 'INACTIVO', 'AUTO', 45, 55)
+ON CONFLICT (id) DO NOTHING;
