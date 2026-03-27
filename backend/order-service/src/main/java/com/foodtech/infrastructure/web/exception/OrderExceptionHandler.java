@@ -1,5 +1,6 @@
 package com.foodtech.order.infrastructure.web.exception;
 
+import com.foodtech.order.domain.exception.RestauranteNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,12 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class OrderExceptionHandler {
+
+    /** 404 — restaurante no encontrado */
+    @ExceptionHandler(RestauranteNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleRestauranteNotFound(RestauranteNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, "Restaurante no encontrado", ex.getMessage());
+    }
 
     /** 400 — campos obligatorios faltantes o inválidos (validación @Valid) */
     @ExceptionHandler(MethodArgumentNotValidException.class)

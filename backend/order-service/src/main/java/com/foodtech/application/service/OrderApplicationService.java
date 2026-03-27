@@ -1,5 +1,6 @@
 package com.foodtech.order.application.service;
 
+import com.foodtech.order.domain.exception.RestauranteNotFoundException;
 import com.foodtech.order.domain.model.EstadoPedido;
 import com.foodtech.order.domain.model.Pedido;
 import com.foodtech.order.domain.model.ProductoPedido;
@@ -8,6 +9,7 @@ import com.foodtech.order.domain.port.output.DeliveryClient;
 import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentRequest;
 import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.order.domain.port.output.PedidoRepository;
+import com.foodtech.order.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.ProductoPedidoDto;
@@ -24,6 +26,7 @@ public class OrderApplicationService implements OrderUseCase {
 
     private final PedidoRepository pedidoRepository;
     private final DeliveryClient deliveryClient;
+    private final RestauranteJpaRepository restauranteRepository;
 
     @Override
     public OrderResponseDto createOrder(OrderRequestDto request) {
@@ -85,6 +88,12 @@ public class OrderApplicationService implements OrderUseCase {
         if (request.getRestauranteId() == null) {
             throw new IllegalArgumentException("El restauranteId es obligatorio");
         }
+        
+        // Validar que el restaurante existe
+        if (!restauranteRepository.existsById(request.getRestauranteId())) {
+            throw new RestauranteNotFoundException(request.getRestauranteId());
+        }
+        
         if (request.getClienteNombre() == null || request.getClienteNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre del cliente es obligatorio");
         }
