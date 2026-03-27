@@ -1,5 +1,7 @@
 package com.foodtech.order.application.service;
 
+import com.foodtech.order.domain.exception.PedidoCancelException;
+import com.foodtech.order.domain.exception.PedidoNotFoundException;
 import com.foodtech.order.domain.exception.RestauranteNotFoundException;
 import com.foodtech.order.domain.model.EstadoPedido;
 import com.foodtech.order.domain.model.Pedido;
@@ -10,6 +12,7 @@ import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentRe
 import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.order.domain.port.output.PedidoRepository;
 import com.foodtech.order.infrastructure.persistence.RestauranteJpaRepository;
+import com.foodtech.order.infrastructure.web.dto.CancelOrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.ProductoPedidoDto;
@@ -31,19 +34,15 @@ public class OrderApplicationService implements OrderUseCase {
     @Override
     public OrderResponseDto createOrder(OrderRequestDto request) {
 
-        // ── 1. Validar campos obligatorios ───────────────────────────────────
         validateRequest(request);
         log.info("[createOrder] Creando pedido para cliente='{}' restauranteId={}",
                 request.getClienteNombre(), request.getRestauranteId());
 
-        // ── 2. Mapear DTO → dominio con estado inicial PENDIENTE ─────────────
         Pedido pedido = toDomain(request);
 
-        // ── 3. Persistir pedido ──────────────────────────────────────────────
         Pedido pedidoGuardado = pedidoRepository.save(pedido);
         log.info("[createOrder] Pedido persistido con id={}", pedidoGuardado.getId());
 
-        // ── 4. Solicitar asignación al delivery-service ──────────────────────
         DeliveryAssignmentResponse deliveryResponse;
         try {
             DeliveryAssignmentRequest deliveryRequest = new DeliveryAssignmentRequest(
@@ -62,7 +61,6 @@ public class OrderApplicationService implements OrderUseCase {
             );
         }
 
-        // ── 5. Actualizar estado según respuesta de delivery ─────────────────
         EstadoPedido estadoFinal = resolveEstado(deliveryResponse.estado());
 
         Pedido pedidoActualizado = Pedido.builder()
@@ -80,11 +78,8 @@ public class OrderApplicationService implements OrderUseCase {
 
         pedidoRepository.save(pedidoActualizado);
 
-        // ── 6. Mapear dominio → DTO de respuesta ─────────────────────────────
         return toResponse(pedidoActualizado, request);
     }
-
-    // ─── Helpers privados ────────────────────────────────────────────────────
 
     private void validateRequest(OrderRequestDto request) {
         if (request.getRestauranteId() == null) {
@@ -157,6 +152,53 @@ public class OrderApplicationService implements OrderUseCase {
                 .productos(productosDto)
                 .estado(pedido.getEstado())
                 .tiempoEstimado(pedido.getTiempoEstimado())
+                .build();
+    }
+
+    @Override
+    public CancelOrderResponseDto cancelOrder(Long pedidoId) {
+        log.info("[cancelOrder] Iniciando cancelación del pedido id={}", pedidoId);
+
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> {
+                    log.error("[cancelOrder] Pedido no encontrado id={}", pedidoId);
+                    return new PedidoNotFoundException(pedidoId);
+                });
+
+        if (pedido.getEstado() == EstadoPedido.ENTREGADO) {
+            log.error("[cancelOrder] No se puede cancelar pedido {} - ya está ENTREGADO", pedidoId);
+            throw new PedidoCancelException(pedidoId, "el pedido ya ha sido entregado");
+        }
+        if (pedido.getEstado() == EstadoPedido.CANCELADO) {
+            log.error("[cancelOrder] No se puede cancelar pedido {} - ya está CANCELADO", pedidoId);
+            throw new PedidoCancelException(pedidoId, "el pedido ya fue cancelado anteriormente");
+        }
+
+        if (pedido.getRepartidorId() != null) {
+            log.info("[cancelOrder] Liberando repartidor id={}", pedido.getRepartidorId());
+            deliveryClient.releaseRepartidor(pedido.getRepartidorId());
+        }
+
+        Pedido pedidoCancelado = Pedido.builder()
+                .id(pedido.getId())
+                .restauranteId(pedido.getRestauranteId())
+                .repartidorId(null)
+                .clienteId(pedido.getClienteId())
+                .clienteNombre(pedido.getClienteNombre())
+                .clienteCoordenadasX(pedido.getClienteCoordenadasX())
+                .clienteCoordenadasY(pedido.getClienteCoordenadasY())
+                .productos(pedido.getProductos())
+                .estado(EstadoPedido.CANCELADO)
+                .tiempoEstimado(null)
+                .build();
+
+        pedidoRepository.save(pedidoCancelado);
+        log.info("[cancelOrder] Pedido {} cancelado exitosamente", pedidoId);
+
+        return CancelOrderResponseDto.builder()
+                .id(pedidoCancelado.getId())
+                .estado(pedidoCancelado.getEstado())
+                .mensaje("Pedido cancelado exitosamente")
                 .build();
     }
 }
