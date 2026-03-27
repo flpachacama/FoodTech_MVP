@@ -2,13 +2,16 @@
 
 ## Análisis de la HU
 
-**Problema identificado:** La HU10 asume que existen endpoints para consultar restaurantes y repartidores, pero estos NO existen:
+**Estado:** ✅ **BACKEND COMPLETADO**
 
-| Recurso | Endpoint necesario | ¿Existe? | Servicio |
-|---------|-------------------|----------|----------|
-| Restaurantes | `GET /restaurants` | ❌ NO | order-service |
-| Restaurante por ID | `GET /restaurants/{id}` | ❌ NO | order-service |
-| Repartidores | `GET /delivery/repartidores` | ❌ NO | delivery-service |
+Endpoints implementados para consultar restaurantes y repartidores:
+
+| Recurso | Endpoint | ¿Existe? | Servicio | Puerto |
+|---------|----------|----------|----------|--------|
+| Restaurantes | `GET /restaurants` | ✅ SÍ | order-service | 8081 |
+| Restaurante por ID | `GET /restaurants/{id}` | ✅ SÍ | order-service | 8081 |
+| Repartidores | `GET /delivers` | ✅ SÍ | delivery-service | 8080 |
+| Repartidor por ID | `GET /delivers/{id}` | ✅ SÍ | delivery-service | 8080 |
 
 ---
 
@@ -17,22 +20,24 @@
 ```markdown
 ### HU10 - Visualizar y seleccionar restaurante
 
-**Subtareas DEV (Backend - order-service):**
-* Crear RestauranteResponseDto con id, nombre, coordenadasX, coordenadasY, menu (lista de productos)
-* Crear RestauranteController con endpoints:
+**Subtareas DEV (Backend - order-service):** ✅ COMPLETADO
+* ✅ Crear RestauranteResponseDto con id, nombre, coordenadasX, coordenadasY, menu (lista de productos)
+* ✅ Crear RestauranteController con endpoints:
   - GET /restaurants → lista todos los restaurantes con sus menús
   - GET /restaurants/{id} → retorna un restaurante específico con su menú
-* Crear RestauranteService para la lógica de consulta
+* ✅ Crear RestauranteService para la lógica de consulta
 
-**Subtareas DEV (Backend - delivery-service):**
-* Crear RepartidorListResponseDto con id, nombre, estado, vehiculo, ubicacionX, ubicacionY
-* Agregar endpoint GET /delivery/repartidores en AsignacionController
-* Retornar lista de repartidores con sus coordenadas actuales
+**Subtareas DEV (Backend - delivery-service):** ✅ COMPLETADO
+* ✅ Crear RepartidorListResponseDto con id, nombre, estado, vehiculo, ubicacionX, ubicacionY
+* ✅ Crear DeliversController con endpoints:
+  - GET /delivers → lista todos los repartidores con sus ubicaciones
+  - GET /delivers/{id} → retorna un repartidor específico
+* ✅ Agregar métodos getAllRepartidores() y getRepartidorById() en AsignacionApplicationService
 
-**Subtareas DEV (Frontend):**
+**Subtareas DEV (Frontend):** ⏳ PENDIENTE
 * Crear componente MapaComponent con Canvas para visualizar el mapa
 * Crear servicio RestauranteService para consultar GET /restaurants
-* Crear servicio RepartidorService para consultar GET /delivery/repartidores
+* Crear servicio RepartidorService para consultar GET /delivers
 * Renderizar posiciones x,y en el mapa con símbolos específicos:
   - 🏪 Restaurantes (círculo rojo)
   - 🛵 Repartidores (triángulo según vehículo y color según estado)
@@ -79,8 +84,13 @@ Then retorna lista de restaurantes con id, nombre, coordenadas y menú
 
 Scenario: API retorna lista de repartidores
 Given el servicio delivery-service está activo
-When se hace GET /delivery/repartidores
+When se hace GET /delivers
 Then retorna lista de repartidores con id, nombre, estado, vehículo y coordenadas
+
+Scenario: API retorna repartidor específico
+Given el servicio delivery-service está activo
+When se hace GET /delivers/1
+Then retorna el repartidor con id 1 con su estado, vehículo y coordenadas
 ```
 ```
 
@@ -88,22 +98,208 @@ Then retorna lista de repartidores con id, nombre, estado, vehículo y coordenad
 
 ## Plan de ejecución (Backend primero)
 
-### Paso 1 — Crear endpoint GET /restaurants en order-service
-- Archivos: `RestauranteController.java`, `RestauranteResponseDto.java`, `RestauranteService.java`
+### Paso 1 — Crear endpoint GET /restaurants en order-service ✅ COMPLETADO
+- Archivos: `RestauranteController.java`, `RestauranteResponseDto.java`, `RestauranteService.java`, `ProductoMenuDto.java`
 - Dependencias previas: Ya existe `RestauranteJpaRepository` y `RestauranteEntity`
-- Por qué este orden: El frontend necesita este endpoint para mostrar restaurantes
+- Estado: ✅ Implementado y probado
 
-### Paso 2 — Crear endpoint GET /delivery/repartidores en delivery-service
-- Archivos: Modificar `AsignacionController.java`, crear `RepartidorListResponseDto.java`
+### Paso 2 — Crear endpoints GET /delivers en delivery-service ✅ COMPLETADO
+- Archivos: `DeliversController.java`, `RepartidorListResponseDto.java`, modificado `AsignacionApplicationService.java`
 - Dependencias previas: Ya existe `RepartidorRepository` y modelo `Repartidor`
-- Por qué este orden: El frontend necesita este endpoint para mostrar repartidores
+- Estado: ✅ Implementado y probado
 
-### Paso 3 — Frontend (fuera de scope de este documento)
-- Crear componentes y servicios Angular/React para consumir los endpoints
+### Paso 3 — Frontend ⏳ PENDIENTE
+- Crear componentes y servicios Angular 19 para consumir los endpoints
 
 ---
 
-## Prompt Paso 1 — Crear endpoint GET /restaurants
+## Prompt Paso 3.1 — Crear servicios HTTP (Angular 19) ✅ COMPLETADO
+
+```
+Tengo una aplicación Angular 19 standalone.
+
+### Contexto
+- Backend en 2 microservicios:
+  - order-service: http://localhost:8081
+  - delivery-service: http://localhost:8080
+
+### Lo que necesito
+
+1. Crear `environment.ts` y `environment.prod.ts` con las URLs base:
+   ```typescript
+   export const environment = {
+     production: false,
+     orderServiceUrl: 'http://localhost:8081',
+     deliveryServiceUrl: 'http://localhost:8080'
+   };
+   ```
+
+2. Crear `restaurante.service.ts` en `src/app/services/`:
+   - Método `getAll(): Observable<Restaurante[]>` → GET /restaurants
+   - Método `getById(id: number): Observable<Restaurante>` → GET /restaurants/{id}
+
+3. Crear `deliver.service.ts` en `src/app/services/`:
+   - Método `getAll(): Observable<Deliver[]>` → GET /delivers
+   - Método `getById(id: number): Observable<Deliver>` → GET /delivers/{id}
+
+4. Crear interfaces en `src/app/models/`:
+   - `restaurante.model.ts`: id, nombre, coordenadaX, coordenadaY, menu (ProductoMenu[])
+   - `producto-menu.model.ts`: id, nombre, precio
+   - `deliver.model.ts`: id, nombre, estado, vehiculo, ubicacionX, ubicacionY
+
+### Reglas
+- Usar HttpClient con inject()
+- Usar signals donde aplique
+- Standalone components
+- Manejar errores con catchError
+```
+
+---
+
+## Prompt Paso 3.2 — Crear componente MapaComponent con Canvas
+
+```
+Tengo una aplicación Angular 19 standalone.
+
+### Contexto existente
+- Ya existen servicios `restaurante.service.ts` y `deliver.service.ts`
+- Interfaz Restaurante: { id, nombre, coordenadaX, coordenadaY, menu }
+- Interfaz Deliver: { id, nombre, estado, vehiculo, ubicacionX, ubicacionY }
+- Las coordenadas van de 0 a 100 (grid 100x100)
+
+### Lo que necesito
+
+1. Crear `mapa.component.ts` en `src/app/components/mapa/`:
+   - Componente standalone con Canvas HTML5
+   - Canvas de 800x800 pixels (escalar coordenadas 0-100 → 0-800)
+   - En ngOnInit cargar restaurantes y repartidores de los servicios
+   - Usar signals para almacenar los datos
+
+2. Renderizar en el canvas:
+   - **Restaurantes:** Círculo rojo (radio 15px) con nombre debajo
+   - **Repartidores:** Triángulo con color según estado:
+     - ACTIVO: verde
+     - EN_ENTREGA: amarillo
+     - INACTIVO: gris
+   - Icono del vehículo dentro del triángulo (emoji o letra):
+     - BICICLETA: 🚲 o "B"
+     - MOTO: 🏍️ o "M"
+     - AUTO: 🚗 o "A"
+
+3. Interactividad:
+   - Al hacer click en un restaurante, emitir evento `(restauranteSelected)` con el objeto Restaurante
+   - Mostrar tooltip al hacer hover sobre elementos
+
+### Reglas
+- Componente standalone
+- Usar signals y computed para estado reactivo
+- Canvas 2D context para dibujar
+- Método privado para convertir coordenadas: coordToPixel(coord: number): number
+```
+
+---
+
+## Prompt Paso 3.3 — Crear modal de menú del restaurante
+
+```
+Tengo una aplicación Angular 19 standalone.
+
+### Contexto existente
+- Ya existe MapaComponent que emite evento (restauranteSelected)
+- Interfaz Restaurante: { id, nombre, coordenadaX, coordenadaY, menu: ProductoMenu[] }
+- Interfaz ProductoMenu: { id, nombre, precio }
+
+### Lo que necesito
+
+1. Crear `menu-modal.component.ts` en `src/app/components/menu-modal/`:
+   - Recibe @Input() restaurante: Restaurante | null
+   - Recibe @Input() visible: boolean
+   - Emite @Output() close cuando se cierra
+   - Emite @Output() agregarProducto con el producto seleccionado
+
+2. Template del modal:
+   - Overlay oscuro de fondo
+   - Card centrada con:
+     - Header: nombre del restaurante + botón X para cerrar
+     - Lista de productos con nombre y precio formateado (COP)
+     - Botón "Agregar" en cada producto
+
+3. Estilos:
+   - Modal centrado con animación de entrada
+   - Scroll si hay muchos productos
+   - Botón Agregar con hover effect
+
+### Reglas
+- Componente standalone
+- Usar signals si es necesario
+- Formatear precios con pipe currency o manualmente: $18.000
+- Cerrar modal al hacer click en overlay o en X
+```
+
+---
+
+## Prompt Paso 3.4 — Integrar componentes en página principal
+
+```
+Tengo una aplicación Angular 19 standalone.
+
+### Contexto existente
+- Ya existe MapaComponent con evento (restauranteSelected)
+- Ya existe MenuModalComponent con inputs restaurante y visible
+- Ya existen servicios RestauranteService y DeliverService
+
+### Lo que necesito
+
+1. Crear o modificar `app.component.ts`:
+   - Importar MapaComponent y MenuModalComponent
+   - Signal para restaurante seleccionado: selectedRestaurante = signal<Restaurante | null>(null)
+   - Signal para visibilidad del modal: modalVisible = signal(false)
+   - Método onRestauranteSelected(r: Restaurante) que actualiza ambos signals
+   - Método onCloseModal() que oculta el modal
+
+2. Template:
+   ```html
+   <div class="container">
+     <h1>FoodTech - Mapa de Restaurantes</h1>
+     <app-mapa (restauranteSelected)="onRestauranteSelected($event)"></app-mapa>
+     <app-menu-modal 
+       [restaurante]="selectedRestaurante()" 
+       [visible]="modalVisible()"
+       (close)="onCloseModal()">
+     </app-menu-modal>
+   </div>
+   ```
+
+3. Estilos básicos en styles.css:
+   - Reset básico
+   - Fuente sistema
+   - Container centrado
+
+### Reglas
+- Standalone application
+- Usar signals para estado
+- Responsive básico
+```
+
+---
+
+## Resumen de archivos frontend a crear
+
+| Paso | Archivo | Descripción | Estado |
+|------|---------|-------------|--------|
+| 3.1 | `src/environments/environment.ts` | URLs de los servicios | ✅ Creado |
+| 3.1 | `src/app/models/restaurante.model.ts` | Interface Restaurante | ✅ Creado |
+| 3.1 | `src/app/models/producto-menu.model.ts` | Interface ProductoMenu | ✅ Creado |
+| 3.1 | `src/app/models/deliver.model.ts` | Interface Deliver | ✅ Creado |
+| 3.1 | `src/app/services/restaurante.service.ts` | Servicio HTTP restaurantes | ✅ Creado |
+| 3.1 | `src/app/services/deliver.service.ts` | Servicio HTTP delivers | ✅ Creado |
+| 3.2 | `src/app/components/mapa/mapa.component.ts` | Componente Canvas del mapa | ⏳ Pendiente |
+| 3.3 | `src/app/components/menu-modal/menu-modal.component.ts` | Modal del menú | ⏳ Pendiente |
+| 3.4 | `src/app/app.component.ts` | Integración de componentes | ⏳ Pendiente |
+
+---
+
+## Prompt Paso 1 — Crear endpoint GET /restaurants ✅ COMPLETADO
 
 ```
 Tengo un microservicio Spring Boot (Java 17) con Arquitectura Hexagonal.
@@ -147,7 +343,7 @@ Paquete base: `com.foodtech.order`
 
 ---
 
-## Prompt Paso 2 — Crear endpoint GET /delivery/repartidores
+## Prompt Paso 2 — Crear endpoint GET /delivers ✅ COMPLETADO
 
 ```
 Tengo un microservicio Spring Boot (Java 17) con Arquitectura Hexagonal.
@@ -168,14 +364,17 @@ Paquete base: `com.foodtech`
    - ubicacionX (Integer)
    - ubicacionY (Integer)
 
-2. Agregar método en `AsignacionApplicationService.java`:
-   - `List<RepartidorListResponseDto> getAllRepartidores()`
+2. Crear `DeliversController.java` en `infrastructure.web.controller`:
+   - @RestController con @RequestMapping("/delivers")
+   - GET / → retorna lista de todos los repartidores
+   - GET /{id} → retorna repartidor específico
 
-3. Agregar endpoint en `AsignacionController.java`:
-   - GET /delivery/repartidores → retorna lista de todos los repartidores con su ubicación actual
+3. Agregar métodos en `AsignacionApplicationService.java`:
+   - `List<RepartidorListResponseDto> getAllRepartidores()`
+   - `Optional<RepartidorListResponseDto> getRepartidorById(Long id)`
 
 ### Reglas
-- Usar el RepartidorRepository existente para obtener todos
+- Usar el RepartidorRepository existente (findAll() y findById())
 - Mapear Coordenada a ubicacionX/ubicacionY
 - Mapear enums a String para el DTO
 - Seguir el mismo estilo del controller existente
@@ -183,28 +382,30 @@ Paquete base: `com.foodtech`
 
 ---
 
-## Resumen de archivos a crear/modificar
+## Resumen de archivos creados/modificados
 
-### order-service
+### order-service ✅
 
-| Archivo | Acción |
-|---------|--------|
-| `infrastructure/web/dto/ProductoMenuDto.java` | **Crear** |
-| `infrastructure/web/dto/RestauranteResponseDto.java` | **Crear** |
-| `application/service/RestauranteService.java` | **Crear** |
-| `infrastructure/web/controller/RestauranteController.java` | **Crear** |
+| Archivo | Acción | Estado |
+|---------|--------|--------|
+| `infrastructure/web/dto/ProductoMenuDto.java` | **Crear** | ✅ Creado |
+| `infrastructure/web/dto/RestauranteResponseDto.java` | **Crear** | ✅ Creado |
+| `application/service/RestauranteService.java` | **Crear** | ✅ Creado |
+| `infrastructure/web/controller/RestauranteController.java` | **Crear** | ✅ Creado |
 
-### delivery-service
+### delivery-service ✅
 
-| Archivo | Acción |
-|---------|--------|
-| `infrastructure/web/dto/RepartidorListResponseDto.java` | **Crear** |
-| `application/service/AsignacionApplicationService.java` | Modificar |
-| `infrastructure/web/controller/AsignacionController.java` | Modificar |
+| Archivo | Acción | Estado |
+|---------|--------|--------|
+| `infrastructure/web/dto/RepartidorListResponseDto.java` | **Crear** | ✅ Creado |
+| `infrastructure/web/controller/DeliversController.java` | **Crear** | ✅ Creado |
+| `application/service/AsignacionApplicationService.java` | Modificar | ✅ Modificado |
+| `domain/port/output/RepartidorRepository.java` | Modificar (agregado findAll) | ✅ Modificado |
+| `infrastructure/persistence/adapter/RepartidorPersistenceAdapter.java` | Modificar (implementado findAll) | ✅ Modificado |
 
 ---
 
-## Pruebas sugeridas (curl)
+## Pruebas realizadas (curl)
 
 ```bash
 # Listar todos los restaurantes
@@ -214,17 +415,66 @@ curl -s http://localhost:8081/restaurants | jq
 curl -s http://localhost:8081/restaurants/1 | jq
 
 # Listar todos los repartidores
-curl -s http://localhost:8080/delivery/repartidores | jq
+curl -s http://localhost:8080/delivers | jq
+
+# Obtener repartidor específico
+curl -s http://localhost:8080/delivers/1 | jq
+```
+
+### Ejemplos de respuestas:
+
+**GET /restaurants/1:**
+```json
+{
+  "id": 1,
+  "nombre": "La Hamburguesería",
+  "coordenadaX": 50,
+  "coordenadaY": 50,
+  "menu": [
+    {"id": 1, "nombre": "Hamburguesa Clásica", "precio": 18000.0},
+    {"id": 2, "nombre": "Hamburguesa BBQ", "precio": 22000.0},
+    {"id": 3, "nombre": "Papas fritas", "precio": 8000.0}
+  ]
+}
+```
+
+**GET /delivers/1:**
+```json
+{
+  "id": 1,
+  "nombre": "Carlos Mendoza",
+  "estado": "ACTIVO",
+  "vehiculo": "MOTO",
+  "ubicacionX": 25,
+  "ubicacionY": 40
+}
 ```
 
 ---
 
-## Nota importante
+## Estado del desarrollo
 
-Esta HU10 requiere **trabajo backend antes del frontend**. Los endpoints deben existir y estar probados antes de que el equipo de frontend comience a consumirlos.
+**Backend:** ✅ **COMPLETADO Y PROBADO**
 
-Dependencias:
+El trabajo backend de HU10 está terminado. Los endpoints están funcionando y listos para ser consumidos por el frontend.
+
+**Frontend:** 🔄 **PROMPTS LISTOS - LISTO PARA IMPLEMENTAR**
+
+| Paso | Descripción | Estado |
+|------|-------------|--------|
+| 3.1 | Servicios HTTP y modelos | ✅ Completado |
+| 3.2 | MapaComponent con Canvas | ⏳ Pendiente |
+| 3.3 | MenuModalComponent | ⏳ Pendiente |
+| 3.4 | Integración en AppComponent | ⏳ Pendiente |
+
+**Endpoints disponibles:**
+- ✅ `GET /restaurants` → Lista todos los restaurantes con sus menús (puerto 8081)
+- ✅ `GET /restaurants/{id}` → Obtiene restaurante específico (puerto 8081)
+- ✅ `GET /delivers` → Lista todos los repartidores con ubicaciones (puerto 8080)
+- ✅ `GET /delivers/{id}` → Obtiene repartidor específico (puerto 8080)
+
+**Dependencias:**
 1. ✅ HU1-HU6 (delivery-service funcionando)
 2. ✅ HU7-HU9 (order-service funcionando)
-3. 🔄 **HU10 Backend** ← Estamos aquí
-4. ⏳ HU10 Frontend
+3. ✅ **HU10 Backend** ← COMPLETADO
+4. 🔄 **HU10 Frontend** ← PROMPTS LISTOS, ejecutar pasos 3.1 → 3.4
