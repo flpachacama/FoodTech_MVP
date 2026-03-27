@@ -1,0 +1,30 @@
+package com.foodtech.order.infrastructure.web.controller;
+
+import com.foodtech.order.domain.port.input.OrderUseCase;
+import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
+import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/orders")
+@RequiredArgsConstructor
+@Validated
+public class OrderController {
+
+    private final OrderUseCase orderUseCase;
+
+    @PostMapping
+    public ResponseEntity<OrderResponseDto> createOrder(@Valid @RequestBody OrderRequestDto request) {
+        OrderResponseDto response = orderUseCase.createOrder(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}

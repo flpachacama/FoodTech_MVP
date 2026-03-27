@@ -15,4 +15,5 @@ public class AsignacionResponseDTO {
     private String estado;
     private Long repartidorId;
     private String nombreRepartidor;
+    private Integer tiempoEstimado;
 }

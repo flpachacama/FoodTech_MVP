@@ -24,6 +24,9 @@ public class PedidoEntity {
     @Column(name = "restaurante_id", nullable = false)
     private Long restauranteId;
 
+    @Column(name = "repartidor_id")
+    private Long repartidorId;
+
     @Column(name = "cliente_id", nullable = false)
     private Long clienteId;
 

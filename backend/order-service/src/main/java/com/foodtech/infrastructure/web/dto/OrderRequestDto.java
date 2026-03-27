@@ -1,25 +1,26 @@
-package com.foodtech.order.domain.model;
+package com.foodtech.order.infrastructure.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pedido {
-    private Long id;
-    private EstadoPedido estado;
+public class OrderRequestDto {
+
     private Long restauranteId;
-    private Long repartidorId;
-    private List<ProductoPedido> productos;
+    private Integer restauranteX;
+    private Integer restauranteY;
+    private String clima;
+    private List<ProductoPedidoDto> productos;
     private Long clienteId;
     private String clienteNombre;
     private Integer clienteCoordenadasX;
     private Integer clienteCoordenadasY;
-    private Integer tiempoEstimado;
+    private String clienteTelefono;
 }

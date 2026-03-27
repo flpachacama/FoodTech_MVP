@@ -14,7 +14,7 @@ public class PedidoTest {
     void debeCrearPedidoYtenerCamposCorrectos() throws Exception {
         ProductoPedido producto = new ProductoPedido(1L, "Burger", null);
         List<ProductoPedido> productos = List.of(producto);
-        Pedido pedido = new Pedido(10L, EstadoPedido.PENDIENTE, 2L, productos, 5L, "Juan", 1, 2, 30);
+        Pedido pedido = new Pedido(10L, EstadoPedido.PENDIENTE, 2L, null, productos, 5L, "Juan", 1, 2, 30);
 
         Field idField = Pedido.class.getDeclaredField("id");
         idField.setAccessible(true);
@@ -27,7 +27,7 @@ public class PedidoTest {
 
     @Test
     void debeAceptarListaProductosVacia() throws Exception {
-        Pedido pedido = new Pedido(11L, EstadoPedido.PENDIENTE, 2L, Collections.emptyList(), 5L, "Ana", null, null, 0);
+        Pedido pedido = new Pedido(11L, EstadoPedido.PENDIENTE, 2L, null, Collections.emptyList(), 5L, "Ana", null, null, 0);
         Field productosField = Pedido.class.getDeclaredField("productos");
         productosField.setAccessible(true);
         assertTrue(((List) productosField.get(pedido)).isEmpty());
