@@ -75,6 +75,7 @@ public class OrderApplicationService implements OrderUseCase {
                 .clienteCoordenadasY(pedidoGuardado.getClienteCoordenadasY())
                 .productos(pedidoGuardado.getProductos())
                 .estado(estadoFinal)
+                .tiempoEstimado(deliveryResponse.tiempoEstimado())
                 .build();
 
         pedidoRepository.save(pedidoActualizado);

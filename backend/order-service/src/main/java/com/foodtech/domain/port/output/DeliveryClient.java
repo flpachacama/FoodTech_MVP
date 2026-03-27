@@ -27,6 +27,7 @@ public interface DeliveryClient {
             Long pedidoId,
             String estado,
             Long repartidorId,
-            String nombreRepartidor
+            String nombreRepartidor,
+            Integer tiempoEstimado
     ) {}
 }

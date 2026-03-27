@@ -31,6 +31,12 @@ public class AsignacionService {
         return distancia / velocidad;
     }
 
+    public int calcularTiempoEstimadoMinutos(Repartidor repartidor, Coordenada destino) {
+        double distancia = repartidor.getUbicacion().distanciaA(destino);
+        double tiempoHoras = calcularTiempoEstimado(distancia, repartidor.getVehiculo().getVelocidadKmH());
+        return (int) Math.round(tiempoHoras * 60); 
+    }
+
     private boolean esVehiculoApto(TipoVehiculo vehiculo, Clima clima) {
         if (clima == null) {
             return true;

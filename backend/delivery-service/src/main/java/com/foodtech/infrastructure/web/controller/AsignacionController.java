@@ -28,6 +28,7 @@ public class AsignacionController {
 
     private final AsignacionApplicationService asignacionApplicationService;
     private final RepartidorUseCase repartidorUseCase;
+    private final com.foodtech.domain.service.AsignacionService asignacionService;
 
     @PostMapping
     public AsignacionResponseDTO asignarRepartidor(@Valid @RequestBody AsignacionRequestDTO request) {
@@ -42,14 +43,18 @@ public class AsignacionController {
                     .estado("PENDIENTE")
                     .repartidorId(null)
                     .nombreRepartidor(null)
+                    .tiempoEstimado(null)
                     .build();
         }
+
+        Integer tiempoEstimado = asignacionService.calcularTiempoEstimadoMinutos(asignado, coordenada);
 
         return AsignacionResponseDTO.builder()
                 .pedidoId(request.getPedidoId())
                 .estado("ASIGNADO")
                 .repartidorId(asignado.getId())
                 .nombreRepartidor(asignado.getNombre())
+                .tiempoEstimado(tiempoEstimado)
                 .build();
     }
 
