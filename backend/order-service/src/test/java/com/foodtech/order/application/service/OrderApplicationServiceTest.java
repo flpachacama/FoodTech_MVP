@@ -69,7 +69,7 @@ class OrderApplicationServiceTest {
 
         when(pedidoRepository.save(any())).thenReturn(pedidoGuardado);
         when(deliveryClient.assign(any()))
-                .thenReturn(new DeliveryAssignmentResponse(42L, "ASIGNADO", 7L, "Carlos"));
+                .thenReturn(new DeliveryAssignmentResponse(42L, "ASIGNADO", 7L, "Carlos", 15));
 
         OrderResponseDto response = service.createOrder(requestBase);
 
@@ -93,7 +93,7 @@ class OrderApplicationServiceTest {
 
         when(pedidoRepository.save(any())).thenReturn(pedidoGuardado);
         when(deliveryClient.assign(any()))
-                .thenReturn(new DeliveryAssignmentResponse(43L, "PENDIENTE", null, null));
+                .thenReturn(new DeliveryAssignmentResponse(43L, "PENDIENTE", null, null, null));
 
         OrderResponseDto response = service.createOrder(requestBase);
 
@@ -173,7 +173,7 @@ class OrderApplicationServiceTest {
 
         when(pedidoRepository.save(any())).thenReturn(pedidoGuardado);
         when(deliveryClient.assign(any()))
-                .thenReturn(new DeliveryAssignmentResponse(45L, "ASIGNADO", 1L, "Pedro"));
+                .thenReturn(new DeliveryAssignmentResponse(45L, "ASIGNADO", 1L, "Pedro", 20));
 
         service.createOrder(requestBase);
 

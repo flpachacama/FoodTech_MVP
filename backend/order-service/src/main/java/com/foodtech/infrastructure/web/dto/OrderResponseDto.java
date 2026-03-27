@@ -16,7 +16,9 @@ public class OrderResponseDto {
 
     private Long id;
     private Long restauranteId;
+    private Long repartidorId;
     private List<ProductoPedidoDto> productos;
+    private Long clienteId;
     private String clienteNombre;
     private Integer clienteCoordenadasX;
     private Integer clienteCoordenadasY;

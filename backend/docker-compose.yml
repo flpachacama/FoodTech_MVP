@@ -48,7 +48,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/foodtech_orders
       SPRING_DATASOURCE_USERNAME: foodtech_user
       SPRING_DATASOURCE_PASSWORD: foodtech_pass
-      DELIVERY_SERVICE_URL: http://foodtech_delivery:8080
+      DELIVERY_SERVICE_URL: http://delivery-service:8080
     ports:
       - "8081:8081"
     depends_on:

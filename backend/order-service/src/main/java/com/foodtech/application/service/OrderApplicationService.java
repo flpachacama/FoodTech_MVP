@@ -1,5 +1,6 @@
 package com.foodtech.order.application.service;
 
+import com.foodtech.order.domain.exception.RestauranteNotFoundException;
 import com.foodtech.order.domain.model.EstadoPedido;
 import com.foodtech.order.domain.model.Pedido;
 import com.foodtech.order.domain.model.ProductoPedido;
@@ -8,6 +9,7 @@ import com.foodtech.order.domain.port.output.DeliveryClient;
 import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentRequest;
 import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.order.domain.port.output.PedidoRepository;
+import com.foodtech.order.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.order.infrastructure.web.dto.ProductoPedidoDto;
@@ -24,6 +26,7 @@ public class OrderApplicationService implements OrderUseCase {
 
     private final PedidoRepository pedidoRepository;
     private final DeliveryClient deliveryClient;
+    private final RestauranteJpaRepository restauranteRepository;
 
     @Override
     public OrderResponseDto createOrder(OrderRequestDto request) {
@@ -65,12 +68,14 @@ public class OrderApplicationService implements OrderUseCase {
         Pedido pedidoActualizado = Pedido.builder()
                 .id(pedidoGuardado.getId())
                 .restauranteId(pedidoGuardado.getRestauranteId())
+                .repartidorId(deliveryResponse.repartidorId())
                 .clienteId(pedidoGuardado.getClienteId())
                 .clienteNombre(pedidoGuardado.getClienteNombre())
                 .clienteCoordenadasX(pedidoGuardado.getClienteCoordenadasX())
                 .clienteCoordenadasY(pedidoGuardado.getClienteCoordenadasY())
                 .productos(pedidoGuardado.getProductos())
                 .estado(estadoFinal)
+                .tiempoEstimado(deliveryResponse.tiempoEstimado())
                 .build();
 
         pedidoRepository.save(pedidoActualizado);
@@ -85,6 +90,11 @@ public class OrderApplicationService implements OrderUseCase {
         if (request.getRestauranteId() == null) {
             throw new IllegalArgumentException("El restauranteId es obligatorio");
         }
+
+        if (!restauranteRepository.existsById(request.getRestauranteId())) {
+            throw new RestauranteNotFoundException(request.getRestauranteId());
+        }
+        
         if (request.getClienteNombre() == null || request.getClienteNombre().isBlank()) {
             throw new IllegalArgumentException("El nombre del cliente es obligatorio");
         }
@@ -110,6 +120,7 @@ public class OrderApplicationService implements OrderUseCase {
 
         return Pedido.builder()
                 .restauranteId(request.getRestauranteId())
+                .clienteId(request.getClienteId())
                 .clienteNombre(request.getClienteNombre())
                 .clienteCoordenadasX(request.getClienteCoordenadasX())
                 .clienteCoordenadasY(request.getClienteCoordenadasY())
@@ -137,6 +148,8 @@ public class OrderApplicationService implements OrderUseCase {
         return OrderResponseDto.builder()
                 .id(pedido.getId())
                 .restauranteId(pedido.getRestauranteId())
+                .repartidorId(pedido.getRepartidorId())
+                .clienteId(pedido.getClienteId())
                 .clienteNombre(pedido.getClienteNombre())
                 .clienteCoordenadasX(request.getClienteCoordenadasX())
                 .clienteCoordenadasY(request.getClienteCoordenadasY())
