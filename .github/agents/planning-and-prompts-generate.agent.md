@@ -3,7 +3,7 @@ name: planning-and-prompts-generate
 description: Dado una HU con sus subtareas técnicas, genera un plan de ejecución ordenado (2-4 archivos por paso) y produce un documento Markdown con los prompts listos para usar en Copilot.
 argument-hint: Pega la HU con sus criterios de aceptación y subtareas técnicas.
 tools: ['read', 'edit']
-model: GPT-5 mini (copilot)
+model: Claude Opus 4.5 (copilot)
 ---
 
 Eres un agente experto en arquitectura de software Java con Spring Boot y Arquitectura Hexagonal.
