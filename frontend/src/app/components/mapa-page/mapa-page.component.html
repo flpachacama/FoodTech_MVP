@@ -1,0 +1,10 @@
+﻿<div class="page-container">
+  <h1>FoodTech - Mapa de Restaurantes</h1>
+  <app-mapa (restauranteSelected)="onRestauranteSelected($event)"></app-mapa>
+  <app-menu-modal
+    [restaurante]="selectedRestaurante()"
+    [visible]="modalVisible()"
+    (close)="onCloseModal()"
+    (pedidoRealizado)="onPedidoRealizado()">
+  </app-menu-modal>
+</div>

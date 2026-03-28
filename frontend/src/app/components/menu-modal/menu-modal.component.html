@@ -2,12 +2,11 @@
   <div class="modal-container">
     <div class="modal-overlay" (click)="onOverlayClick($event)">
       <div class="modal-card" (click)="$event.stopPropagation()">
+
         <!-- Header -->
         <div class="modal-header">
           <h2 class="restaurante-nombre">{{ restaurante.nombre }}</h2>
-          <button class="close-btn" (click)="onClose()" aria-label="Cerrar">
-            ×
-          </button>
+          <button class="close-btn" (click)="onClose()" aria-label="Cerrar">×</button>
         </div>
 
         <!-- Product List -->
@@ -19,8 +18,8 @@
                   <span class="product-nombre">{{ producto.nombre }}</span>
                   <span class="product-precio">{{ formatPrice(producto.precio) }} COP</span>
                 </div>
-                <button 
-                  class="btn-agregar" 
+                <button
+                  class="btn-agregar"
                   (click)="onAgregarProducto(producto)"
                   [attr.aria-label]="'Agregar ' + producto.nombre">
                   Agregar
@@ -31,6 +30,33 @@
             <p class="no-products">No hay productos disponibles</p>
           }
         </div>
+
+        <!-- Cart Summary -->
+        @if (!cartService.isEmpty()) {
+          <div class="cart-section">
+            <h3 class="cart-title">Tu pedido</h3>
+            <div class="cart-items">
+              @for (item of cartService.items(); track item.producto.id) {
+                <div class="cart-item">
+                  <span class="cart-item-nombre">
+                    {{ item.cantidad }}× {{ item.producto.nombre }}
+                  </span>
+                  <span class="cart-item-subtotal">
+                    {{ formatPrice(item.producto.precio * item.cantidad) }}
+                  </span>
+                </div>
+              }
+            </div>
+            <div class="cart-total">
+              <span>Total</span>
+              <span class="cart-total-valor">{{ formatPrice(cartService.total()) }} COP</span>
+            </div>
+            <button class="btn-hacer-pedido" (click)="onHacerPedido()">
+              Hacer pedido
+            </button>
+          </div>
+        }
+
       </div>
     </div>
   </div>

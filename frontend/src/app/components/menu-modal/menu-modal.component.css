@@ -169,6 +169,77 @@
   font-size: 1rem;
 }
 
+/* Cart section */
+.cart-section {
+  border-top: 2px solid #e5e7eb;
+  padding: 16px 24px;
+  background: #f9fafb;
+  flex-shrink: 0;
+}
+
+.cart-title {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.cart-item-subtotal {
+  font-weight: 600;
+  color: #374151;
+}
+
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 10px 0;
+  border-top: 1px solid #e5e7eb;
+  margin-bottom: 14px;
+  color: #1f2937;
+}
+
+.cart-total-valor {
+  color: #764ba2;
+}
+
+.btn-hacer-pedido {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.btn-hacer-pedido:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-hacer-pedido:active {
+  transform: translateY(0);
+}
+
 /* Animaciones */
 @keyframes fadeIn {
   from {
@@ -217,5 +288,9 @@
 
   .btn-agregar {
     width: 100%;
+  }
+
+  .cart-section {
+    padding: 12px 20px;
   }
 }
