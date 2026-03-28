@@ -19,6 +19,7 @@ export class MapaComponent implements OnInit {
   private ctx!: CanvasRenderingContext2D;
   private readonly CANVAS_SIZE = 800;
   private readonly GRID_SIZE = 100;
+  private readonly PADDING = 20;
   
   // Signals
   restaurantes = signal<Restaurante[]>([]);
@@ -147,7 +148,7 @@ export class MapaComponent implements OnInit {
   }
   
   private coordToPixel(coord: number): number {
-    return (coord * this.CANVAS_SIZE) / this.GRID_SIZE;
+    return this.PADDING + (coord * (this.CANVAS_SIZE - 2 * this.PADDING)) / this.GRID_SIZE;
   }
   
   onCanvasClick(event: MouseEvent): void {
