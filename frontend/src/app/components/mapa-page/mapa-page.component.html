@@ -3,8 +3,13 @@
   <app-mapa (restauranteSelected)="onRestauranteSelected($event)"></app-mapa>
   <app-menu-modal
     [restaurante]="selectedRestaurante()"
-    [visible]="modalVisible()"
-    (close)="onCloseModal()"
+    [visible]="menuVisible()"
+    (close)="onCloseMenu()"
     (pedidoRealizado)="onPedidoRealizado()">
   </app-menu-modal>
+  <app-order-form-modal
+    [visible]="orderFormVisible()"
+    (close)="onCloseOrderForm()"
+    (pedidoConfirmado)="onPedidoConfirmado()">
+  </app-order-form-modal>
 </div>
