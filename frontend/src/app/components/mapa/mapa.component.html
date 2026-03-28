@@ -1,15 +1,17 @@
-<div class="mapa-container">
-  <canvas 
-    #canvas
-    width="800" 
-    height="800"
-    (click)="onCanvasClick($event)"
-    (mousemove)="onCanvasMouseMove($event)">
-  </canvas>
-  
-  @if (hoveredElement()) {
-    <div class="tooltip">
-      Click para ver el menú
-    </div>
-  }
+<div class="mapa-scroll-wrapper">
+  <div class="mapa-container">
+    <canvas 
+      #canvas
+      width="800" 
+      height="800"
+      (click)="onCanvasClick($event)"
+      (mousemove)="onCanvasMouseMove($event)">
+    </canvas>
+    
+    @if (hoveredElement()) {
+      <div class="tooltip">
+        Click para ver el menú
+      </div>
+    }
+  </div>
 </div>
