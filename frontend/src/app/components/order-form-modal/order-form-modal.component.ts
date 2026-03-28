@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
+import { ActiveOrdersService } from '../../services/active-orders.service';
 import { OrderRequest } from '../../models/order-request.model';
+import { OrderResponse } from '../../models/order-response.model';
 
 @Component({
   selector: 'app-order-form-modal',
@@ -20,6 +22,7 @@ export class OrderFormModalComponent implements OnChanges {
   private readonly fb = inject(FormBuilder);
   public readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
+  private readonly activeOrdersService = inject(ActiveOrdersService);
 
   enviando = signal(false);
   error = signal<string | null>(null);
@@ -90,9 +93,9 @@ export class OrderFormModalComponent implements OnChanges {
     this.error.set(null);
 
     this.orderService.crearPedido(order).subscribe({
-      next: () => {
+      next: (response: OrderResponse) => {
         this.enviando.set(false);
-        this.cartService.clear();
+        this.activeOrdersService.add(response);
         this.pedidoConfirmado.emit();
       },
       error: (err: Error) => {

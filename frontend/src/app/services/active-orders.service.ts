@@ -1,26 +1,31 @@
-﻿import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { OrderRequest } from '../models/order-request.model';
-import { Clima } from '../models/order-request.model';
 import { OrderResponse } from '../models/order-response.model';
 
 @Injectable({ providedIn: 'root' })
-export class OrderService {
+export class ActiveOrdersService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.orderServiceUrl}/orders`;
 
-  private readonly CLIMAS: Clima[] = ['SOLEADO', 'LLUVIA_SUAVE', 'LLUVIA_FUERTE'];
+  private readonly _orders = signal<OrderResponse[]>([]);
 
-  getRandomClima(): Clima {
-    return this.CLIMAS[Math.floor(Math.random() * this.CLIMAS.length)];
+  readonly orders = this._orders.asReadonly();
+  readonly hasOrders = computed(() => this._orders().length > 0);
+
+  add(order: OrderResponse): void {
+    this._orders.update(current => [...current, order]);
   }
 
-  crearPedido(order: OrderRequest): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(this.baseUrl, order).pipe(
+  cancel(id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}/cancel`, {}).pipe(
       catchError(this.handleError)
     );
+  }
+
+  remove(id: number): void {
+    this._orders.update(current => current.filter(o => o.id !== id));
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
@@ -30,7 +35,7 @@ export class OrderService {
     } else {
       errorMessage = `Código: ${error.status}, Mensaje: ${error.message}`;
     }
-    console.error('OrderService:', errorMessage);
+    console.error('ActiveOrdersService:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }
