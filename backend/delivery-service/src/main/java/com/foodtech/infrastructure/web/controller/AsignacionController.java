@@ -7,17 +7,21 @@ import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.port.input.RepartidorUseCase;
 import com.foodtech.infrastructure.web.dto.AsignacionRequestDTO;
 import com.foodtech.infrastructure.web.dto.AsignacionResponseDTO;
+import com.foodtech.infrastructure.web.dto.RepartidorListResponseDto;
 import com.foodtech.infrastructure.web.dto.RepartidorResponseDTO;
 import com.foodtech.application.service.AsignacionApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import java.util.Map;
 
@@ -84,5 +88,11 @@ public class AsignacionController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "Error interno del servidor"));
         }
+    }
+
+    @GetMapping("/fooders")
+    public ResponseEntity<List<RepartidorListResponseDto>> getAllRepartidores() {
+        List<RepartidorListResponseDto> repartidores = asignacionApplicationService.getAllRepartidores();
+        return ResponseEntity.ok(repartidores);
     }
 }

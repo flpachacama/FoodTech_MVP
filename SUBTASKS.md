@@ -186,12 +186,26 @@ Nota: Para la comunicación entre servicios, si esta llega a fallar se debe cont
 
 ### HU10 - Visualizar y seleccionar restaurante
 
-**Subtareas DEV:**
-* Crear componente MapaComponent con Canvas para visualizar el mapa
-* Crear un servicio para consultar los restaurantes
-* Renderizar posiciones x,y  en el mapa de repartidores y restaurantes con simbolos especificos
-* Al dar click en restaurante, abrir un modal con datos del restaurante y mostrar menú. 
+**Subtareas DEV (Backend - order-service):**
+* Crear RestauranteResponseDto con id, nombre, coordenadasX, coordenadasY, menu (lista de productos)
+* Crear RestauranteController con endpoints:
+  - GET /restaurants → lista todos los restaurantes con sus menús
+  - GET /restaurants/{id} → retorna un restaurante específico con su menú
+* Crear RestauranteService para la lógica de consulta
 
+**Subtareas DEV (Backend - delivery-service):**
+* Crear RepartidorListResponseDto con id, nombre, estado, vehiculo, ubicacionX, ubicacionY
+* Agregar endpoint GET /delivery/repartidores en AsignacionController
+* Retornar lista de repartidores con sus coordenadas actuales
+
+**Subtareas DEV (Frontend):**
+* Crear componente MapaComponent con Canvas para visualizar el mapa
+* Crear servicio RestauranteService para consultar GET /restaurants
+* Crear servicio RepartidorService para consultar GET /delivery/repartidores
+* Renderizar posiciones x,y en el mapa con símbolos específicos:
+  - 🏪 Restaurantes (círculo rojo)
+  - 🛵 Repartidores (triángulo según vehículo y color según estado)
+* Al dar click en restaurante, abrir modal con datos y menú
 **Subtareas QA:**
 * Validar visualización en mapa
 * Probar selección de restaurante

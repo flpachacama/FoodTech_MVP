@@ -15,5 +15,7 @@ public interface RepartidorRepository {
 
     List<Repartidor> findByEstado(EstadoRepartidor estado);
 
+    List<Repartidor> findAll();
+
     Repartidor save(Repartidor repartidor);
 }
