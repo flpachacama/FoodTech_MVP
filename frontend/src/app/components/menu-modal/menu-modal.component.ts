@@ -35,7 +35,6 @@ export class MenuModalComponent {
 
   onHacerPedido(): void {
     this.pedidoRealizado.emit();
-    this.cartService.clear();
   }
 
   formatPrice(precio: number): string {
