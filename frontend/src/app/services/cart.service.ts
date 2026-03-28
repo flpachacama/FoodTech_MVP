@@ -1,12 +1,15 @@
 ﻿import { Injectable, signal, computed } from '@angular/core';
 import { CartItem } from '../models/cart-item.model';
 import { ProductoMenu } from '../models/producto-menu.model';
+import { Restaurante } from '../models/restaurante.model';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private readonly _items = signal<CartItem[]>([]);
+  private readonly _restaurante = signal<Restaurante | null>(null);
 
   readonly items = this._items.asReadonly();
+  readonly restaurante = this._restaurante.asReadonly();
 
   readonly total = computed(() =>
     this._items().reduce((sum, item) => sum + item.producto.precio * item.cantidad, 0)
@@ -26,7 +29,12 @@ export class CartService {
     }
   }
 
+  setRestaurante(restaurante: Restaurante): void {
+    this._restaurante.set(restaurante);
+  }
+
   clear(): void {
     this._items.set([]);
+    this._restaurante.set(null);
   }
 }
