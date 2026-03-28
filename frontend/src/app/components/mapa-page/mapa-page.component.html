@@ -1,5 +1,8 @@
 ﻿<div class="page-container">
-  <h1>FoodTech - Mapa de Restaurantes</h1>
+  <div >
+     <h1 class="title" >FoodTech <div class="line">_</div></h1>
+  </div>
+  <h1 class="map-name">Mapa de Restaurantes</h1>
   <app-mapa (restauranteSelected)="onRestauranteSelected($event)"></app-mapa>
   <app-menu-modal
     [restaurante]="selectedRestaurante()"
@@ -12,4 +15,5 @@
     (close)="onCloseOrderForm()"
     (pedidoConfirmado)="onPedidoConfirmado()">
   </app-order-form-modal>
+  <app-active-orders-panel />
 </div>
