@@ -1,4 +1,3 @@
-/* Container principal del modal */
 .modal-container {
   position: fixed;
   top: 0;
@@ -12,7 +11,6 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-/* Overlay oscuro de fondo */
 .modal-overlay {
   position: absolute;
   top: 0;
@@ -23,7 +21,6 @@
   backdrop-filter: blur(2px);
 }
 
-/* Card del modal */
 .modal-card {
   position: relative;
   background: white;
@@ -38,7 +35,6 @@
   overflow: hidden;
 }
 
-/* Header del modal */
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -80,7 +76,6 @@
   transform: scale(0.95);
 }
 
-/* Lista de productos */
 .product-list {
   overflow-y: auto;
   padding: 16px 24px;
@@ -105,7 +100,6 @@
   background: #555;
 }
 
-/* Item individual de producto */
 .product-item {
   display: flex;
   justify-content: space-between;
@@ -138,7 +132,6 @@
   font-weight: 600;
 }
 
-/* Botón Agregar */
 .btn-agregar {
   background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
   color: white;
@@ -161,7 +154,6 @@
   transform: translateY(0);
 }
 
-/* Mensaje sin productos */
 .no-products {
   text-align: center;
   color: #9ca3af;
@@ -169,7 +161,6 @@
   font-size: 1rem;
 }
 
-/* Cart section */
 .cart-section {
   border-top: 2px solid #e5e7eb;
   padding: 16px 24px;
@@ -240,7 +231,6 @@
   transform: translateY(0);
 }
 
-/* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -261,7 +251,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .modal-card {
     width: 95%;

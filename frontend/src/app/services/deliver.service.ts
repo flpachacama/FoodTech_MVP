@@ -30,7 +30,6 @@ export class DeliverService {
     } else {
       errorMessage = `Código: ${error.status}, Mensaje: ${error.message}`;
     }
-    console.error('DeliverService:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

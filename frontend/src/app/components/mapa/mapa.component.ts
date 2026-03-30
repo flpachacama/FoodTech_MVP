@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, signal, output } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, signal, output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { RestauranteService, DeliverService } from '../../services';
 import { Restaurante, Deliver } from '../../models';
 
@@ -10,11 +12,12 @@ import { Restaurante, Deliver } from '../../models';
   templateUrl: './mapa.component.html',
   styleUrls: ['./mapa.component.css']
 })
-export class MapaComponent implements OnInit {
+export class MapaComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   
   private readonly restauranteService = inject(RestauranteService);
   private readonly deliverService = inject(DeliverService);
+  private readonly destroy$ = new Subject<void>();
   
   private ctx!: CanvasRenderingContext2D;
   private readonly CANVAS_SIZE = 800;
@@ -33,21 +36,25 @@ export class MapaComponent implements OnInit {
   }
   
   private loadData(): void {
-    this.restauranteService.getAll().subscribe({
-      next: (restaurantes) => {
-        this.restaurantes.set(restaurantes);
-        this.render();
-      },
-      error: (err) => console.error('Error cargando restaurantes:', err)
-    });
+    this.restauranteService.getAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (restaurantes) => {
+          this.restaurantes.set(restaurantes);
+          this.render();
+        },
+        error: () => {}
+      });
     
-    this.deliverService.getAll().subscribe({
-      next: (delivers) => {
-        this.delivers.set(delivers);
-        this.render();
-      },
-      error: (err) => console.error('Error cargando delivers:', err)
-    });
+    this.deliverService.getAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (delivers) => {
+          this.delivers.set(delivers);
+          this.render();
+        },
+        error: () => {}
+      });
   }
   
   private render(): void {
@@ -60,17 +67,14 @@ export class MapaComponent implements OnInit {
   private drawGrid(): void {
     this.ctx.strokeStyle = '#e0e0e0';
     this.ctx.lineWidth = 1;
-    
-    // Líneas verticales
-    for (let i = 0; i <= 10; i++) {
+        for (let i = 0; i <= 10; i++) {
       const x = (i * this.CANVAS_SIZE) / 10;
       this.ctx.beginPath();
       this.ctx.moveTo(x, 0);
       this.ctx.lineTo(x, this.CANVAS_SIZE);
       this.ctx.stroke();
     }
-    
-    // Líneas horizontales
+
     for (let i = 0; i <= 10; i++) {
       const y = (i * this.CANVAS_SIZE) / 10;
       this.ctx.beginPath();
@@ -83,19 +87,16 @@ export class MapaComponent implements OnInit {
   private drawRestaurante(r: Restaurante): void {
     const x = this.coordToPixel(r.coordenadaX);
     const y = this.coordToPixel(r.coordenadaY);
-    
-    // Círculo rojo
+
     this.ctx.fillStyle = '#e74c3c';
     this.ctx.beginPath();
     this.ctx.arc(x, y, 15, 0, Math.PI * 2);
     this.ctx.fill();
-    
-    // Borde blanco
+
     this.ctx.strokeStyle = '#fff';
     this.ctx.lineWidth = 2;
     this.ctx.stroke();
-    
-    // Nombre debajo
+
     this.ctx.fillStyle = '#000';
     this.ctx.font = '12px Arial';
     this.ctx.textAlign = 'center';
@@ -105,13 +106,11 @@ export class MapaComponent implements OnInit {
   private drawDeliver(d: Deliver): void {
     const x = this.coordToPixel(d.ubicacionX);
     const y = this.coordToPixel(d.ubicacionY);
-    
-    // Color según estado
-    let color = '#95a5a6'; // INACTIVO (gris)
-    if (d.estado === 'ACTIVO') color = '#27ae60'; // verde
-    if (d.estado === 'EN_ENTREGA') color = '#f39c12'; // amarillo
-    
-    // Triángulo
+
+    let color = '#95a5a6';
+    if (d.estado === 'ACTIVO') color = '#27ae60';
+    if (d.estado === 'EN_ENTREGA') color = '#f39c12';
+
     this.ctx.fillStyle = color;
     this.ctx.beginPath();
     this.ctx.moveTo(x, y - 12);
@@ -119,13 +118,11 @@ export class MapaComponent implements OnInit {
     this.ctx.lineTo(x + 10, y + 8);
     this.ctx.closePath();
     this.ctx.fill();
-    
-    // Borde
+
     this.ctx.strokeStyle = '#fff';
     this.ctx.lineWidth = 2;
     this.ctx.stroke();
-    
-    // Icono del vehículo
+
     this.ctx.fillStyle = '#fff';
     this.ctx.font = 'bold 10px Arial';
     this.ctx.textAlign = 'center';
@@ -147,7 +144,6 @@ export class MapaComponent implements OnInit {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     
-    // Verificar click en restaurantes
     for (const r of this.restaurantes()) {
       const rx = this.coordToPixel(r.coordenadaX);
       const ry = this.coordToPixel(r.coordenadaY);
@@ -167,7 +163,6 @@ export class MapaComponent implements OnInit {
     
     let found = false;
     
-    // Verificar hover en restaurantes
     for (const r of this.restaurantes()) {
       const rx = this.coordToPixel(r.coordenadaX);
       const ry = this.coordToPixel(r.coordenadaY);
@@ -185,5 +180,10 @@ export class MapaComponent implements OnInit {
       this.hoveredElement.set(null);
       this.canvasRef.nativeElement.style.cursor = 'default';
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -3,22 +3,17 @@
     <div class="modal-overlay" (click)="onOverlayClick($event)">
       <div class="modal-card" (click)="$event.stopPropagation()">
 
-        <!-- Header -->
         <div class="modal-header">
           <h2 class="modal-titulo">Confirmar pedido</h2>
           <button class="close-btn" (click)="onClose()" aria-label="Cerrar">×</button>
         </div>
 
-        <!-- Resumen del carrito -->
         <div class="resumen-section">
           <p class="resumen-label">Restaurante: <strong>{{ cartService.restaurante()?.nombre }}</strong></p>
           <p class="resumen-label">Items: <strong>{{ cartService.items().length }}</strong> producto(s) — Total: <strong>${{ cartService.total().toLocaleString('es-CO') }} COP</strong></p>
         </div>
 
-        <!-- Formulario -->
         <form [formGroup]="form" class="form-body" (ngSubmit)="onConfirmar()">
-
-          <!-- Nombre -->
           <div class="field">
             <label class="field-label" for="nombre">Nombre completo *</label>
             <input
@@ -34,7 +29,6 @@
             }
           </div>
 
-          <!-- Teléfono -->
           <div class="field">
             <label class="field-label" for="telefono">Teléfono *</label>
             <input
@@ -51,7 +45,6 @@
             }
           </div>
 
-          <!-- Coordenadas -->
           <div class="coords-row">
             <div class="field">
               <label class="field-label" for="ubicacionX">Ubicación X * <span class="hint">(0-100)</span></label>
@@ -86,12 +79,10 @@
             </div>
           </div>
 
-          <!-- Error global -->
           @if (error()) {
             <div class="error-banner">{{ error() }}</div>
           }
 
-          <!-- Submit -->
           <button
             type="submit"
             class="btn-confirmar"

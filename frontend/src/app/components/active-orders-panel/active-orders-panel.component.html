@@ -1,7 +1,6 @@
 @if (activeOrdersService.hasOrders()) {
   <div class="panel-wrapper" [class.panel-wrapper--expanded]="expanded()">
 
-    <!-- Toggle button -->
     <button class="toggle-btn" (click)="toggle()" [attr.aria-label]="expanded() ? 'Minimizar pedidos' : 'Ver pedidos activos'">
       <span class="toggle-icon">{{ expanded() ? '▼' : '▲' }}</span>
       <span class="toggle-label">Pedidos activos</span>
@@ -10,7 +9,6 @@
       }
     </button>
 
-    <!-- Panel expandido -->
     @if (expanded()) {
       <div class="panel-body">
         <h3 class="panel-title">Pedidos en curso</h3>

@@ -30,7 +30,6 @@ export class RestauranteService {
     } else {
       errorMessage = `Código: ${error.status}, Mensaje: ${error.message}`;
     }
-    console.error('RestauranteService:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

@@ -35,7 +35,6 @@ export class ActiveOrdersService {
     } else {
       errorMessage = `Código: ${error.status}, Mensaje: ${error.message}`;
     }
-    console.error('ActiveOrdersService:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }
