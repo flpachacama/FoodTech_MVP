@@ -1,9 +1,9 @@
-package com.foodtech.order.infrastructure.web.exception;
+package com.foodtech.infrastructure.web.exception;
 
-import com.foodtech.order.domain.exception.PedidoCancelException;
-import com.foodtech.order.domain.exception.PedidoDeliverException;
-import com.foodtech.order.domain.exception.PedidoNotFoundException;
-import com.foodtech.order.domain.exception.RestauranteNotFoundException;
+import com.foodtech.domain.exception.PedidoCancelException;
+import com.foodtech.domain.exception.PedidoDeliverException;
+import com.foodtech.domain.exception.PedidoNotFoundException;
+import com.foodtech.domain.exception.RestauranteNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,4 +1,4 @@
-package com.foodtech.order.infrastructure.persistence.entity;
+package com.foodtech.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

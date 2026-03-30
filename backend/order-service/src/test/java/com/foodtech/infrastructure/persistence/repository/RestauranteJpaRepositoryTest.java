@@ -1,6 +1,6 @@
-package com.foodtech.order.infrastructure.persistence.repository;
+package com.foodtech.infrastructure.persistence.repository;
 
-import com.foodtech.order.infrastructure.persistence.RestauranteJpaRepository;
+import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

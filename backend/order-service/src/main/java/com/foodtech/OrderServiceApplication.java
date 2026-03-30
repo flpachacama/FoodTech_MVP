@@ -1,4 +1,4 @@
-package com.foodtech.order;
+package com.foodtech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

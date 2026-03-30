@@ -1,14 +1,14 @@
-package com.foodtech.order.infrastructure.persistence.adapter;
+package com.foodtech.infrastructure.persistence.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foodtech.order.domain.model.EstadoPedido;
-import com.foodtech.order.domain.model.Pedido;
-import com.foodtech.order.domain.model.ProductoPedido;
-import com.foodtech.order.domain.port.output.PedidoRepository;
-import com.foodtech.order.infrastructure.persistence.PedidoJpaRepository;
-import com.foodtech.order.infrastructure.persistence.entity.PedidoEntity;
+import com.foodtech.domain.model.EstadoPedido;
+import com.foodtech.domain.model.Pedido;
+import com.foodtech.domain.model.ProductoPedido;
+import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.infrastructure.persistence.PedidoJpaRepository;
+import com.foodtech.infrastructure.persistence.entity.PedidoEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

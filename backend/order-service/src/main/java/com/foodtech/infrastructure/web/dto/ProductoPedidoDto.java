@@ -1,4 +1,4 @@
-package com.foodtech.order.infrastructure.web.dto;
+package com.foodtech.infrastructure.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

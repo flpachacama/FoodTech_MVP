@@ -1,9 +1,9 @@
-package com.foodtech.order.domain.port.input;
+package com.foodtech.domain.port.input;
 
-import com.foodtech.order.infrastructure.web.dto.CancelOrderResponseDto;
-import com.foodtech.order.infrastructure.web.dto.DeliverOrderResponseDto;
-import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
-import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
+import com.foodtech.infrastructure.web.dto.CancelOrderResponseDto;
+import com.foodtech.infrastructure.web.dto.DeliverOrderResponseDto;
+import com.foodtech.infrastructure.web.dto.OrderRequestDto;
+import com.foodtech.infrastructure.web.dto.OrderResponseDto;
 
 /**
  * Puerto de entrada (input port) para el caso de uso de pedidos.

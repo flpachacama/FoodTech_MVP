@@ -1,4 +1,4 @@
-package com.foodtech.order.domain.exception;
+package com.foodtech.domain.exception;
 
 public class PedidoDeliverException extends RuntimeException {
 

@@ -1,6 +1,6 @@
-package com.foodtech.order.infrastructure.web.dto;
+package com.foodtech.infrastructure.web.dto;
 
-import com.foodtech.order.domain.model.EstadoPedido;
+import com.foodtech.domain.model.EstadoPedido;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

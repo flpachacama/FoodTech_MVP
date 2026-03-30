@@ -1,6 +1,6 @@
-package com.foodtech.order.infrastructure.persistence.entity;
+package com.foodtech.infrastructure.persistence.entity;
 
-import com.foodtech.order.domain.model.EstadoPedido;
+import com.foodtech.domain.model.EstadoPedido;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

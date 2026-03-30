@@ -1,10 +1,10 @@
-package com.foodtech.order.infrastructure.web.controller;
+package com.foodtech.infrastructure.web.controller;
 
-import com.foodtech.order.domain.port.input.OrderUseCase;
-import com.foodtech.order.infrastructure.web.dto.CancelOrderResponseDto;
-import com.foodtech.order.infrastructure.web.dto.DeliverOrderResponseDto;
-import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
-import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
+import com.foodtech.domain.port.input.OrderUseCase;
+import com.foodtech.infrastructure.web.dto.CancelOrderResponseDto;
+import com.foodtech.infrastructure.web.dto.DeliverOrderResponseDto;
+import com.foodtech.infrastructure.web.dto.OrderRequestDto;
+import com.foodtech.infrastructure.web.dto.OrderResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

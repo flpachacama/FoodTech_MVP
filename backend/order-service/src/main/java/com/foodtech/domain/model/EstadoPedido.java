@@ -1,4 +1,4 @@
-package com.foodtech.order.domain.model;
+package com.foodtech.domain.model;
 
 public enum EstadoPedido {
     PENDIENTE,

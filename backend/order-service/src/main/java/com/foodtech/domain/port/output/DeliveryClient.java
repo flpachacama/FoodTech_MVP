@@ -1,4 +1,4 @@
-package com.foodtech.order.domain.port.output;
+package com.foodtech.domain.port.output;
 
 public interface DeliveryClient {
 

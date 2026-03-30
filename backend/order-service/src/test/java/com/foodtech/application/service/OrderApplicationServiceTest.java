@@ -1,13 +1,13 @@
-package com.foodtech.order.application.service;
+package com.foodtech.application.service;
 
-import com.foodtech.order.domain.model.EstadoPedido;
-import com.foodtech.order.domain.model.Pedido;
-import com.foodtech.order.domain.port.output.DeliveryClient;
-import com.foodtech.order.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
-import com.foodtech.order.domain.port.output.PedidoRepository;
-import com.foodtech.order.infrastructure.web.dto.OrderRequestDto;
-import com.foodtech.order.infrastructure.web.dto.OrderResponseDto;
-import com.foodtech.order.infrastructure.web.dto.ProductoPedidoDto;
+import com.foodtech.domain.model.EstadoPedido;
+import com.foodtech.domain.model.Pedido;
+import com.foodtech.domain.port.output.DeliveryClient;
+import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
+import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.infrastructure.web.dto.OrderRequestDto;
+import com.foodtech.infrastructure.web.dto.OrderResponseDto;
+import com.foodtech.infrastructure.web.dto.ProductoPedidoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

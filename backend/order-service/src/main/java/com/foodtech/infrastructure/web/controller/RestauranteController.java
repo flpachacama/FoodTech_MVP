@@ -1,9 +1,10 @@
-package com.foodtech.order.infrastructure.web.controller;
+package com.foodtech.infrastructure.web.controller;
 
-import com.foodtech.order.application.service.RestauranteService;
-import com.foodtech.order.infrastructure.web.dto.RestauranteResponseDto;
+import com.foodtech.application.service.RestauranteService;
+import com.foodtech.infrastructure.web.dto.RestauranteResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurants")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class RestauranteController {
 

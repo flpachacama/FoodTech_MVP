@@ -1,6 +1,6 @@
-package com.foodtech.order.domain.port.output;
+package com.foodtech.domain.port.output;
 
-import com.foodtech.order.domain.model.Pedido;
+import com.foodtech.domain.model.Pedido;
 import java.util.List;
 import java.util.Optional;
 

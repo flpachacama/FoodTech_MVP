@@ -1,6 +1,6 @@
-package com.foodtech.order.infrastructure.web.client;
+package com.foodtech.infrastructure.web.client;
 
-import com.foodtech.order.domain.port.output.DeliveryClient;
+import com.foodtech.domain.port.output.DeliveryClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
