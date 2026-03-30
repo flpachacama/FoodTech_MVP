@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
   color: white;
   border: none;
   border-radius: 24px;
@@ -47,7 +47,7 @@
 
 .badge {
   background: white;
-  color: #764ba2;
+  color: #c49745;
   border-radius: 50%;
   width: 22px;
   height: 22px;
@@ -137,7 +137,7 @@
 
 .estado--entregado {
   background: #e0e7ff;
-  color: #3730a3;
+  color: #e7b018;
 }
 
 .estado--cancelado {
@@ -166,7 +166,7 @@
 
 .producto-tag {
   background: #ede9fe;
-  color: #5b21b6;
+  color: #d6a00a;
   border-radius: 6px;
   padding: 2px 8px;
   font-size: 0.78rem;
@@ -185,7 +185,7 @@
 .order-total {
   font-weight: 700;
   font-size: 0.9rem;
-  color: #764ba2;
+  color: #d6a00a;
 }
 
 .btn-cancelar {

@@ -42,7 +42,7 @@
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg,#f7a13f 0%, #cfad4e 100%);
   color: white;
   border-radius: 12px 12px 0 0;
 }
@@ -126,7 +126,7 @@
 }
 
 .field-input:focus {
-  border-color: #667eea;
+  border-color: #c7a021;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
@@ -164,7 +164,7 @@
 .btn-confirmar {
   width: 100%;
   padding: 13px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
   color: white;
   border: none;
   border-radius: 8px;
