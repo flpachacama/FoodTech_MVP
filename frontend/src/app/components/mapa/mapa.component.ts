@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, inject, signal, output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RestaurantGuideComponent } from '../restaurant-guide/restaurant-guide.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { RestauranteService, DeliverService } from '../../services';
@@ -8,7 +9,7 @@ import { Restaurante, Deliver } from '../../models';
 @Component({
   selector: 'app-mapa',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RestaurantGuideComponent],
   templateUrl: './mapa.component.html',
   styleUrls: ['./mapa.component.css']
 })

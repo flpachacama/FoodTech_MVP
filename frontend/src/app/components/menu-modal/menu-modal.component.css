@@ -253,8 +253,9 @@
 
 @media (max-width: 640px) {
   .modal-card {
-    width: 95%;
+    width: 60%;
     max-height: 85vh;
+ 
   }
 
   .modal-header {
@@ -262,24 +263,43 @@
   }
 
   .restaurante-nombre {
-    font-size: 1.25rem;
+    font-size: 1.12rem;
   }
 
   .product-list {
-    padding: 12px 20px;
+    padding: 10px 16px;
+   
   }
 
   .product-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
   }
 
   .btn-agregar {
     width: 100%;
+    padding: 8px 14px;
+    font-size: 0.85rem;
   }
 
   .cart-section {
-    padding: 12px 20px;
+    padding: 10px 16px;
+  }
+
+  .close-btn {
+    font-size: 1.4rem;
+    width: 32px;
+    height: 32px;
+  }
+
+  .restaurante-nombre {
+    font-weight: 600;
+  }
+}
+
+@media (max-height: 600px) {
+  .modal-card {
+    max-height: calc(100vh - 20px);
   }
 }

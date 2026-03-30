@@ -194,8 +194,10 @@
 
 @media (max-width: 480px) {
   .modal-card {
-    width: 95%;
-    max-height: 95vh;
+    width: 60%;
+    max-height: 95hv;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .form-body {
@@ -204,5 +206,35 @@
 
   .coords-row {
     grid-template-columns: 1fr;
+  }
+  
+  .modal-header {
+    padding: 12px 16px;
+  }
+
+  .modal-titulo {
+    font-size: 1.1rem;
+  }
+
+  .close-btn {
+    font-size: 1.6rem;
+    width: 34px;
+    height: 34px;
+  }
+
+  .field-input {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .btn-confirmar {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .modal-card {
+    max-height: calc(100vh - 20px);
   }
 }

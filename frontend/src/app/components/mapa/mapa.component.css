@@ -46,3 +46,10 @@ canvas {
   pointer-events: none;
   z-index: 10;
 }
+
+.message {
+  position: relative;
+  margin: 12px auto;
+  justify-content: center;
+  align-items: center;
+}
