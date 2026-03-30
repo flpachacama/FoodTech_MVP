@@ -13,10 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Adaptador de persistencia que implementa el puerto de salida RepartidorRepository.
- * Convierte entre el modelo de dominio (Repartidor) y la entidad JPA (RepartidorEntity).
- */
 @Component
 @RequiredArgsConstructor
 public class RepartidorPersistenceAdapter implements RepartidorRepository {
@@ -38,15 +34,20 @@ public class RepartidorPersistenceAdapter implements RepartidorRepository {
     }
 
     @Override
+    public List<Repartidor> findAll() {
+        return jpaRepartidorRepository.findAll()
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Repartidor save(Repartidor repartidor) {
         RepartidorEntity entity = toEntity(repartidor);
         RepartidorEntity savedEntity = jpaRepartidorRepository.save(entity);
         return toDomain(savedEntity);
     }
 
-    /**
-     * Convierte de entidad JPA a modelo de dominio.
-     */
     private Repartidor toDomain(RepartidorEntity entity) {
         return Repartidor.builder()
                 .id(entity.getId())
@@ -57,9 +58,6 @@ public class RepartidorPersistenceAdapter implements RepartidorRepository {
                 .build();
     }
 
-    /**
-     * Convierte de modelo de dominio a entidad JPA.
-     */
     private RepartidorEntity toEntity(Repartidor repartidor) {
         return RepartidorEntity.builder()
                 .id(repartidor.getId())
