@@ -23,6 +23,10 @@ export class MapaComponent implements OnInit, OnDestroy {
   private readonly CANVAS_SIZE = 800;
   private readonly GRID_SIZE = 100;
   private readonly PADDING = 20;
+  private readonly ICON_SIZE = 30;
+  
+  private images = new Map<string, HTMLImageElement>();
+  private imagesLoaded = false;
   
   restaurantes = signal<Restaurante[]>([]);
   delivers = signal<Deliver[]>([]);
@@ -32,7 +36,44 @@ export class MapaComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     this.ctx = this.canvasRef.nativeElement.getContext('2d')!;
+    this.loadImages();
     this.loadData();
+  }
+  
+  private loadImages(): void {
+    const imagesToLoad = [
+      { key: 'restaurante', path: '/assets/restaurantes/restaurante.svg' },
+      { key: 'bici-inactivo', path: '/assets/delivers/bici-inactivo.svg' },
+      { key: 'bici-activo', path: '/assets/delivers/bici-activo.svg' },
+      { key: 'bici-en-entrega', path: '/assets/delivers/bici-en-entrega.svg' },
+      { key: 'moto-inactivo', path: '/assets/delivers/moto-inactivo.svg' },
+      { key: 'moto-activo', path: '/assets/delivers/moto-activo.svg' },
+      { key: 'moto-en-entrega', path: '/assets/delivers/moto-en-entrega.svg' },
+      { key: 'auto-inactivo', path: '/assets/delivers/auto-inactivo.svg' },
+      { key: 'auto-activo', path: '/assets/delivers/auto-activo.svg' },
+      { key: 'auto-en-entrega', path: '/assets/delivers/auto-en-entrega.svg' }
+    ];
+
+    let loadedCount = 0;
+    imagesToLoad.forEach(({ key, path }) => {
+      const img = new Image();
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === imagesToLoad.length) {
+          this.imagesLoaded = true;
+          this.render();
+        }
+      };
+      img.onerror = () => {
+        loadedCount++;
+        if (loadedCount === imagesToLoad.length) {
+          this.imagesLoaded = true;
+          this.render();
+        }
+      };
+      img.src = path;
+      this.images.set(key, img);
+    });
   }
   
   private loadData(): void {
@@ -41,7 +82,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (restaurantes) => {
           this.restaurantes.set(restaurantes);
-          this.render();
+          if (this.imagesLoaded) this.render();
         },
         error: () => {}
       });
@@ -51,7 +92,7 @@ export class MapaComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (delivers) => {
           this.delivers.set(delivers);
-          this.render();
+          if (this.imagesLoaded) this.render();
         },
         error: () => {}
       });
@@ -88,17 +129,21 @@ export class MapaComponent implements OnInit, OnDestroy {
     const x = this.coordToPixel(r.coordenadaX);
     const y = this.coordToPixel(r.coordenadaY);
 
-    this.ctx.fillStyle = '#e74c3c';
-    this.ctx.beginPath();
-    this.ctx.arc(x, y, 15, 0, Math.PI * 2);
-    this.ctx.fill();
-
-    this.ctx.strokeStyle = '#fff';
-    this.ctx.lineWidth = 2;
-    this.ctx.stroke();
+    const img = this.images.get('restaurante');
+    if (img && img.complete) {
+      this.ctx.drawImage(img, x - this.ICON_SIZE / 2, y - this.ICON_SIZE / 2, this.ICON_SIZE, this.ICON_SIZE);
+    } else {
+      this.ctx.fillStyle = '#e74c3c';
+      this.ctx.beginPath();
+      this.ctx.arc(x, y, 15, 0, Math.PI * 2);
+      this.ctx.fill();
+      this.ctx.strokeStyle = '#fff';
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
+    }
 
     this.ctx.fillStyle = '#000';
-    this.ctx.font = '12px Arial';
+    this.ctx.font = '25px Arial Bold';
     this.ctx.textAlign = 'center';
     this.ctx.fillText(r.nombre, x, y + 30);
   }
@@ -107,32 +152,52 @@ export class MapaComponent implements OnInit, OnDestroy {
     const x = this.coordToPixel(d.ubicacionX);
     const y = this.coordToPixel(d.ubicacionY);
 
-    let color = '#95a5a6';
-    if (d.estado === 'ACTIVO') color = '#27ae60';
-    if (d.estado === 'EN_ENTREGA') color = '#f39c12';
+    const vehiculo = ((): string => {
+      switch (d.vehiculo) {
+        case 'BICICLETA': return 'bici';
+        case 'MOTO': return 'moto';
+        case 'AUTO': return 'auto';
+        default: return String(d.vehiculo).toLowerCase();
+      }
+    })();
 
-    this.ctx.fillStyle = color;
-    this.ctx.beginPath();
-    this.ctx.moveTo(x, y - 12);
-    this.ctx.lineTo(x - 10, y + 8);
-    this.ctx.lineTo(x + 10, y + 8);
-    this.ctx.closePath();
-    this.ctx.fill();
-
-    this.ctx.strokeStyle = '#fff';
-    this.ctx.lineWidth = 2;
-    this.ctx.stroke();
-
-    this.ctx.fillStyle = '#fff';
-    this.ctx.font = 'bold 10px Arial';
-    this.ctx.textAlign = 'center';
-    this.ctx.textBaseline = 'middle';
+    let estado = 'inactivo';
+    if (d.estado === 'ACTIVO') estado = 'activo';
+    if (d.estado === 'EN_ENTREGA') estado = 'en-entrega';
     
-    let vehiculoIcon = 'B';
-    if (d.vehiculo === 'MOTO') vehiculoIcon = 'M';
-    if (d.vehiculo === 'AUTO') vehiculoIcon = 'A';
+    const imageKey = `${vehiculo}-${estado}`;
+    const img = this.images.get(imageKey);
     
-    this.ctx.fillText(vehiculoIcon, x, y);
+    if (img && img.complete) {
+      this.ctx.drawImage(img, x - this.ICON_SIZE / 2, y - this.ICON_SIZE / 2, this.ICON_SIZE, this.ICON_SIZE);
+    } else {
+      let color = '#95a5a6';
+      if (d.estado === 'ACTIVO') color = '#27ae60';
+      if (d.estado === 'EN_ENTREGA') color = '#f39c12';
+
+      this.ctx.fillStyle = color;
+      this.ctx.beginPath();
+      this.ctx.moveTo(x, y - 12);
+      this.ctx.lineTo(x - 10, y + 8);
+      this.ctx.lineTo(x + 10, y + 8);
+      this.ctx.closePath();
+      this.ctx.fill();
+
+      this.ctx.strokeStyle = '#fff';
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
+
+      this.ctx.fillStyle = '#fff';
+      this.ctx.font = 'bold 10px Arial';
+      this.ctx.textAlign = 'center';
+      this.ctx.textBaseline = 'middle';
+      
+      let vehiculoIcon = 'B';
+      if (d.vehiculo === 'MOTO') vehiculoIcon = 'M';
+      if (d.vehiculo === 'AUTO') vehiculoIcon = 'A';
+      
+      this.ctx.fillText(vehiculoIcon, x, y);
+    }
   }
   
   private coordToPixel(coord: number): number {
