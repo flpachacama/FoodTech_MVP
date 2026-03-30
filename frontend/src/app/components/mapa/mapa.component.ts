@@ -23,7 +23,8 @@ export class MapaComponent implements OnInit, OnDestroy {
   private readonly CANVAS_SIZE = 800;
   private readonly GRID_SIZE = 100;
   private readonly PADDING = 20;
-  private readonly ICON_SIZE = 30;
+  private readonly ICON_SIZE = 40;
+  private readonly RESTAURANTE_ICON_SIZE = 50;
   
   private images = new Map<string, HTMLImageElement>();
   private imagesLoaded = false;
@@ -130,12 +131,13 @@ export class MapaComponent implements OnInit, OnDestroy {
     const y = this.coordToPixel(r.coordenadaY);
 
     const img = this.images.get('restaurante');
+    const size = this.RESTAURANTE_ICON_SIZE;
     if (img && img.complete) {
-      this.ctx.drawImage(img, x - this.ICON_SIZE / 2, y - this.ICON_SIZE / 2, this.ICON_SIZE, this.ICON_SIZE);
+      this.ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
     } else {
       this.ctx.fillStyle = '#e74c3c';
       this.ctx.beginPath();
-      this.ctx.arc(x, y, 15, 0, Math.PI * 2);
+      this.ctx.arc(x, y, size / 2, 0, Math.PI * 2);
       this.ctx.fill();
       this.ctx.strokeStyle = '#fff';
       this.ctx.lineWidth = 2;
