@@ -21,12 +21,10 @@ export class MapaComponent implements OnInit {
   private readonly GRID_SIZE = 100;
   private readonly PADDING = 20;
   
-  // Signals
   restaurantes = signal<Restaurante[]>([]);
   delivers = signal<Deliver[]>([]);
   hoveredElement = signal<string | null>(null);
   
-  // Output event
   restauranteSelected = output<Restaurante>();
   
   ngOnInit(): void {
@@ -53,16 +51,9 @@ export class MapaComponent implements OnInit {
   }
   
   private render(): void {
-    // Limpiar canvas
     this.ctx.clearRect(0, 0, this.CANVAS_SIZE, this.CANVAS_SIZE);
-    
-    // Dibujar grid de fondo
     this.drawGrid();
-    
-    // Dibujar restaurantes
     this.restaurantes().forEach(r => this.drawRestaurante(r));
-    
-    // Dibujar repartidores
     this.delivers().forEach(d => this.drawDeliver(d));
   }
   
