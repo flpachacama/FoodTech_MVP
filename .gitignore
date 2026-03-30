@@ -7,3 +7,4 @@
 **/.mvn/
 *.class
 .gitkeep
+**/node_modules/
