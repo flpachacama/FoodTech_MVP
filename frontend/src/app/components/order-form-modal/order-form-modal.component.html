@@ -1,7 +1,7 @@
 @if (visible) {
   <div class="modal-container">
-    <div class="modal-overlay" (click)="onOverlayClick($event)">
-      <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-overlay" (click)="onClose()"></div>
+    <div class="modal-card">
 
         <div class="modal-header">
           <h2 class="modal-titulo">Confirmar pedido</h2>
@@ -95,7 +95,6 @@
           </button>
 
         </form>
-      </div>
     </div>
   </div>
 }

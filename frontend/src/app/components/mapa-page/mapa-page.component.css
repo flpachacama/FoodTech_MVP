@@ -55,9 +55,7 @@
   border-width: 1px;
   border-style: solid;
   border-color: #e5e7eb;
-  box-shadow: 10px 4px 6px rgba(255, 137, 2, .5);
-  /* margin-left: -50px; */
-  
+  box-shadow: 10px 4px 6px rgba(255, 137, 2, .5);  
 }
 
 
@@ -80,11 +78,6 @@
 
 .restaurant-list::-webkit-scrollbar {
   width: 6px;
-}
-
-.restaurant-list::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
 }
 
 .restaurant-item {
@@ -171,13 +164,8 @@
   min-width: 0;
   overflow: hidden;
   height: 100vh;
-  /* position: ; */
 }
 
-/* --- Right panel (desktop placeholder) --- */
-/* .right-panel {
-  display: none;
-} */
 
 /* ===== MOBILE FAB ===== */
 .fab {
@@ -193,7 +181,6 @@
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); */
   z-index: 800;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -299,7 +286,7 @@
   .sidebar {
     display: flex;
     flex-direction: column;
-    width: 280px;
+    width: 400px;
     min-width: 280px;
     background: white;
     border-right: 1px solid #e5e7eb;
