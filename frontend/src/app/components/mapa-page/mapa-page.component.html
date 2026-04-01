@@ -1,19 +1,83 @@
-﻿<div class="page-container">
-  <div >
-     <img src="/logo.png" alt="FoodTech Logo">
-  </div>
-  <h1 class="map-name">Mapa de Restaurantes</h1>
-  <app-mapa (restauranteSelected)="onRestauranteSelected($event)"></app-mapa>
-  <app-menu-modal
-    [restaurante]="selectedRestaurante()"
-    [visible]="menuVisible()"
-    (close)="onCloseMenu()"
-    (pedidoRealizado)="onPedidoRealizado()">
-  </app-menu-modal>
-  <app-order-form-modal
-    [visible]="orderFormVisible()"
-    (close)="onCloseOrderForm()"
-    (pedidoConfirmado)="onPedidoConfirmado()">
-  </app-order-form-modal>
-  <app-active-orders-panel />
+﻿<!-- Header -->
+<header class="header">
+  <img src="/logo.png" alt="FoodTech Logo" class="logo" />
+  <h1 class="title">Mapa de Restaurantes</h1>
+</header>
+
+<!-- Desktop 3-column layout -->
+<div class="layout">
+  <!-- Left sidebar (desktop only) -->
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Restaurantes</h2>
+    <ul class="restaurant-list">
+      @for (r of restaurantes(); track r.id) {
+        <li class="restaurant-item" (click)="onRestauranteSelected(r)"
+            [class.restaurant-item--active]="selectedRestaurante()?.id === r.id">
+          <span class="restaurant-icon">🍽️</span>
+          <div class="restaurant-info">
+            <span class="restaurant-name">{{ r.nombre }}</span>
+            <span class="restaurant-menu-count">{{ r.menu.length }} productos</span>
+          </div>
+        </li>
+      }
+      @if (restaurantes().length === 0) {
+        <li class="restaurant-item restaurant-item--empty">Cargando restaurantes...</li>
+      }
+    </ul>
+  </aside>
+
+  <!-- Center: Map -->
+  <main class="map-area">
+    <app-mapa (restauranteSelected)="onRestauranteSelected($event)"></app-mapa>
+  </main>
+
+  <!-- Right: empty space (modals overlay here) -->
+  <div class="right-panel"></div>
 </div>
+
+<!-- Mobile FAB -->
+<button class="fab" (click)="toggleSidebar()" aria-label="Ver restaurantes">
+  <span class="fab-icon">🍽️</span>
+</button>
+
+<!-- Mobile sidebar overlay -->
+@if (sidebarOpen()) {
+  <div class="mobile-overlay" (click)="closeSidebar()"></div>
+  <aside class="mobile-sidebar" [class.mobile-sidebar--open]="sidebarOpen()">
+    <div class="mobile-sidebar-header">
+      <h2 class="sidebar-title">Restaurantes</h2>
+      <button class="mobile-close-btn" (click)="closeSidebar()" aria-label="Cerrar">×</button>
+    </div>
+    <ul class="restaurant-list">
+      @for (r of restaurantes(); track r.id) {
+        <li class="restaurant-item" (click)="onRestauranteSelected(r)"
+            [class.restaurant-item--active]="selectedRestaurante()?.id === r.id">
+          <span class="restaurant-icon">🍽️</span>
+          <div class="restaurant-info">
+            <span class="restaurant-name">{{ r.nombre }}</span>
+            <span class="restaurant-menu-count">{{ r.menu.length }} productos</span>
+          </div>
+        </li>
+      }
+      @if (restaurantes().length === 0) {
+        <li class="restaurant-item restaurant-item--empty">Cargando restaurantes...</li>
+      }
+    </ul>
+  </aside>
+}
+
+<!-- Modals -->
+<app-menu-modal
+  [restaurante]="selectedRestaurante()"
+  [visible]="menuVisible()"
+  (close)="onCloseMenu()"
+  (pedidoRealizado)="onPedidoRealizado()">
+</app-menu-modal>
+
+<app-order-form-modal
+  [visible]="orderFormVisible()"
+  (close)="onCloseOrderForm()"
+  (pedidoConfirmado)="onPedidoConfirmado()">
+</app-order-form-modal>
+
+<app-active-orders-panel />

@@ -1,55 +1,26 @@
 :host {
   display: block;
   width: 100%;
+  height: 100%;
 }
 
-.mapa-scroll-wrapper {
+.mapa-wrapper {
   width: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 4px 0;
-}
-
-.mapa-container {
-  position: relative;
-  display: block;
-  margin: 0 auto;
-  width: fit-content;
-  border: 2px solid #333;
+  height: 100%;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-image: url('/map.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.7;
 }
 
-canvas {
+.mapa-iframe {
   display: block;
-  position: relative;
-  background: transparent;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
-.tooltip {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.message {
-  position: relative;
-  margin: 12px auto;
-  justify-content: center;
-  align-items: center;
+@media (min-width: 992px) {
+  .mapa-wrapper {
+    border-radius: 0;
+  }
 }
