@@ -42,7 +42,7 @@
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
 }
 
@@ -134,7 +134,7 @@
 }
 
 .btn-agregar {
-  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
   border: none;
   border-radius: 6px;
@@ -213,7 +213,7 @@
 .btn-hacer-pedido {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg,#f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
   border: none;
   border-radius: 8px;

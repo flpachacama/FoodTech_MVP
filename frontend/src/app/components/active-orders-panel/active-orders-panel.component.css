@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
   border: none;
   border-radius: 24px;

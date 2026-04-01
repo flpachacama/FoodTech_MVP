@@ -8,7 +8,6 @@ import { CartService } from '../../services/cart.service';
 import { RestauranteService } from '../../services/restaurante.service';
 import { Restaurante } from '../../models/restaurante.model';
 import { Subject, takeUntil } from 'rxjs';
-
 @Component({
   selector: 'app-mapa-page',
   standalone: true,

@@ -2,7 +2,7 @@
 <header class="header">
   <div class="header-content">
     <div class="containerLogo">
-        <img src="/logo.png" alt="FoodTech Logo" class="logo" />
+        <!-- <img src="/logo.png" alt="FoodTech Logo" class="logo" /> -->
     </div>
     <div class="containerSidebar">
         <aside class="sidebar">
@@ -11,7 +11,7 @@
       @for (r of restaurantes(); track r.id) {
         <li class="restaurant-item" (click)="onRestauranteMapFocus(r)"
             [class.restaurant-item--active]="mapRestaurante()?.id === r.id">
-          <span class="restaurant-icon">🍽️</span>
+          <span class="restaurant-icon material-icons">restaurant</span>
           <div class="restaurant-info">
             <span class="restaurant-name">{{ r.nombre }}</span>
             <span class="restaurant-menu-count">{{ r.menu.length }} productos</span>
@@ -46,7 +46,7 @@
 
 <!-- Mobile FAB -->
 <button class="fab" (click)="toggleSidebar()" aria-label="Ver restaurantes">
-  <span class="fab-icon">🍽️</span>
+  <span class="material-icons">storefront</span>
 </button>
 
 <!-- Mobile sidebar overlay -->
@@ -59,9 +59,9 @@
     </div>
     <ul class="restaurant-list">
       @for (r of restaurantes(); track r.id) {
-        <li class="restaurant-item" (click)="onRestauranteMapFocus(r)"
+        <li class="restaurant-item" (click)="onRestauranteMapFocus(r); closeSidebar()"
             [class.restaurant-item--active]="mapRestaurante()?.id === r.id">
-          <span class="restaurant-icon">🍽️</span>
+          <span class="restaurant-icon material-icons">restaurant</span>
           <div class="restaurant-info">
             <span class="restaurant-name">{{ r.nombre }}</span>
             <span class="restaurant-menu-count">{{ r.menu.length }} productos</span>
