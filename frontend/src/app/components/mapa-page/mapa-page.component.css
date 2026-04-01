@@ -26,8 +26,8 @@
 }
 .logo {
   height: auto;
-  width: 180px;
-  height:100px;
+  width: 250px;
+  height:120px;
   ;
 }
 
@@ -119,6 +119,26 @@
   transform: none;
 }
 
+.btn-ver-menu {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-ver-menu:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
 .restaurant-icon {
   font-size: 1.5rem;
   flex-shrink: 0;
@@ -191,13 +211,7 @@
   font-size: 1.6rem;
   line-height: 1;
 }
-.containerMenuModal{
 
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-}
 /* ===== MOBILE SIDEBAR ===== */
 .mobile-overlay {
   position: fixed;

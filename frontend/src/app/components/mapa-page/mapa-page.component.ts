@@ -22,6 +22,9 @@ export class MapaPageComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   restaurantes = signal<Restaurante[]>([]);
+  /** Usado solo para centrar el mapa (no abre modal) */
+  mapRestaurante = signal<Restaurante | null>(null);
+  /** Usado para el modal de menú */
   selectedRestaurante = signal<Restaurante | null>(null);
   menuVisible = signal(false);
   orderFormVisible = signal(false);
@@ -44,10 +47,17 @@ export class MapaPageComponent implements OnInit, OnDestroy {
     this.sidebarOpen.set(false);
   }
 
-  onRestauranteSelected(restaurante: Restaurante): void {
+  /** Solo centra el mapa, no abre el modal */
+  onRestauranteMapFocus(restaurante: Restaurante): void {
+    this.mapRestaurante.set(restaurante);
+  }
+
+  /** Abre el modal del menú (usado por el botón "Ver menú") */
+  onOpenMenu(restaurante: Restaurante): void {
     this.cartService.clear();
     this.cartService.setRestaurante(restaurante);
     this.selectedRestaurante.set(restaurante);
+    this.mapRestaurante.set(restaurante);
     this.menuVisible.set(true);
     this.sidebarOpen.set(false);
   }
