@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter, inject, signal, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, signal, OnChanges, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { ActiveOrdersService } from '../../services/active-orders.service';
@@ -14,7 +16,7 @@ import { OrderResponse } from '../../models/order-response.model';
   templateUrl: './order-form-modal.component.html',
   styleUrls: ['./order-form-modal.component.css']
 })
-export class OrderFormModalComponent implements OnChanges {
+export class OrderFormModalComponent implements OnChanges, OnDestroy {
   @Input() visible = false;
   @Output() close = new EventEmitter<void>();
   @Output() pedidoConfirmado = new EventEmitter<void>();
@@ -23,6 +25,7 @@ export class OrderFormModalComponent implements OnChanges {
   public readonly cartService = inject(CartService);
   private readonly orderService = inject(OrderService);
   private readonly activeOrdersService = inject(ActiveOrdersService);
+  private readonly destroy$ = new Subject<void>();
 
   enviando = signal(false);
   error = signal<string | null>(null);
@@ -61,12 +64,10 @@ export class OrderFormModalComponent implements OnChanges {
   }
 
   onConfirmar(): void {
-    console.log("confirmar pedido")
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
     const restaurante = this.cartService.restaurante();
-    console.log("confirmar pedido 2", restaurante)
     if (!restaurante) return;
         
 
@@ -88,21 +89,26 @@ export class OrderFormModalComponent implements OnChanges {
       clienteCoordenadasY: Number(ubicacionY),
       clienteTelefono: telefono
     };
-    console.log("orden", order)
     this.enviando.set(true);
     this.error.set(null);
 
-    this.orderService.crearPedido(order).subscribe({
+    this.orderService.crearPedido(order)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (response: OrderResponse) => {
         this.enviando.set(false);
         this.activeOrdersService.add(response);
         this.pedidoConfirmado.emit();
       },
-      error: (err: Error) => {
+      error: () => {
         this.enviando.set(false);
         this.error.set('No se pudo crear el pedido. Intenta de nuevo.');
-        console.error(err);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

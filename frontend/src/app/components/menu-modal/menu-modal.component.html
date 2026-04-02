@@ -1,15 +1,13 @@
 @if (visible && restaurante) {
   <div class="modal-container">
-    <div class="modal-overlay" (click)="onOverlayClick($event)">
-      <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-overlay" (click)="onClose()"></div>
+    <div class="modal-card">
 
-        <!-- Header -->
         <div class="modal-header">
           <h2 class="restaurante-nombre">{{ restaurante.nombre }}</h2>
           <button class="close-btn" (click)="onClose()" aria-label="Cerrar">×</button>
         </div>
 
-        <!-- Product List -->
         <div class="product-list">
           @if (restaurante.menu && restaurante.menu.length > 0) {
             @for (producto of restaurante.menu; track producto.id) {
@@ -31,7 +29,6 @@
           }
         </div>
 
-        <!-- Cart Summary -->
         @if (!cartService.isEmpty()) {
           <div class="cart-section">
             <h3 class="cart-title">Tu pedido</h3>
@@ -57,7 +54,6 @@
           </div>
         }
 
-      </div>
     </div>
   </div>
 }

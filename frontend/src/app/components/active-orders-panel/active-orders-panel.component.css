@@ -11,12 +11,11 @@
   width: 340px;
 }
 
-/* Toggle button — siempre visible */
 .toggle-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
   border: none;
   border-radius: 24px;
@@ -58,7 +57,6 @@
   font-weight: 700;
 }
 
-/* Panel body */
 .panel-body {
   background: white;
   border-radius: 12px 12px 0 0;
@@ -88,7 +86,6 @@
   padding-bottom: 8px;
 }
 
-/* Order card */
 .order-card {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
@@ -209,13 +206,11 @@
   cursor: not-allowed;
 }
 
-/* Animation */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .panel-wrapper {
     right: 10px;

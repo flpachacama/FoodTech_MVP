@@ -17,12 +17,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-card {
   position: relative;
+  z-index: 1;
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -33,16 +33,16 @@
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s ease-out;
+  transition: all 0.3s ease;
 }
 
-/* Header */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(135deg,#f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
   border-radius: 12px 12px 0 0;
 }
@@ -74,7 +74,6 @@
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Resumen */
 .resumen-section {
   padding: 12px 24px;
   background: #f0f4ff;
@@ -87,7 +86,6 @@
   color: #4b5563;
 }
 
-/* Form body */
 .form-body {
   padding: 20px 24px;
   display: flex;
@@ -95,7 +93,6 @@
   gap: 16px;
 }
 
-/* Field */
 .field {
   display: flex;
   flex-direction: column;
@@ -143,14 +140,12 @@
   color: #ef4444;
 }
 
-/* Coords row */
 .coords-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-/* Error banner */
 .error-banner {
   background: #fef2f2;
   border: 1px solid #fca5a5;
@@ -160,11 +155,10 @@
   font-size: 0.9rem;
 }
 
-/* Botón confirmar */
 .btn-confirmar {
   width: 100%;
   padding: 13px;
-  background: linear-gradient(135deg, #f7a13f 0%, #cfad4e 100%);
+  background: #f7a13f;
   color: white;
   border: none;
   border-radius: 8px;
@@ -189,7 +183,6 @@
   cursor: not-allowed;
 }
 
-/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -200,11 +193,12 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .modal-card {
-    width: 95%;
-    max-height: 95vh;
+    width: 60%;
+    max-height: 95hv;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .form-body {
@@ -213,5 +207,35 @@
 
   .coords-row {
     grid-template-columns: 1fr;
+  }
+  
+  .modal-header {
+    padding: 12px 16px;
+  }
+
+  .modal-titulo {
+    font-size: 1.1rem;
+  }
+
+  .close-btn {
+    font-size: 1.6rem;
+    width: 34px;
+    height: 34px;
+  }
+
+  .field-input {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .btn-confirmar {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-height: 600px) {
+  .modal-card {
+    max-height: calc(100vh - 20px);
   }
 }
