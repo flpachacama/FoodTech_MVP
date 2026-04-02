@@ -9,7 +9,7 @@ INSERT INTO restaurantes (id, nombre, coordenada_x, coordenada_y, menu) VALUES (
     1,
     'La Hamburguesería',
     10,
-    10,
+    20,
     '[{"id":1,"nombre":"Hamburguesa Clásica","precio":18000},{"id":2,"nombre":"Hamburguesa BBQ","precio":22000},{"id":3,"nombre":"Papas Fritas","precio":8000},{"id":4,"nombre":"Gaseosa","precio":5000}]'
 )
 ON CONFLICT (id) DO NOTHING;
@@ -26,8 +26,8 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO restaurantes (id, nombre, coordenada_x, coordenada_y, menu) VALUES (
     3,
     'Sushi Kyoto',
-    90,
-    70,
+    1,
+    50,
     '[{"id":1,"nombre":"Roll Philadelphia","precio":32000},{"id":2,"nombre":"Roll Spicy Tuna","precio":35000},{"id":3,"nombre":"Edamame","precio":12000},{"id":4,"nombre":"Té Verde","precio":6000}]'
 )
 ON CONFLICT (id) DO NOTHING;

@@ -42,3 +42,43 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
 VALUES (10, 'Javier Angarita', 'ACTIVO', 'MOTO', 31, 34)
 ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (11, 'Sofía Herrera', 'ACTIVO', 'MOTO', 18, 72)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (12, 'Diego Ramírez', 'ACTIVO', 'BICICLETA', 55, 88)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (13, 'Valentina Torres', 'ACTIVO', 'AUTO', 42, 11)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (14, 'Sebastián Castro', 'ACTIVO', 'MOTO', 67, 49)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (15, 'Camila Morales', 'ACTIVO', 'BICICLETA', 33, 61)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (16, 'Andrés Gutiérrez', 'ACTIVO', 'AUTO', 85, 37)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (17, 'Isabella Vargas', 'ACTIVO', 'MOTO', 9, 53)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (18, 'Mateo Pineda', 'EN_ENTREGA', 'AUTO', 74, 92)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (19, 'Lucía Navarro', 'ACTIVO', 'BICICLETA', 50, 5)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO repartidores (id, nombre, estado, vehiculo, x, y) 
+VALUES (20, 'Felipe Ríos', 'INACTIVO', 'MOTO', 22, 78)
+ON CONFLICT (id) DO NOTHING;
