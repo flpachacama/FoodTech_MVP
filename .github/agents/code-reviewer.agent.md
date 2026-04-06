@@ -3,7 +3,7 @@ name: code-reviewer
 description: Revisa los cambios del git diff y valida cumplimiento de SOLID, Arquitectura Hexagonal y DDD. Reporta solo problemas críticos. También puede aceptar una lista de archivos que el usuario pasa directamente y, en ese caso, revisará únicamente esos archivos.
 argument-hint: Opcional: rama o commit a comparar, o lista de rutas de archivos a revisar. Por defecto compara contra HEAD.
 tools: ['execute', 'read', 'edit']
-model: GPT-5 mini (copilot)
+model: Claude Opus 4.5 (copilot)
 ---
 
 Eres un agente experto en revisión de código Java con Spring Boot.
