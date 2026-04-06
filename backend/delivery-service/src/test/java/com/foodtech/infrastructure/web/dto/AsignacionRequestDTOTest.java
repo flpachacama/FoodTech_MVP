@@ -32,15 +32,15 @@ class AsignacionRequestDTOTest {
     void debeConstruirYLeerCampos_cuandoSeUsaBuilder() {
         AsignacionRequestDTO dto = AsignacionRequestDTO.builder()
                 .pedidoId(1L)
-                .restauranteX(25)
-                .restauranteY(40)
+                .restauranteX(25.5)
+                .restauranteY(-40.75)
                 .clima("SOLEADO")
                 .build();
 
         assertThat(dto).isNotNull();
         assertThat(dto.getPedidoId()).isEqualTo(1L);
-        assertThat(dto.getRestauranteX()).isEqualTo(25);
-        assertThat(dto.getRestauranteY()).isEqualTo(40);
+        assertThat(dto.getRestauranteX()).isEqualTo(25.5);
+        assertThat(dto.getRestauranteY()).isEqualTo(-40.75);
         assertThat(dto.getClima()).isEqualTo("SOLEADO");
     }
 

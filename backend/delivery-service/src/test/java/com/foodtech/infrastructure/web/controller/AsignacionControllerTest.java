@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
@@ -35,6 +36,9 @@ class AsignacionControllerTest {
         @Mock
         private com.foodtech.domain.port.input.RepartidorUseCase repartidorUseCase;
 
+        @Mock
+        private com.foodtech.domain.service.AsignacionService asignacionService;
+
     @InjectMocks
     private AsignacionController controller;
 
@@ -42,8 +46,8 @@ class AsignacionControllerTest {
     void debeRetornarASIGNADO_cuandoHayCandidatos() {
         AsignacionRequestDTO request = AsignacionRequestDTO.builder()
                 .pedidoId(1L)
-                .restauranteX(25)
-                .restauranteY(40)
+                                .restauranteX(25.5)
+                                .restauranteY(40.25)
                 .clima(Clima.SOLEADO.name())
                 .build();
 
@@ -52,11 +56,12 @@ class AsignacionControllerTest {
                 .nombre("Carlos Mendoza")
                 .estado(EstadoRepartidor.ACTIVO)
                 .vehiculo(TipoVehiculo.MOTO)
-                .ubicacion(new Coordenada(25, 40))
+                .ubicacion(new Coordenada(25.5, 40.25))
                 .build();
 
-        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(25, 40)), eq(Clima.SOLEADO)))
+        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(25.5, 40.25)), eq(Clima.SOLEADO)))
                 .thenReturn(candidato);
+        when(asignacionService.calcularTiempoEstimadoMinutos(any(), any())).thenReturn(15);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
 
@@ -70,12 +75,12 @@ class AsignacionControllerTest {
     void debeRetornarPENDIENTE_cuandoNoHayCandidatos() {
         AsignacionRequestDTO request = AsignacionRequestDTO.builder()
                 .pedidoId(2L)
-                .restauranteX(10)
-                .restauranteY(10)
+                .restauranteX(-10.5)
+                .restauranteY(10.75)
                 .clima(Clima.LLUVIA_SUAVE.name())
                 .build();
 
-        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(10, 10)), eq(Clima.LLUVIA_SUAVE)))
+        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(-10.5, 10.75)), eq(Clima.LLUVIA_SUAVE)))
                 .thenReturn(null);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
@@ -90,17 +95,17 @@ class AsignacionControllerTest {
     void debeLlamarUseCaseConClimaNull_cuandoRequestNoTieneClima() {
         AsignacionRequestDTO request = AsignacionRequestDTO.builder()
                 .pedidoId(3L)
-                .restauranteX(5)
-                .restauranteY(5)
+                .restauranteX(5.25)
+                .restauranteY(-5.25)
                 .clima(null)
                 .build();
 
-        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(5, 5)), isNull()))
+        when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(5.25, -5.25)), isNull()))
                 .thenReturn(null);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
 
         assertThat(resp.getEstado()).isEqualTo("PENDIENTE");
-        verify(asignacionApplicationService).asignarRepartidor(eq(new Coordenada(5, 5)), isNull());
+        verify(asignacionApplicationService).asignarRepartidor(eq(new Coordenada(5.25, -5.25)), isNull());
     }
 }

@@ -15,6 +15,6 @@ public class RepartidorResponseDTO {
     private String nombre;
     private String estado;
     private String vehiculo;
-    private Integer x;
-    private Integer y;
+    private Double x;
+    private Double y;
 }

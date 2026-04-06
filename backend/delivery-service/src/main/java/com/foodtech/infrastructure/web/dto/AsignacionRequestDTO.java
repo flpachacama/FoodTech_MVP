@@ -16,10 +16,10 @@ public class AsignacionRequestDTO {
     private Long pedidoId;
 
     @NotNull(message = "La coordenada X es obligatoria")
-    private Integer restauranteX;
+    private Double restauranteX;
 
     @NotNull(message = "La coordenada Y es obligatoria")
-    private Integer restauranteY;
+    private Double restauranteY;
 
     private String clima;
 }
