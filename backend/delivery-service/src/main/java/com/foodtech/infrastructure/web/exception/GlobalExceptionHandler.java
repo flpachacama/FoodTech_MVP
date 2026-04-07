@@ -1,6 +1,7 @@
 package com.foodtech.infrastructure.web.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,6 +28,15 @@ public class GlobalExceptionHandler {
     public Map<String, String> handleIllegalArgumentException(IllegalArgumentException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", "Clima inválido. Valores permitidos: SOLEADO, LLUVIA_SUAVE, LLUVIA_FUERTE");
+        return error;
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        Map<String, String> error = new HashMap<>();
+        String mensaje = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
+        error.put("error", mensaje);
         return error;
     }
 
