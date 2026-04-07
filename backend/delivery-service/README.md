@@ -1,45 +1,73 @@
-# Delivery Service - Quick Start (Docker)
+# Delivery Service
 
-Este README explica cómo levantar únicamente el microservicio `delivery-service` junto con su base de datos PostgreSQL usando Docker Compose, cómo consultar la tabla `repartidores` y ejemplos concretos de peticiones HTTP (POST y PUT) para probar el servicio.
+Microservicio encargado de gestionar los **repartidores** y la **asignación inteligente** de pedidos basada en proximidad y condiciones climáticas.
 
-Ubicación del compose (raíz del repo): `backend/docker-compose.yml` — contiene servicios `postgres`, `delivery-service` y `order-service`.
+- **Puerto:** `8080`
+- **Base de datos:** PostgreSQL — `foodtech_db` (tabla: `repartidores`)
+- **Java:** 17 — Spring Boot 3.x
+- **Arquitectura:** Hexagonal (Ports & Adapters)
 
-Requisitos
-- Docker y Docker Compose instalados.
+---
 
-Levantar el stack (Postgres + delivery)
-1. Desde la carpeta raíz del repositorio:
+## Levantar con Docker (recomendado)
 
-```bash
-cd backend
-docker compose up --build -d
-```
-
-2. Ver logs del servicio delivery:
+Desde la carpeta `backend/` del repositorio:
 
 ```bash
+# Primera vez o luego de cambios
+docker compose up -d --build
+
+# Ver logs
 docker compose logs -f delivery-service
+
+# Reiniciar
+docker compose restart delivery-service
 ```
 
-Verificar estado de los contenedores:
+---
 
+## Endpoints
+
+Base URL: `http://localhost:8080`
+
+### Repartidores (consulta)
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/delivers` | Lista todos los repartidores |
+| `GET` | `/delivers/{id}` | Obtiene un repartidor por ID |
+| `GET` | `/delivery/fooders` | Lista todos los repartidores (alias) |
+
+**Ejemplo — listar repartidores:**
 ```bash
-docker compose ps
+curl http://localhost:8080/delivers
 ```
 
-Consultar la tabla `repartidores` desde el host (si tienes `psql`):
+**Respuesta:**
+```json
+[
+  {
+    "id": 1,
+    "nombre": "Carlos Mendoza",
+    "estado": "ACTIVO",
+    "vehiculo": "MOTO",
+    "ubicacionX": -74.0627,
+    "ubicacionY": 4.6482
+  }
+]
+```
 
+**Ejemplo — obtener repartidor por ID:**
 ```bash
-PGPASSWORD=foodtech_pass psql -h localhost -p 5432 -U foodtech_user -d foodtech_db -c "SELECT id, nombre, estado, vehiculo, x, y FROM repartidores ORDER BY id;"
+curl http://localhost:8080/delivers/1
 ```
 
-O ejecutar `psql` dentro del contenedor Postgres:
+### Asignación de pedidos
 
-```bash
-docker compose exec postgres psql -U foodtech_user -d foodtech_db -c "SELECT id, nombre, estado, vehiculo, x, y FROM repartidores ORDER BY id;"
-```
-
-Ejemplos de peticiones (base URL: `http://localhost:8080`)
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/delivery` | Asigna repartidor a un pedido |
+| `PUT` | `/delivery/{id}/state` | Actualiza estado del repartidor |
 
 1) Asignar repartidor a un pedido (POST /delivery)
 
@@ -92,10 +120,36 @@ Respuesta 200 OK (ejemplo):
   "nombre": "Carlos Mendoza",
   "estado": "ACTIVO",
   "vehiculo": "MOTO",
-  "x": 25,
-  "y": 40
+  "x": -74.0627,
+  "y": 4.6482
 }
 ```
+
+---
+
+## Lógica de negocio destacada
+
+### Algoritmo de asignación
+
+1. Filtra repartidores en estado `ACTIVO`
+2. Aplica restricciones climáticas (lluvia excluye BICICLETA; lluvia fuerte excluye también MOTO)
+3. Calcula distancia repartidor → restaurante con aproximación plana (flat-earth, en **km**)
+4. Ordena por tiempo estimado = distancia / velocidad del vehículo
+5. Asigna al de menor tiempo y cambia su estado a `EN_ENTREGA`
+
+### Velocidades por vehículo
+
+| Vehículo | km/h |
+|----------|------|
+| BICICLETA | 15 |
+| MOTO | 40 |
+| AUTO | 60 |
+
+### Coordenadas
+
+Todas las coordenadas son **longitud/latitud reales de Bogotá** (`Double`). Los 19 repartidores de ejemplo están distribuidos en Chapinero, Usaquén, Zona Rosa y Teusaquillo.
+
+---
 
 Notas rápidas
 - Los datos de ejemplo provienen de `src/main/resources/data.sql` que se carga al iniciar la aplicación.

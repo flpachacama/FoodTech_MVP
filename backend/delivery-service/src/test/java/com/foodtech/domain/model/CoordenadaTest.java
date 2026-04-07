@@ -8,57 +8,52 @@ class CoordenadaTest {
 
     @Test
     void shouldCreateCoordenada_WhenValuesAreValid() {
-        Coordenada a = new Coordenada(0, 0);
-        assertEquals(0, a.x());
-        assertEquals(0, a.y());
+        Coordenada a = new Coordenada(-12.5, 0.75);
+        assertEquals(-12.5, a.x(), 1e-9);
+        assertEquals(0.75, a.y(), 1e-9);
 
-        Coordenada b = new Coordenada(100, 100);
-        assertEquals(100, b.x());
-        assertEquals(100, b.y());
-    }
-
-    @Test
-    void shouldThrowException_WhenXIsNegative() {
-        assertThrows(IllegalArgumentException.class, () -> new Coordenada(-1, 10));
-    }
-
-    @Test
-    void shouldThrowException_WhenYIsNegative() {
-        assertThrows(IllegalArgumentException.class, () -> new Coordenada(10, -1));
-    }
-
-    @Test
-    void shouldThrowException_WhenValuesExceedLimit() {
-        assertThrows(IllegalArgumentException.class, () -> new Coordenada(101, 50));
+        Coordenada b = new Coordenada(100.25, -100.75);
+        assertEquals(100.25, b.x(), 1e-9);
+        assertEquals(-100.75, b.y(), 1e-9);
     }
 
     @Test
     void distancia_shouldReturnZero_whenSameCoordinates() {
-        Coordenada a = new Coordenada(10, 20);
+        Coordenada a = new Coordenada(10.5, -20.25);
         assertEquals(0.0, a.distanciaA(a), 1e-6);
     }
 
     @Test
-    void distancia_shouldReturnFive_for3_4_5Triangle() {
-        Coordenada a = new Coordenada(0, 0);
-        Coordenada b = new Coordenada(3, 4);
-        assertEquals(5.0, a.distanciaA(b), 1e-6);
+    void distancia_shouldReturnApproxFiveKm_for3_4_5TriangleAtEquator() {
+        // Cerca del ecuador (lat≈0): 1° ≈ 111 km en ambos ejes
+        // Δlat = 4/111° → 4 km, Δlng = 3/111° → 3 km → hipotenusa ≈ 5 km
+        Coordenada a = new Coordenada(0.0, 0.0);
+        Coordenada b = new Coordenada(3.0 / 111.0, 4.0 / 111.0);
+        assertEquals(5.0, a.distanciaA(b), 0.05);
     }
 
     @Test
     void distancia_shouldBeSymmetric_betweenPoints() {
-        Coordenada a = new Coordenada(10, 10);
-        Coordenada b = new Coordenada(13, 14);
+        // Dos puntos reales en Bogotá: la simetría debe mantenerse independiente del eje
+        Coordenada a = new Coordenada(-74.0627, 4.6482);
+        Coordenada b = new Coordenada(-74.0317, 4.6953);
         double d1 = a.distanciaA(b);
         double d2 = b.distanciaA(a);
         assertEquals(d1, d2, 1e-9);
-        assertEquals(5.0, d1, 1e-6);
+        assertTrue(d1 > 0);
     }
 
     @Test
-    void distancia_shouldReturnSqrt2_forDiagonalUnit() {
-        Coordenada a = new Coordenada(0, 0);
-        Coordenada b = new Coordenada(1, 1);
-        assertEquals(Math.sqrt(2), a.distanciaA(b), 1e-6);
+    void distancia_shouldReturnApproxSqrt2Km_forOneKmDiagonal() {
+        // 1 km en cada eje → diagonal de sqrt(2) km
+        Coordenada a = new Coordenada(0.0, 0.0);
+        Coordenada b = new Coordenada(1.0 / 111.0, 1.0 / 111.0);
+        assertEquals(Math.sqrt(2), a.distanciaA(b), 0.05);
+    }
+
+    @Test
+    void distancia_shouldThrowException_whenTargetIsNull() {
+        Coordenada a = new Coordenada(0.0, 0.0);
+        assertThrows(IllegalArgumentException.class, () -> a.distanciaA(null));
     }
 }

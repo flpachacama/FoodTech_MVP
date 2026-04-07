@@ -15,7 +15,7 @@ public class RestauranteResponseDto {
 
     private Long id;
     private String nombre;
-    private Integer coordenadaX;
-    private Integer coordenadaY;
+    private Double coordenadaX;
+    private Double coordenadaY;
     private List<ProductoMenuDto> menu;
 }

@@ -37,8 +37,8 @@ public class RepartidorEntity {
     private TipoVehiculo vehiculo;
 
     @Column(nullable = false)
-    private Integer x;
+    private Double x;
 
     @Column(nullable = false)
-    private Integer y;
+    private Double y;
 }

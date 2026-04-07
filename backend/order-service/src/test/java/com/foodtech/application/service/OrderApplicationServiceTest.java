@@ -1,10 +1,13 @@
 package com.foodtech.application.service;
 
+import com.foodtech.domain.exception.PedidoNotFoundException;
 import com.foodtech.domain.model.EstadoPedido;
 import com.foodtech.domain.model.Pedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.domain.service.TiempoDeliveryCalculator;
+import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.infrastructure.web.dto.ProductoPedidoDto;
@@ -18,10 +21,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +38,12 @@ class OrderApplicationServiceTest {
     @Mock
     private DeliveryClient deliveryClient;
 
+    @Mock
+    private RestauranteJpaRepository restauranteJpaRepository;
+
+    @Mock
+    private TiempoDeliveryCalculator tiempoCalculator;
+
     @InjectMocks
     private OrderApplicationService service;
 
@@ -40,15 +51,17 @@ class OrderApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
+        lenient().when(restauranteJpaRepository.existsById(anyLong())).thenReturn(true);
+        lenient().when(tiempoCalculator.calcularMinutos(any(), any(), any(), any())).thenReturn(5);
         requestBase = OrderRequestDto.builder()
                 .restauranteId(10L)
-                .restauranteX(5)
-                .restauranteY(8)
+                .restauranteX(5.0)
+                .restauranteY(8.0)
                 .clima("SOLEADO")
                 .clienteNombre("Ana García")
                 .clienteTelefono("600000001")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .productos(List.of(ProductoPedidoDto.builder()
                         .id(1L).nombre("Hamburguesa").precio(BigDecimal.valueOf(8.50)).build()))
                 .build();
@@ -61,8 +74,8 @@ class OrderApplicationServiceTest {
                 .id(42L)
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE)
                 .productos(List.of())
                 .build();
@@ -85,8 +98,8 @@ class OrderApplicationServiceTest {
                 .id(43L)
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE)
                 .productos(List.of())
                 .build();
@@ -107,8 +120,8 @@ class OrderApplicationServiceTest {
                 .id(44L)
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE)
                 .productos(List.of())
                 .build();
@@ -129,8 +142,8 @@ class OrderApplicationServiceTest {
                 .restauranteId(null)
                 .clienteNombre("Ana García")
                 .clienteTelefono("600000001")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .productos(List.of(ProductoPedidoDto.builder()
                         .id(1L).nombre("Burger").precio(BigDecimal.ONE).build()))
                 .build();
@@ -149,8 +162,8 @@ class OrderApplicationServiceTest {
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
                 .clienteTelefono("600000001")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .productos(List.of())
                 .build();
 
@@ -168,7 +181,7 @@ class OrderApplicationServiceTest {
 
         Pedido pedidoGuardado = Pedido.builder()
                 .id(45L).restauranteId(10L).clienteNombre("Ana García")
-                .clienteCoordenadasX(1).clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0).clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE).productos(List.of()).build();
 
         when(pedidoRepository.save(any())).thenReturn(pedidoGuardado);
@@ -181,5 +194,34 @@ class OrderApplicationServiceTest {
                 ArgumentCaptor.forClass(DeliveryClient.DeliveryAssignmentRequest.class);
         verify(deliveryClient).assign(captor.capture());
         assertThat(captor.getValue().clima()).isEqualTo("SOLEADO");
+    }
+
+    // ── Caso 7: repartidor con pedido activo ──────────────────────────────────
+    @Test
+    void getOrderByRepartidorId_cuandoPedidoActivo_retornaDto() {
+        Pedido pedidoActivo = Pedido.builder()
+                .id(55L).restauranteId(10L).repartidorId(1L)
+                .clienteNombre("Juan").clienteCoordenadasX(-74.06).clienteCoordenadasY(4.64)
+                .estado(EstadoPedido.ASIGNADO).tiempoEstimado(25).productos(List.of()).build();
+
+        when(pedidoRepository.findPedidoActivoByRepartidorId(1L)).thenReturn(Optional.of(pedidoActivo));
+
+        OrderResponseDto response = service.getOrderByRepartidorId(1L);
+
+        assertThat(response.getId()).isEqualTo(55L);
+        assertThat(response.getRepartidorId()).isEqualTo(1L);
+        assertThat(response.getClienteNombre()).isEqualTo("Juan");
+        assertThat(response.getTiempoEstimado()).isEqualTo(25);
+        assertThat(response.getEstado()).isEqualTo(EstadoPedido.ASIGNADO);
+    }
+
+    // ── Caso 8: repartidor sin pedido activo ─────────────────────────────────
+    @Test
+    void getOrderByRepartidorId_cuandoSinPedidoActivo_lanzaNotFoundException() {
+        when(pedidoRepository.findPedidoActivoByRepartidorId(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.getOrderByRepartidorId(99L))
+                .isInstanceOf(PedidoNotFoundException.class)
+                .hasMessageContaining("99");
     }
 }

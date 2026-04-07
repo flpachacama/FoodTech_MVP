@@ -1,6 +1,6 @@
 # FoodTech Frontend — Angular 19
 
-Aplicación Angular 19 que visualiza restaurantes y repartidores en un mapa interactivo, permite ver el menú de cada restaurante y realizar pedidos conectándose a los microservicios del backend.
+Aplicación Angular 19 para pedidos de comida con visualización de restaurantes en mapa interactivo, carrito de compras y gestión de pedidos activos.
 
 ---
 
@@ -20,15 +20,13 @@ Aplicación Angular 19 que visualiza restaurantes y repartidores en un mapa inte
 
 ```bash
 # Desde la raíz del repositorio
-cd frontend/foodtech-app
+cd frontend
 
 # Instalar dependencias
 npm install
 
 # Iniciar servidor de desarrollo
 npm start
-# o
-ng serve
 ```
 
 La aplicación estará disponible en **http://localhost:4200**
@@ -37,44 +35,63 @@ La aplicación estará disponible en **http://localhost:4200**
 
 ## Conexión con el backend
 
-Antes de ejecutar el frontend, asegúrate de que los contenedores Docker del backend estén corriendo:
+Asegúrate de que los contenedores Docker del backend estén corriendo:
 
 ```bash
-# Desde la raíz del repositorio
 cd backend
 docker compose up -d --build
 ```
 
-| Microservicio     | URL base               | Endpoints usados                          |
-|-------------------|------------------------|-------------------------------------------|
-| order-service     | http://localhost:8081  | `GET /restaurants`, `GET /restaurants/{id}`, `POST /orders` |
-| delivery-service  | http://localhost:8080  | `GET /delivers`, `GET /delivers/{id}`     |
+| Microservicio | URL | Endpoints usados |
+|---------------|-----|------------------|
+| order-service | http://localhost:8081 | `GET /restaurants`, `POST /orders`, `PUT /orders/{id}/cancel`, `GET /orders/repartidor/{id}` |
+| delivery-service | http://localhost:8080 | `GET /delivers`, `GET /delivers/{id}` |
 
-Las URLs se configuran en `src/environments/environment.ts` (desarrollo) y `environment.prod.ts` (producción).
+Configuración en `src/environments/environment.ts`:
+```typescript
+export const environment = {
+  production: false,
+  orderServiceUrl: 'http://localhost:8081',
+  deliveryServiceUrl: 'http://localhost:8080'
+};
+```
 
 ---
 
 ## Estructura del proyecto
 
 ```
-foodtech-app/
+frontend/
 ├── src/
 │   ├── app/
-│   │   ├── models/              # Interfaces TypeScript
+│   │   ├── data/                      # Datos mock / constantes
+│   │   │   └── mock-user.ts           # Usuario consumidor simulado (3 favoritos en Bogotá)
+│   │   ├── models/                    # Interfaces TypeScript
 │   │   │   ├── restaurante.model.ts
 │   │   │   ├── producto-menu.model.ts
 │   │   │   ├── deliver.model.ts
-│   │   │   └── index.ts
-│   │   ├── services/            # Servicios HTTP
-│   │   │   ├── restaurante.service.ts
-│   │   │   ├── deliver.service.ts
-│   │   │   └── index.ts
+│   │   │   ├── cart-item.model.ts
+│   │   │   ├── order-request.model.ts
+│   │   │   └── order-response.model.ts
+│   │   ├── services/                  # Servicios HTTP y estado
+│   │   │   ├── restaurante.service.ts     # GET /restaurants
+│   │   │   ├── deliver.service.ts         # GET /delivers, GET /delivers/{id}
+│   │   │   ├── order.service.ts           # POST /orders
+│   │   │   ├── repartidor-order.service.ts # GET /orders/repartidor/{id}
+│   │   │   ├── active-orders.service.ts   # Gestión pedidos activos
+│   │   │   └── cart.service.ts            # Carrito de compras (signals)
 │   │   └── components/
-│   │       ├── mapa/            # Canvas interactivo con restaurantes y repartidores
-│   │       └── menu-modal/      # Modal para ver y agregar productos al pedido
+│   │       ├── mapa/                  # Selector de restaurantes en mapa
+│   │       ├── mapa-page/             # Página principal (ruta /)
+│   │       ├── repartidor-page/       # Vista repartidor (ruta /repartidor)
+│   │       ├── menu-modal/            # Modal de menú del restaurante
+│   │       ├── order-form-modal/      # Formulario de pedido (con selector favoritos)
+│   │       ├── active-orders-panel/   # Panel de pedidos activos
+│   │       └── restaurant-guide/      # Guía de selección
 │   └── environments/
-│       ├── environment.ts       # URLs desarrollo (localhost)
-│       └── environment.prod.ts  # URLs producción
+│       ├── environment.ts             # URLs desarrollo
+│       └── environment.prod.ts        # URLs producción
+└── public/assets/                     # Imágenes (restaurantes, repartidores)
 ```
 
 ---
@@ -82,19 +99,41 @@ foodtech-app/
 ## Componentes principales
 
 ### MapaComponent
-Canvas HTML5 de 800×800 px con sistema de coordenadas 0–100:
-
-- **Restaurantes** — Desplegable para ver restaurantes ver su menú
-- Mapa en google maps para visualizar ubicación del restaurante
+Selector de restaurantes con integración Google Maps:
+- Lista desplegable de restaurantes disponibles
+- Visualización de ubicación en mapa
 
 ### MenuModalComponent
-Modal que aparece al hacer click en un restaurante:
+Modal de menú del restaurante:
+- Lista de productos con precios formateados (`$18.000 COP`)
+- Botón "Agregar" para añadir al carrito
+- Cierre con botón X o click en overlay
 
-- Lista de productos con nombre y precio formateado (`$18.000 COP`)
-- Botón "Agregar" por producto
-- Cierre con botón X o click en el overlay
-- Animaciones de entrada (fadeIn, slideIn)
-- Responsive: 95% del ancho en móvil
+### OrderFormModalComponent
+Formulario para completar pedido:
+- Selector de lugares favoritos del mock-user (Casa / Trabajo / Novia) con pre-relleno automático
+- Datos del cliente editables (nombre, teléfono, coordenadas)
+- Resumen del carrito
+- Envío del pedido al backend
+
+### RepartidorPageComponent
+Vista de la ruta `/repartidor` (HU11):
+- Muestra datos del repartidor ID=1 (nombre, vehículo, estado)
+- Si el repartidor está `EN_ENTREGA`: muestra datos del cliente y tiempo estimado
+- Si no tiene pedido activo: mensaje informativo
+- Botón "← Volver al mapa" con `routerLink="/"`
+
+### ActiveOrdersPanelComponent
+Panel lateral de pedidos activos:
+- Lista de pedidos en curso
+- Botón para cancelar pedidos
+- Actualización reactiva con Angular Signals
+
+### CartService
+Servicio de estado del carrito (Angular Signals):
+- Agregar/quitar productos
+- Cálculo de total
+- Limpieza al confirmar pedido
 
 ---
 
@@ -121,3 +160,4 @@ ng generate component components/nombre-componente
 | 3.2  | MapaComponent con Canvas, repartidores y restaurantes | ✅ |
 | 3.3  | MenuModalComponent con lista de productos | ✅ |
 | 3.4  | Integración completa en AppComponent con signals | ✅ |
+| HU11 — Fase B | Routing Angular (`/` y `/repartidor`), `mock-user.ts`, `RepartidorPageComponent`, `RepartidorOrderService`, selector de favoritos en `OrderFormModalComponent`, link a `/repartidor` en `MapaPageComponent` | ✅ |

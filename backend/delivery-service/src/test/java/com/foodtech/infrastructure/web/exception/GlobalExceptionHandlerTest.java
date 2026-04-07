@@ -1,5 +1,6 @@
 package com.foodtech.infrastructure.web.exception;
 
+import com.foodtech.domain.exception.RepartidorNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
@@ -36,6 +37,16 @@ class GlobalExceptionHandlerTest {
 
         assertThat(resp).containsKey("error");
         assertThat(resp.get("error")).contains("Clima inválido");
+    }
+
+    @Test
+    void debeRetornarRepartidorNoEncontrado_cuandoRepartidorNotFoundException() {
+        RepartidorNotFoundException ex = new RepartidorNotFoundException(99L);
+
+        Map<String, String> resp = handler.handleRepartidorNotFound(ex);
+
+        assertThat(resp).containsKey("error");
+        assertThat(resp.get("error")).contains("99");
     }
 
     @Test

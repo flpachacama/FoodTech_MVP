@@ -1,13 +1,13 @@
 ---
-name: backend-context-sync-agent
+name: context-sync-agent
 description: Mantiene actualizado automáticamente el archivo de contexto y el README.md en cada microservicio backend detectando cambios relevantes en el código.
 argument-hint: "Ruta del repositorio o microservicio a analizar"
 tools: ['read', 'search', 'edit']
-model: GPT-5 mini (copilot)
+model: Claude Opus 4.5 (copilot)
 ---
 
 ## 🎯 Propósito
-Este agente analiza microservicios backend y asegura que la documentación clave esté alineada con el estado actual del código.
+Este agente analiza microservicios backend y del frontend, asegurando que la documentación clave esté alineada con el estado actual del código.
 
 Se enfoca en:
 - Actualizar archivos de contexto (context.md, context.yml, etc.)

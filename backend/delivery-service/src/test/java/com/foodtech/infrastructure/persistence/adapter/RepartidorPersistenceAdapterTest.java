@@ -41,8 +41,8 @@ class RepartidorPersistenceAdapterTest {
                 .nombre("Juan Perez")
                 .estado(EstadoRepartidor.ACTIVO)
                 .vehiculo(TipoVehiculo.MOTO)
-                .x(5)
-                .y(7)
+                .x(5.5)
+                .y(-7.25)
                 .build();
 
         when(jpaRepartidorRepository.findById(id)).thenReturn(Optional.of(entity));
@@ -55,8 +55,8 @@ class RepartidorPersistenceAdapterTest {
         assertEquals("Juan Perez", repartidor.getNombre());
         Coordenada ubicacion = repartidor.getUbicacion();
         assertNotNull(ubicacion);
-        assertEquals(5, ubicacion.x());
-        assertEquals(7, ubicacion.y());
+        assertEquals(5.5, ubicacion.x(), 1e-9);
+        assertEquals(-7.25, ubicacion.y(), 1e-9);
     }
 
     @Test
@@ -66,7 +66,7 @@ class RepartidorPersistenceAdapterTest {
                 .nombre("Ana Lopez")
                 .estado(EstadoRepartidor.EN_ENTREGA)
                 .vehiculo(TipoVehiculo.BICICLETA)
-                .ubicacion(new Coordenada(12, 34))
+            .ubicacion(new Coordenada(12.5, 34.75))
                 .build();
 
         when(jpaRepartidorRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
@@ -78,13 +78,13 @@ class RepartidorPersistenceAdapterTest {
 
         RepartidorEntity persisted = captor.getValue();
         assertEquals("Ana Lopez", persisted.getNombre());
-        assertEquals(12, persisted.getX());
-        assertEquals(34, persisted.getY());
+        assertEquals(12.5, persisted.getX(), 1e-9);
+        assertEquals(34.75, persisted.getY(), 1e-9);
 
         assertNotNull(saved);
         assertEquals("Ana Lopez", saved.getNombre());
-        assertEquals(12, saved.getUbicacion().x());
-        assertEquals(34, saved.getUbicacion().y());
+        assertEquals(12.5, saved.getUbicacion().x(), 1e-9);
+        assertEquals(34.75, saved.getUbicacion().y(), 1e-9);
     }
 
     @Test
@@ -99,22 +99,20 @@ class RepartidorPersistenceAdapterTest {
 
     @Test
     void save_BoundaryCoordinates_shouldPersistExtremes() {
-        // lower boundary
         Repartidor low = Repartidor.builder()
                 .id(null)
                 .nombre("Low")
                 .estado(EstadoRepartidor.ACTIVO)
                 .vehiculo(TipoVehiculo.BICICLETA)
-                .ubicacion(new Coordenada(0, 0))
+            .ubicacion(new Coordenada(-0.5, 0.25))
                 .build();
 
-        // upper boundary (assumed map limit)
         Repartidor high = Repartidor.builder()
                 .id(null)
                 .nombre("High")
                 .estado(EstadoRepartidor.ACTIVO)
                 .vehiculo(TipoVehiculo.MOTO)
-                .ubicacion(new Coordenada(100, 100))
+            .ubicacion(new Coordenada(100.5, -100.25))
                 .build();
 
         when(jpaRepartidorRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
@@ -126,8 +124,8 @@ class RepartidorPersistenceAdapterTest {
         verify(jpaRepartidorRepository, times(2)).save(captor.capture());
 
         List<RepartidorEntity> entities = captor.getAllValues();
-        assertEquals(0, entities.get(0).getX());
-        assertEquals(100, entities.get(1).getX());
+        assertEquals(-0.5, entities.get(0).getX(), 1e-9);
+        assertEquals(100.5, entities.get(1).getX(), 1e-9);
     }
 
     @Test
@@ -142,13 +140,12 @@ class RepartidorPersistenceAdapterTest {
 
     @Test
     void save_NullValues_nameNullAndUbicacionNull_behaviour() {
-        // name null -> adapter should still call save and propagate null name in entity
         Repartidor nameNull = Repartidor.builder()
                 .id(null)
                 .nombre(null)
                 .estado(EstadoRepartidor.ACTIVO)
                 .vehiculo(TipoVehiculo.AUTO)
-                .ubicacion(new Coordenada(1, 1))
+            .ubicacion(new Coordenada(1.1, 1.1))
                 .build();
 
         when(jpaRepartidorRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
@@ -160,7 +157,6 @@ class RepartidorPersistenceAdapterTest {
         RepartidorEntity persisted = captor.getValue();
         assertNull(persisted.getNombre());
 
-        // ubicacion null -> expect NullPointerException when adapter tries to access ubicacion.x()
         Repartidor ubicacionNull = Repartidor.builder()
                 .id(null)
                 .nombre("NoUbicacion")
@@ -179,8 +175,8 @@ class RepartidorPersistenceAdapterTest {
                 .nombre("Integrity")
                 .estado(EstadoRepartidor.INACTIVO)
                 .vehiculo(TipoVehiculo.AUTO)
-                .x(9)
-                .y(8)
+            .x(9.9)
+            .y(-8.8)
                 .build();
 
         when(jpaRepartidorRepository.findById(42L)).thenReturn(Optional.of(entity));
@@ -190,7 +186,7 @@ class RepartidorPersistenceAdapterTest {
         Repartidor r = result.get();
         assertEquals(EstadoRepartidor.INACTIVO, r.getEstado());
         assertEquals(TipoVehiculo.AUTO, r.getVehiculo());
-        assertEquals(9, r.getUbicacion().x());
-        assertEquals(8, r.getUbicacion().y());
+        assertEquals(9.9, r.getUbicacion().x(), 1e-9);
+        assertEquals(-8.8, r.getUbicacion().y(), 1e-9);
     }
 }

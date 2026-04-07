@@ -81,6 +81,7 @@ curl http://localhost:8081/restaurants/1
 | `POST` | `/orders` | Crea un nuevo pedido y asigna repartidor |
 | `PUT`  | `/orders/{id}/cancel` | Cancela un pedido existente |
 | `PUT`  | `/orders/{id}/deliver` | Marca un pedido como entregado |
+| `GET`  | `/orders/repartidor/{repartidorId}` | Pedido activo asignado a un repartidor |
 
 **Ejemplo — crear pedido:**
 ```bash
@@ -88,21 +89,65 @@ curl -X POST http://localhost:8081/orders \
   -H "Content-Type: application/json" \
   -d '{
     "restauranteId": 1,
+    "restauranteX": -74.0627,
+    "restauranteY": 4.6482,
     "clima": "SOLEADO",
+    "clienteNombre": "Ana García",
+    "clienteTelefono": "3001234567",
+    "clienteCoordenadasX": -74.0637,
+    "clienteCoordenadasY": 4.6482,
     "productos": [
       { "id": 1, "nombre": "Hamburguesa Clásica", "precio": 18000 }
     ]
   }'
 ```
 
-**Respuesta 200 OK:**
+**Respuesta 201 Created:**
 ```json
 {
-  "pedidoId": 1,
-  "estado": "ASIGNADO",
+  "id": 1,
+  "restauranteId": 1,
   "repartidorId": 3,
-  "nombreRepartidor": "Carlos Mendoza",
-  "total": 18000
+  "estado": "ASIGNADO",
+  "tiempoEstimado": 18,
+  "clienteNombre": "Ana García",
+  "clienteTelefono": "3001234567",
+  "clienteCoordenadasX": -74.0637,
+  "clienteCoordenadasY": 4.6482,
+  "productos": [...]
+}
+```
+
+> `tiempoEstimado` incluye **dos tramos**: repartidor → restaurante (calculado por delivery-service) + restaurante → cliente (calculado por order-service con `TiempoDeliveryCalculator` a 20 km/h).
+
+**Ejemplo — consultar pedido activo de un repartidor:**
+```bash
+curl http://localhost:8081/orders/repartidor/3
+```
+
+**Respuesta 200 OK (repartidor con pedido ASIGNADO):**
+```json
+{
+  "id": 1,
+  "restauranteId": 1,
+  "repartidorId": 3,
+  "estado": "ASIGNADO",
+  "tiempoEstimado": 18,
+  "clienteNombre": "Ana García",
+  "clienteCoordenadasX": -74.0637,
+  "clienteCoordenadasY": 4.6482,
+  "clienteTelefono": null,
+  "productos": [...]
+}
+```
+
+**Respuesta 404 (repartidor sin pedido activo):**
+```json
+{
+  "timestamp": "...",
+  "status": 404,
+  "error": "Not Found",
+  "path": "/orders/repartidor/3"
 }
 ```
 
@@ -115,6 +160,20 @@ curl -X PUT http://localhost:8081/orders/1/cancel
 ```bash
 curl -X PUT http://localhost:8081/orders/1/deliver
 ```
+
+---
+
+## Lógica de negocio destacada
+
+### Cálculo de tiempo estimado total
+
+`TiempoDeliveryCalculator` (servicio de dominio) calcula el tramo **restaurante → cliente** usando la aproximación plana (flat-earth) a 20 km/h:
+
+```
+tiempoTotal = tiempoRepartidorRestaurante (delivery-service) + tiempoRestauranteCliente (order-service)
+```
+
+Las coordenadas son **longitud/latitud reales de Bogotá** (Double). Los 4 restaurantes de ejemplo están distribuidos en Chapinero, Usaquén, Zona Rosa y Teusaquillo.
 
 ---
 

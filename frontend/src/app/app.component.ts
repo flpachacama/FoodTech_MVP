@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { MapaPageComponent } from './components/mapa-page/mapa-page.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MapaPageComponent],
-  template: '<app-mapa-page />'
+  imports: [RouterOutlet],
+  template: '<router-outlet />'
 })
 export class AppComponent {}
+

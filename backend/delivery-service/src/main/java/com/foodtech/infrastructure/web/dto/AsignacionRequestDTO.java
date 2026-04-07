@@ -1,5 +1,6 @@
 package com.foodtech.infrastructure.web.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,10 +17,12 @@ public class AsignacionRequestDTO {
     private Long pedidoId;
 
     @NotNull(message = "La coordenada X es obligatoria")
-    private Integer restauranteX;
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
+    private Double restauranteX;
 
     @NotNull(message = "La coordenada Y es obligatoria")
-    private Integer restauranteY;
+    @JsonDeserialize(using = StrictDoubleDeserializer.class)
+    private Double restauranteY;
 
     private String clima;
 }
