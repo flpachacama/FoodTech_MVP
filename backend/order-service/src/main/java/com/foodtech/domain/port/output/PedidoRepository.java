@@ -12,4 +12,6 @@ public interface PedidoRepository {
 
     List<Pedido> findAll();
 
+    Optional<Pedido> findPedidoActivoByRepartidorId(Long repartidorId);
+
 }

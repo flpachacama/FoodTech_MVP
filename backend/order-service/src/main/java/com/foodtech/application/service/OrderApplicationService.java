@@ -136,6 +136,41 @@ public class OrderApplicationService implements OrderUseCase {
                 .build();
     }
 
+    @Override
+    public OrderResponseDto getOrderByRepartidorId(Long repartidorId) {
+        log.info("[getOrderByRepartidorId] Buscando pedido activo para repartidorId={}", repartidorId);
+        Pedido pedido = pedidoRepository.findPedidoActivoByRepartidorId(repartidorId)
+                .orElseThrow(() -> {
+                    log.warn("[getOrderByRepartidorId] Sin pedido activo para repartidorId={}", repartidorId);
+                    return new PedidoNotFoundException(repartidorId);
+                });
+        return toPedidoResponse(pedido);
+    }
+
+    private OrderResponseDto toPedidoResponse(Pedido pedido) {
+        List<ProductoPedidoDto> productosDto = pedido.getProductos().stream()
+                .map(p -> ProductoPedidoDto.builder()
+                        .id(p.getId())
+                        .nombre(p.getNombre())
+                        .precio(p.getPrecio())
+                        .build())
+                .toList();
+
+        return OrderResponseDto.builder()
+                .id(pedido.getId())
+                .restauranteId(pedido.getRestauranteId())
+                .repartidorId(pedido.getRepartidorId())
+                .clienteId(pedido.getClienteId())
+                .clienteNombre(pedido.getClienteNombre())
+                .clienteCoordenadasX(pedido.getClienteCoordenadasX())
+                .clienteCoordenadasY(pedido.getClienteCoordenadasY())
+                .clienteTelefono(null)   // clienteTelefono no se persiste en BD
+                .productos(productosDto)
+                .estado(pedido.getEstado())
+                .tiempoEstimado(pedido.getTiempoEstimado())
+                .build();
+    }
+
     private EstadoPedido resolveEstado(String estadoDelivery) {
         if ("ASIGNADO".equalsIgnoreCase(estadoDelivery)) {
             return EstadoPedido.ASIGNADO;

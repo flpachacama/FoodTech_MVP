@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -129,6 +129,31 @@ public class PedidoDataAdapterTest {
         List<Pedido> lista = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findAll();
         assertEquals(1, lista.size());
         assertTrue(lista.get(0).getProductos().isEmpty());
+    }
+
+    @Test
+    void findPedidoActivoByRepartidorId_cuandoExiste_retornaPedido() {
+        PedidoEntity entity = new PedidoEntity(500L, EstadoPedido.ASIGNADO, 10L, 7L, 20L, "Carlos", -74.06, 4.64, 20, "[]");
+        when(pedidoJpaRepository.findFirstByRepartidorIdAndEstadoIn(
+                eq(7L), anyList())).thenReturn(Optional.of(entity));
+
+        Optional<Pedido> result = new PedidoDataAdapter(pedidoJpaRepository, objectMapper)
+                .findPedidoActivoByRepartidorId(7L);
+
+        assertTrue(result.isPresent());
+        assertEquals(500L, result.get().getId());
+        assertEquals(EstadoPedido.ASIGNADO, result.get().getEstado());
+    }
+
+    @Test
+    void findPedidoActivoByRepartidorId_cuandoNoExiste_retornaVacio() {
+        when(pedidoJpaRepository.findFirstByRepartidorIdAndEstadoIn(
+                eq(99L), anyList())).thenReturn(Optional.empty());
+
+        Optional<Pedido> result = new PedidoDataAdapter(pedidoJpaRepository, objectMapper)
+                .findPedidoActivoByRepartidorId(99L);
+
+        assertTrue(result.isEmpty());
     }
 
 }

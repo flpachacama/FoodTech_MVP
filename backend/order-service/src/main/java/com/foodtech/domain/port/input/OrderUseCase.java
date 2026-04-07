@@ -16,4 +16,6 @@ public interface OrderUseCase {
     CancelOrderResponseDto cancelOrder(Long pedidoId);
 
     DeliverOrderResponseDto deliverOrder(Long pedidoId);
+
+    OrderResponseDto getOrderByRepartidorId(Long repartidorId);
 }

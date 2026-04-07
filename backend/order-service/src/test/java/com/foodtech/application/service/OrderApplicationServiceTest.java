@@ -1,5 +1,6 @@
 package com.foodtech.application.service;
 
+import com.foodtech.domain.exception.PedidoNotFoundException;
 import com.foodtech.domain.model.EstadoPedido;
 import com.foodtech.domain.model.Pedido;
 import com.foodtech.domain.port.output.DeliveryClient;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -192,5 +194,34 @@ class OrderApplicationServiceTest {
                 ArgumentCaptor.forClass(DeliveryClient.DeliveryAssignmentRequest.class);
         verify(deliveryClient).assign(captor.capture());
         assertThat(captor.getValue().clima()).isEqualTo("SOLEADO");
+    }
+
+    // ── Caso 7: repartidor con pedido activo ──────────────────────────────────
+    @Test
+    void getOrderByRepartidorId_cuandoPedidoActivo_retornaDto() {
+        Pedido pedidoActivo = Pedido.builder()
+                .id(55L).restauranteId(10L).repartidorId(1L)
+                .clienteNombre("Juan").clienteCoordenadasX(-74.06).clienteCoordenadasY(4.64)
+                .estado(EstadoPedido.ASIGNADO).tiempoEstimado(25).productos(List.of()).build();
+
+        when(pedidoRepository.findPedidoActivoByRepartidorId(1L)).thenReturn(Optional.of(pedidoActivo));
+
+        OrderResponseDto response = service.getOrderByRepartidorId(1L);
+
+        assertThat(response.getId()).isEqualTo(55L);
+        assertThat(response.getRepartidorId()).isEqualTo(1L);
+        assertThat(response.getClienteNombre()).isEqualTo("Juan");
+        assertThat(response.getTiempoEstimado()).isEqualTo(25);
+        assertThat(response.getEstado()).isEqualTo(EstadoPedido.ASIGNADO);
+    }
+
+    // ── Caso 8: repartidor sin pedido activo ─────────────────────────────────
+    @Test
+    void getOrderByRepartidorId_cuandoSinPedidoActivo_lanzaNotFoundException() {
+        when(pedidoRepository.findPedidoActivoByRepartidorId(99L)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.getOrderByRepartidorId(99L))
+                .isInstanceOf(PedidoNotFoundException.class)
+                .hasMessageContaining("99");
     }
 }
