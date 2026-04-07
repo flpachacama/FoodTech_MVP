@@ -44,7 +44,6 @@ class OrderApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
-        when(restauranteRepository.existsById(anyLong())).thenReturn(true);
         requestBase = OrderRequestDto.builder()
                 .restauranteId(10L)
                 .restauranteX(5)
@@ -62,6 +61,8 @@ class OrderApplicationServiceTest {
     // ── Caso 1: flujo completo, delivery responde ASIGNADO ────────────────────
     @Test
     void createOrder_whenDeliveryAsigna_returnsEstadoAsignado() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(42L)
                 .restauranteId(10L)
@@ -86,6 +87,8 @@ class OrderApplicationServiceTest {
     // ── Caso 2: delivery responde PENDIENTE (sin repartidor disponible) ────────
     @Test
     void createOrder_whenDeliveryPendiente_returnsEstadoPendiente() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(43L)
                 .restauranteId(10L)
@@ -108,6 +111,8 @@ class OrderApplicationServiceTest {
     // ── Caso 3: delivery-service lanza excepción → IllegalStateException ──────
     @Test
     void createOrder_whenDeliveryFails_throwsIllegalStateException() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(44L)
                 .restauranteId(10L)
@@ -150,6 +155,8 @@ class OrderApplicationServiceTest {
     // ── Caso 5: lista de productos vacía → IllegalArgumentException ────────────
     @Test
     void createOrder_whenProductosEmpty_throwsIllegalArgumentException() {
+        stubRestauranteExistente();
+
         OrderRequestDto requestSinProductos = OrderRequestDto.builder()
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
@@ -169,6 +176,8 @@ class OrderApplicationServiceTest {
     // ── Caso 6: clima null usa fallback "SOLEADO" ──────────────────────────────
     @Test
     void createOrder_whenClimaNull_usesFallbackSoleado() {
+        stubRestauranteExistente();
+
         requestBase.setClima(null);
 
         Pedido pedidoGuardado = Pedido.builder()
@@ -186,5 +195,9 @@ class OrderApplicationServiceTest {
                 ArgumentCaptor.forClass(DeliveryClient.DeliveryAssignmentRequest.class);
         verify(deliveryClient).assign(captor.capture());
         assertThat(captor.getValue().clima()).isEqualTo("SOLEADO");
+    }
+
+    private void stubRestauranteExistente() {
+        when(restauranteRepository.existsById(anyLong())).thenReturn(true);
     }
 }

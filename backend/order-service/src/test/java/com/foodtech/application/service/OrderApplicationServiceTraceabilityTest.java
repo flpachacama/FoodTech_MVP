@@ -2,6 +2,7 @@ package com.foodtech.application.service;
 
 import com.foodtech.domain.model.EstadoPedido;
 import com.foodtech.domain.model.Pedido;
+import com.foodtech.domain.model.ProductoPedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
@@ -65,7 +66,10 @@ class OrderApplicationServiceTraceabilityTest {
                 .clienteNombre(request.getClienteNombre())
                 .clienteCoordenadasX(request.getClienteCoordenadasX())
                 .clienteCoordenadasY(request.getClienteCoordenadasY())
-                .productos(List.of())
+                .productos(List.of(
+                        ProductoPedido.builder().id(1L).nombre("Hamburguesa").precio(new BigDecimal("8.50")).build(),
+                        ProductoPedido.builder().id(2L).nombre("Papas").precio(new BigDecimal("4.00")).build()
+                ))
                 .estado(EstadoPedido.PENDIENTE)
                 .build();
 
