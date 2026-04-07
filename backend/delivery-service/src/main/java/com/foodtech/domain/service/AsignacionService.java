@@ -16,6 +16,7 @@ public class AsignacionService {
                                                    Coordenada restauranteUbicacion,
                                                    Clima clima) {
         return repartidores.stream()
+            .filter(r -> r != null && r.getUbicacion() != null && r.getVehiculo() != null)
             .filter(r -> esVehiculoApto(r.getVehiculo(), clima))
             .sorted((r1, r2) -> {
                 double d1 = r1.getUbicacion().distanciaA(restauranteUbicacion);

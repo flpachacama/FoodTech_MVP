@@ -5,6 +5,7 @@ import com.foodtech.domain.model.Coordenada;
 import com.foodtech.domain.model.Repartidor;
 import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.model.TipoVehiculo;
+import com.foodtech.domain.service.AsignacionService;
 import com.foodtech.domain.port.input.AsignacionUseCase;
 import com.foodtech.infrastructure.web.dto.AsignacionRequestDTO;
 import com.foodtech.infrastructure.web.dto.AsignacionResponseDTO;
@@ -35,6 +36,9 @@ class AsignacionControllerTest {
         @Mock
         private com.foodtech.domain.port.input.RepartidorUseCase repartidorUseCase;
 
+        @Mock
+        private AsignacionService asignacionService;
+
     @InjectMocks
     private AsignacionController controller;
 
@@ -57,6 +61,8 @@ class AsignacionControllerTest {
 
         when(asignacionApplicationService.asignarRepartidor(eq(new Coordenada(25, 40)), eq(Clima.SOLEADO)))
                 .thenReturn(candidato);
+        when(asignacionService.calcularTiempoEstimadoMinutos(candidato, new Coordenada(25, 40)))
+                .thenReturn(12);
 
         AsignacionResponseDTO resp = controller.asignarRepartidor(request);
 
@@ -102,5 +108,20 @@ class AsignacionControllerTest {
 
         assertThat(resp.getEstado()).isEqualTo("PENDIENTE");
         verify(asignacionApplicationService).asignarRepartidor(eq(new Coordenada(5, 5)), isNull());
+    }
+
+    // HU3 - Aplicar restricciones por clima
+    @Test
+    void debeLanzarIllegalArgumentException_cuandoElClimaNoEsValido_TC009() {
+        AsignacionRequestDTO request = AsignacionRequestDTO.builder()
+                .pedidoId(4L)
+                .restauranteX(5)
+                .restauranteY(5)
+                .clima("TORMENTA_EXTREMA")
+                .build();
+
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () ->
+                controller.asignarRepartidor(request)
+        );
     }
 }

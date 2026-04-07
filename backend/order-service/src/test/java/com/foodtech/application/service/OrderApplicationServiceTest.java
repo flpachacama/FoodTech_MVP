@@ -5,6 +5,7 @@ import com.foodtech.domain.model.Pedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.infrastructure.web.dto.ProductoPedidoDto;
@@ -33,6 +34,9 @@ class OrderApplicationServiceTest {
     @Mock
     private DeliveryClient deliveryClient;
 
+    @Mock
+    private RestauranteJpaRepository restauranteRepository;
+
     @InjectMocks
     private OrderApplicationService service;
 
@@ -57,6 +61,8 @@ class OrderApplicationServiceTest {
     // ── Caso 1: flujo completo, delivery responde ASIGNADO ────────────────────
     @Test
     void createOrder_whenDeliveryAsigna_returnsEstadoAsignado() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(42L)
                 .restauranteId(10L)
@@ -81,6 +87,8 @@ class OrderApplicationServiceTest {
     // ── Caso 2: delivery responde PENDIENTE (sin repartidor disponible) ────────
     @Test
     void createOrder_whenDeliveryPendiente_returnsEstadoPendiente() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(43L)
                 .restauranteId(10L)
@@ -103,6 +111,8 @@ class OrderApplicationServiceTest {
     // ── Caso 3: delivery-service lanza excepción → IllegalStateException ──────
     @Test
     void createOrder_whenDeliveryFails_throwsIllegalStateException() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(44L)
                 .restauranteId(10L)
@@ -145,6 +155,8 @@ class OrderApplicationServiceTest {
     // ── Caso 5: lista de productos vacía → IllegalArgumentException ────────────
     @Test
     void createOrder_whenProductosEmpty_throwsIllegalArgumentException() {
+        stubRestauranteExistente();
+
         OrderRequestDto requestSinProductos = OrderRequestDto.builder()
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
@@ -164,6 +176,8 @@ class OrderApplicationServiceTest {
     // ── Caso 6: clima null usa fallback "SOLEADO" ──────────────────────────────
     @Test
     void createOrder_whenClimaNull_usesFallbackSoleado() {
+        stubRestauranteExistente();
+
         requestBase.setClima(null);
 
         Pedido pedidoGuardado = Pedido.builder()
@@ -181,5 +195,9 @@ class OrderApplicationServiceTest {
                 ArgumentCaptor.forClass(DeliveryClient.DeliveryAssignmentRequest.class);
         verify(deliveryClient).assign(captor.capture());
         assertThat(captor.getValue().clima()).isEqualTo("SOLEADO");
+    }
+
+    private void stubRestauranteExistente() {
+        when(restauranteRepository.existsById(anyLong())).thenReturn(true);
     }
 }

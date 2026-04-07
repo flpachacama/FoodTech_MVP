@@ -4,7 +4,7 @@ package com.foodtech.domain.model;
  * Tipo de vehículo de un repartidor con velocidad asociada en km/h.
  */
 public enum TipoVehiculo {
-    BICICLETA(15),
+    BICICLETA(10),
     MOTO(20),
     AUTO(30);
 
