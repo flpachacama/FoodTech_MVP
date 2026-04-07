@@ -20,8 +20,8 @@ public class OrderResponseDto {
     private List<ProductoPedidoDto> productos;
     private Long clienteId;
     private String clienteNombre;
-    private Integer clienteCoordenadasX;
-    private Integer clienteCoordenadasY;
+    private Double clienteCoordenadasX;
+    private Double clienteCoordenadasY;
     private String clienteTelefono;
     private Integer tiempoEstimado;
     private EstadoPedido estado;

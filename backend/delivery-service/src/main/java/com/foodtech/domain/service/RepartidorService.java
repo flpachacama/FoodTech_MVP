@@ -1,5 +1,6 @@
 package com.foodtech.domain.service;
 
+import com.foodtech.domain.exception.RepartidorNotFoundException;
 import com.foodtech.domain.model.Repartidor;
 import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.port.input.RepartidorUseCase;
@@ -16,7 +17,7 @@ public class RepartidorService implements RepartidorUseCase {
     @Override
     public Repartidor cambiarEstado(Long repartidorId, EstadoRepartidor nuevoEstado) {
         Repartidor existente = repartidorRepository.findById(repartidorId)
-                .orElseThrow(() -> new IllegalArgumentException("Repartidor no encontrado: " + repartidorId));
+                .orElseThrow(() -> new RepartidorNotFoundException(repartidorId));
 
         Repartidor actualizado = Repartidor.builder()
                 .id(existente.getId())

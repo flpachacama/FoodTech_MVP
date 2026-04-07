@@ -62,10 +62,10 @@ class RepartidorServiceTest {
     }
 
     @Test
-    void debeLanzarIllegalArgumentException_cuandoRepartidorNoExiste() {
+    void debeLanzarRepartidorNotFoundException_cuandoRepartidorNoExiste() {
         when(repartidorRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(com.foodtech.domain.exception.RepartidorNotFoundException.class, () ->
                 repartidorService.cambiarEstado(99L, EstadoRepartidor.EN_ENTREGA)
         );
 
