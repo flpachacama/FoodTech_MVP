@@ -5,6 +5,7 @@ import com.foodtech.domain.model.Pedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.domain.service.TiempoDeliveryCalculator;
 import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.infrastructure.web.dto.OrderResponseDto;
@@ -38,6 +39,9 @@ class OrderApplicationServiceTest {
     @Mock
     private RestauranteJpaRepository restauranteJpaRepository;
 
+    @Mock
+    private TiempoDeliveryCalculator tiempoCalculator;
+
     @InjectMocks
     private OrderApplicationService service;
 
@@ -46,6 +50,7 @@ class OrderApplicationServiceTest {
     @BeforeEach
     void setUp() {
         lenient().when(restauranteJpaRepository.existsById(anyLong())).thenReturn(true);
+        lenient().when(tiempoCalculator.calcularMinutos(any(), any(), any(), any())).thenReturn(5);
         requestBase = OrderRequestDto.builder()
                 .restauranteId(10L)
                 .restauranteX(5.0)

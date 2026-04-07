@@ -12,6 +12,7 @@ import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentRequest;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.domain.service.TiempoDeliveryCalculator;
 import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.CancelOrderResponseDto;
 import com.foodtech.infrastructure.web.dto.DeliverOrderResponseDto;
@@ -32,6 +33,7 @@ public class OrderApplicationService implements OrderUseCase {
     private final PedidoRepository pedidoRepository;
     private final DeliveryClient deliveryClient;
     private final RestauranteJpaRepository restauranteRepository;
+    private final TiempoDeliveryCalculator tiempoCalculator;
 
     @Override
     public OrderResponseDto createOrder(OrderRequestDto request) {
@@ -65,7 +67,7 @@ public class OrderApplicationService implements OrderUseCase {
 
         EstadoPedido estadoFinal = resolveEstado(deliveryResponse.estado());
 
-        int tiempoRestauranteCliente = calcularTiempoRestauranteClienteMinutos(
+        int tiempoRestauranteCliente = tiempoCalculator.calcularMinutos(
                 request.getRestauranteX(), request.getRestauranteY(),
                 request.getClienteCoordenadasX(), request.getClienteCoordenadasY());
         int tiempoTotal = (deliveryResponse.tiempoEstimado() != null ? deliveryResponse.tiempoEstimado() : 0)
@@ -132,20 +134,6 @@ public class OrderApplicationService implements OrderUseCase {
                 .productos(productos)
                 .estado(EstadoPedido.PENDIENTE)
                 .build();
-    }
-
-    /**
-     * Calcula el tiempo en minutos desde el restaurante hasta el cliente
-     * usando la aproximación plana (flat-earth) a 20 km/h de velocidad promedio.
-     */
-    private int calcularTiempoRestauranteClienteMinutos(Double restX, Double restY,
-                                                        Double cliX, Double cliY) {
-        if (restX == null || restY == null || cliX == null || cliY == null) return 0;
-        double deltaLatKm = (cliY - restY) * 111.0;
-        double latMediaRad = Math.toRadians((restY + cliY) / 2.0);
-        double deltaLngKm = (cliX - restX) * 111.0 * Math.cos(latMediaRad);
-        double distanciaKm = Math.sqrt(deltaLatKm * deltaLatKm + deltaLngKm * deltaLngKm);
-        return (int) Math.round((distanciaKm / 20.0) * 60);
     }
 
     private EstadoPedido resolveEstado(String estadoDelivery) {
