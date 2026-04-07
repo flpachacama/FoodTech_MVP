@@ -5,6 +5,7 @@ import com.foodtech.domain.model.Pedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.infrastructure.web.dto.ProductoPedidoDto;
@@ -33,6 +34,9 @@ class OrderApplicationServiceTest {
     @Mock
     private DeliveryClient deliveryClient;
 
+    @Mock
+    private RestauranteJpaRepository restauranteRepository;
+
     @InjectMocks
     private OrderApplicationService service;
 
@@ -40,6 +44,7 @@ class OrderApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
+        when(restauranteRepository.existsById(anyLong())).thenReturn(true);
         requestBase = OrderRequestDto.builder()
                 .restauranteId(10L)
                 .restauranteX(5)

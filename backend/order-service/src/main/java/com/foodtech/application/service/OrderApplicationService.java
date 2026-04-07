@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -101,9 +102,19 @@ public class OrderApplicationService implements OrderUseCase {
         if (request.getClienteCoordenadasX() == null || request.getClienteCoordenadasY() == null) {
             throw new IllegalArgumentException("Las coordenadas del cliente son obligatorias");
         }
+        if (!isValidCoordinate(request.getClienteCoordenadasX()) || !isValidCoordinate(request.getClienteCoordenadasY())) {
+            throw new IllegalArgumentException("Las coordenadas del cliente son inválidas");
+        }
         if (request.getProductos() == null || request.getProductos().isEmpty()) {
             throw new IllegalArgumentException("El pedido debe incluir al menos un producto");
         }
+        if (request.getProductos().stream().anyMatch(Objects::isNull)) {
+            throw new IllegalArgumentException("El pedido contiene productos inválidos");
+        }
+    }
+
+    private boolean isValidCoordinate(Integer coordinate) {
+        return coordinate >= 0 && coordinate <= 100;
     }
 
     private Pedido toDomain(OrderRequestDto request) {
