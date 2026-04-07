@@ -49,7 +49,7 @@ Migrar todo el sistema de coordenadas del proyecto para que use `Double` de extr
 
 ---
 
-## Fase 2: order-service
+## Fase 2: order-service ✅ COMPLETADA Y PROBADA
 
 ### Subtasks tecnicas
 1. Migrar modelos de dominio y persistencia.
@@ -72,14 +72,15 @@ Migrar todo el sistema de coordenadas del proyecto para que use `Double` de extr
    - Confirmar que `POST /orders` sigue funcionando con `Double`.
    - Verificar que `cancel` y `deliver` no dependan de coordenadas enteras.
 
-### Criterio de salida
-- El contrato entre order-service y delivery-service queda alineado.
-- No quedan tipos `Integer` en coordenadas del flujo de pedido.
-- El servicio compila y sus tests pasan.
+### Criterio de salida ✅
+- El contrato entre order-service y delivery-service queda alineado. ✅
+- No quedan tipos `Integer` en coordenadas del flujo de pedido. ✅
+- El servicio compila y sus tests pasan (25 tests, 0 fallos). ✅
+- Endpoints validados con pruebas Karate. ✅
 
 ---
 
-## Fase 3: frontend
+## Fase 3: frontend ⏳ PENDIENTE 
 
 ### Subtasks tecnicas
 1. Ajustar modelos TypeScript.
