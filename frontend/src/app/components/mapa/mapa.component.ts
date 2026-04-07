@@ -31,8 +31,9 @@ export class MapaComponent implements OnInit, OnDestroy {
     let lat = this.DEFAULT_LAT;
     let lng = this.DEFAULT_LNG;
     let zoom = 14;
-    
     if (r) {
+      lat = r.coordenadaY;   
+      lng = r.coordenadaX;
       zoom = 16;
     }
 
