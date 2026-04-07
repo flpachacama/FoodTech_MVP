@@ -51,6 +51,11 @@ npm start
 
 Aplicación disponible en **http://localhost:4200**
 
+| Ruta | Vista |
+|------|-------|
+| `/` | Mapa principal — pedidos de usuario consumidor |
+| `/repartidor` | Vista repartidor — pedido activo asignado |
+
 ---
 
 ## 📁 Estructura del proyecto

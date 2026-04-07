@@ -44,8 +44,8 @@ docker compose up -d --build
 
 | Microservicio | URL | Endpoints usados |
 |---------------|-----|------------------|
-| order-service | http://localhost:8081 | `GET /restaurants`, `POST /orders`, `PUT /orders/{id}/cancel` |
-| delivery-service | http://localhost:8080 | `GET /delivers` |
+| order-service | http://localhost:8081 | `GET /restaurants`, `POST /orders`, `PUT /orders/{id}/cancel`, `GET /orders/repartidor/{id}` |
+| delivery-service | http://localhost:8080 | `GET /delivers`, `GET /delivers/{id}` |
 
 Configuración en `src/environments/environment.ts`:
 ```typescript
@@ -64,6 +64,8 @@ export const environment = {
 frontend/
 ├── src/
 │   ├── app/
+│   │   ├── data/                      # Datos mock / constantes
+│   │   │   └── mock-user.ts           # Usuario consumidor simulado (3 favoritos en Bogotá)
 │   │   ├── models/                    # Interfaces TypeScript
 │   │   │   ├── restaurante.model.ts
 │   │   │   ├── producto-menu.model.ts
@@ -72,16 +74,18 @@ frontend/
 │   │   │   ├── order-request.model.ts
 │   │   │   └── order-response.model.ts
 │   │   ├── services/                  # Servicios HTTP y estado
-│   │   │   ├── restaurante.service.ts # GET /restaurants
-│   │   │   ├── deliver.service.ts     # GET /delivers
-│   │   │   ├── order.service.ts       # POST /orders
-│   │   │   ├── active-orders.service.ts # Gestión pedidos activos
-│   │   │   └── cart.service.ts        # Carrito de compras (signals)
+│   │   │   ├── restaurante.service.ts     # GET /restaurants
+│   │   │   ├── deliver.service.ts         # GET /delivers, GET /delivers/{id}
+│   │   │   ├── order.service.ts           # POST /orders
+│   │   │   ├── repartidor-order.service.ts # GET /orders/repartidor/{id}
+│   │   │   ├── active-orders.service.ts   # Gestión pedidos activos
+│   │   │   └── cart.service.ts            # Carrito de compras (signals)
 │   │   └── components/
 │   │       ├── mapa/                  # Selector de restaurantes en mapa
-│   │       ├── mapa-page/             # Página principal con mapa
+│   │       ├── mapa-page/             # Página principal (ruta /)
+│   │       ├── repartidor-page/       # Vista repartidor (ruta /repartidor)
 │   │       ├── menu-modal/            # Modal de menú del restaurante
-│   │       ├── order-form-modal/      # Formulario de pedido
+│   │       ├── order-form-modal/      # Formulario de pedido (con selector favoritos)
 │   │       ├── active-orders-panel/   # Panel de pedidos activos
 │   │       └── restaurant-guide/      # Guía de selección
 │   └── environments/
@@ -107,9 +111,17 @@ Modal de menú del restaurante:
 
 ### OrderFormModalComponent
 Formulario para completar pedido:
-- Datos del cliente (nombre, teléfono, coordenadas)
+- Selector de lugares favoritos del mock-user (Casa / Trabajo / Novia) con pre-relleno automático
+- Datos del cliente editables (nombre, teléfono, coordenadas)
 - Resumen del carrito
 - Envío del pedido al backend
+
+### RepartidorPageComponent
+Vista de la ruta `/repartidor` (HU11):
+- Muestra datos del repartidor ID=1 (nombre, vehículo, estado)
+- Si el repartidor está `EN_ENTREGA`: muestra datos del cliente y tiempo estimado
+- Si no tiene pedido activo: mensaje informativo
+- Botón "← Volver al mapa" con `routerLink="/"`
 
 ### ActiveOrdersPanelComponent
 Panel lateral de pedidos activos:
@@ -148,3 +160,4 @@ ng generate component components/nombre-componente
 | 3.2  | MapaComponent con Canvas, repartidores y restaurantes | ✅ |
 | 3.3  | MenuModalComponent con lista de productos | ✅ |
 | 3.4  | Integración completa en AppComponent con signals | ✅ |
+| HU11 — Fase B | Routing Angular (`/` y `/repartidor`), `mock-user.ts`, `RepartidorPageComponent`, `RepartidorOrderService`, selector de favoritos en `OrderFormModalComponent`, link a `/repartidor` en `MapaPageComponent` | ✅ |
