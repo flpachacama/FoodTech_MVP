@@ -2,7 +2,7 @@
 
 ## Análisis de la HU
 
-**Estado:** ✅ FASE A COMPLETADA — ⏳ FASE B EN PROGRESO
+**Estado:** ✅ FASE A COMPLETADA — ✅ FASE B COMPLETADA — 🏁 HU11 FINALIZADA
 
 **Objetivo:** El repartidor accede a la ruta `/repartidor` y ve el pedido que tiene actualmente asignado (datos del cliente + tiempo estimado). Si no tiene pedidos activos, ve un mensaje informativo. No hay autenticación real: se simula el login con el repartidor ID=1 (dato real en BD) y se usa un mock de usuario consumidor con 3 direcciones favoritas en Bogotá.
 
@@ -14,7 +14,7 @@
 |---------|----------|----------|----------|--------|
 | Datos del repartidor | `GET /delivers/{id}` | ✅ SÍ | delivery-service | 8080 |
 | Pedido activo del repartidor | `GET /orders/repartidor/{repartidorId}` | ✅ CREADO | order-service | 8081 |
-| Routing Angular | rutas `/` y `/repartidor` | ⏳ EN PROGRESO | frontend | — |
+| Routing Angular | rutas `/` y `/repartidor` | ✅ COMPLETADO | frontend | — |
 
 ---
 
@@ -252,7 +252,7 @@ Paquete base: com.foodtech
 
 ---
 
-## Prompt Paso B1 — Crear mock-user.ts ⏳ PENDIENTE
+## Prompt Paso B1 — Crear mock-user.ts ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone.
@@ -288,7 +288,7 @@ El primer favorito (Casa) debe ser el pre-seleccionado por defecto.
 
 ---
 
-## Prompt Paso B2 — Habilitar routing Angular ⏳ PENDIENTE
+## Prompt Paso B2 — Habilitar routing Angular ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone.
@@ -321,7 +321,7 @@ Tengo una aplicación Angular 19 standalone.
 
 ---
 
-## Prompt Paso B3-B4 — Crear servicio y componente repartidor-page ⏳ PENDIENTE
+## Prompt Paso B3-B4 — Crear servicio y componente repartidor-page ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone con routing configurado.
@@ -364,7 +364,7 @@ Tengo una aplicación Angular 19 standalone con routing configurado.
 
 ---
 
-## Prompt Paso B5 — Integrar mock-user en order-form-modal ⏳ PENDIENTE
+## Prompt Paso B5 — Integrar mock-user en order-form-modal ✅ COMPLETADO
 
 ```
 Tengo una aplicación Angular 19 standalone.
@@ -414,14 +414,14 @@ Modificar order-form-modal para agregar un selector de lugar favorito:
 
 | Archivo | Acción | Estado |
 |---------|--------|--------|
-| `app/data/mock-user.ts` | Crear | ⏳ PENDIENTE |
-| `app/app.routes.ts` | Modificar — añadir rutas | ⏳ PENDIENTE |
-| `app/app.component.ts` | Modificar — router-outlet | ⏳ PENDIENTE |
-| `app/app.config.ts` | Verificar/añadir provideRouter | ⏳ PENDIENTE |
-| `app/services/repartidor-order.service.ts` | Crear | ⏳ PENDIENTE |
-| `app/components/repartidor-page/*.ts/html/css` | Crear | ⏳ PENDIENTE |
-| `app/components/order-form-modal/*.ts/.html` | Modificar — selector favoritos | ⏳ PENDIENTE |
-| `app/components/mapa-page/*.html` | Modificar — link a /repartidor | ⏳ PENDIENTE |
+| `app/data/mock-user.ts` | Crear | ✅ COMPLETADO |
+| `app/app.routes.ts` | Modificar — añadir rutas | ✅ COMPLETADO |
+| `app/app.component.ts` | Modificar — router-outlet | ✅ COMPLETADO |
+| `app/app.config.ts` | Verificar/añadir provideRouter | ✅ COMPLETADO |
+| `app/services/repartidor-order.service.ts` | Crear | ✅ COMPLETADO |
+| `app/components/repartidor-page/*.ts/html/css` | Crear | ✅ COMPLETADO |
+| `app/components/order-form-modal/*.ts/.html` | Modificar — selector favoritos | ✅ COMPLETADO |
+| `app/components/mapa-page/*.html` | Modificar — link a /repartidor | ✅ COMPLETADO |
 
 ---
 
