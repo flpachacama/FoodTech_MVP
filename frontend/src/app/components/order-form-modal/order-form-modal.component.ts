@@ -8,6 +8,7 @@ import { OrderService } from '../../services/order.service';
 import { ActiveOrdersService } from '../../services/active-orders.service';
 import { OrderRequest } from '../../models/order-request.model';
 import { OrderResponse } from '../../models/order-response.model';
+import { MOCK_USER, Favorito } from '../../data/mock-user';
 
 @Component({
   selector: 'app-order-form-modal',
@@ -30,6 +31,9 @@ export class OrderFormModalComponent implements OnChanges, OnDestroy {
   enviando = signal(false);
   error = signal<string | null>(null);
 
+  readonly mockUser = MOCK_USER;
+  favoritoSeleccionado = signal<Favorito>(MOCK_USER.favoritos[0]);
+
   form: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2)]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.minLength(7)]],
@@ -39,9 +43,27 @@ export class OrderFormModalComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(): void {
     if (this.visible) {
-      this.form.reset();
+      this.aplicarFavorito(MOCK_USER.favoritos[0]);
+      this.favoritoSeleccionado.set(MOCK_USER.favoritos[0]);
       this.error.set(null);
     }
+  }
+
+  onFavoritoChange(alias: string): void {
+    const favorito = MOCK_USER.favoritos.find(f => f.alias === alias);
+    if (favorito) {
+      this.favoritoSeleccionado.set(favorito);
+      this.aplicarFavorito(favorito);
+    }
+  }
+
+  private aplicarFavorito(favorito: Favorito): void {
+    this.form.patchValue({
+      nombre: MOCK_USER.nombre,
+      telefono: MOCK_USER.telefono,
+      ubicacionX: favorito.coordenadaX,
+      ubicacionY: favorito.coordenadaY
+    });
   }
 
   onOverlayClick(event: MouseEvent): void {
