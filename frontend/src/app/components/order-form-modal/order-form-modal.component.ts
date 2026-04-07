@@ -33,8 +33,8 @@ export class OrderFormModalComponent implements OnChanges, OnDestroy {
   form: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2)]],
     telefono: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.minLength(7)]],
-    ubicacionX: [null, [Validators.required, Validators.min(0), Validators.max(100)]],
-    ubicacionY: [null, [Validators.required, Validators.min(0), Validators.max(100)]]
+    ubicacionX: [null, [Validators.required]],
+    ubicacionY: [null, [Validators.required]]
   });
 
   ngOnChanges(): void {
