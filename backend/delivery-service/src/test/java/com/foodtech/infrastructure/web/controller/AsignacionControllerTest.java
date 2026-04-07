@@ -109,4 +109,19 @@ class AsignacionControllerTest {
         assertThat(resp.getEstado()).isEqualTo("PENDIENTE");
         verify(asignacionApplicationService).asignarRepartidor(eq(new Coordenada(5, 5)), isNull());
     }
+
+    // HU3 - Aplicar restricciones por clima
+    @Test
+    void debeLanzarIllegalArgumentException_cuandoElClimaNoEsValido_TC009() {
+        AsignacionRequestDTO request = AsignacionRequestDTO.builder()
+                .pedidoId(4L)
+                .restauranteX(5)
+                .restauranteY(5)
+                .clima("TORMENTA_EXTREMA")
+                .build();
+
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () ->
+                controller.asignarRepartidor(request)
+        );
+    }
 }

@@ -42,6 +42,84 @@ class AsignacionApplicationServiceTraceabilityTest {
     @InjectMocks
     private AsignacionApplicationService service;
 
+    // HU1 - Gestionar estado de repartidores
+    @Test
+    @DisplayName("TC-001 - Repartidor ACTIVO queda habilitado como candidato")
+    void shouldReturnActiveRepartidorAsCandidate_TC001() {
+        // Arrange
+        Repartidor candidato = createRepartidor(1L, "Activo", EstadoRepartidor.ACTIVO, TipoVehiculo.MOTO, 6, 5);
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(List.of(candidato));
+        when(asignacionService.priorizarRepartidores(List.of(candidato), new Coordenada(5, 5), Clima.SOLEADO)).thenReturn(List.of(candidato));
+
+        // Act
+        List<Repartidor> result = service.obtenerRepartidoresPriorizados(new Coordenada(5, 5), Clima.SOLEADO);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals("Activo", result.get(0).getNombre());
+    }
+
+    // HU1 - Gestionar estado de repartidores
+    @Test
+    @DisplayName("TC-002 - Repartidor EN_ENTREGA no debe ser considerado para nuevo pedido")
+    void shouldExcludeEnEntregaRepartidor_TC002() {
+        // Arrange
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Repartidor> result = service.obtenerRepartidoresPriorizados(new Coordenada(5, 5), Clima.SOLEADO);
+
+        // Assert
+        assertEquals(0, result.size());
+    }
+
+    // HU1 - Gestionar estado de repartidores
+    @Test
+    @DisplayName("TC-003 - Repartidor INACTIVO queda excluido de candidatos")
+    void shouldExcludeInactiveRepartidor_TC003() {
+        // Arrange
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Repartidor> result = service.obtenerRepartidoresPriorizados(new Coordenada(5, 5), Clima.SOLEADO);
+
+        // Assert
+        assertEquals(0, result.size());
+    }
+
+    // HU5 - Asignar pedido automaticamente
+    @Test
+    @DisplayName("TC-015 - Repartidores INACTIVO o EN_ENTREGA no se asignan")
+    void shouldNotAssignInactiveOrBusyRepartidores_TC015() {
+        // Arrange
+        Repartidor inactivo = createRepartidor(1L, "Inactivo", EstadoRepartidor.INACTIVO, TipoVehiculo.MOTO, 6, 5);
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(List.of(inactivo));
+        when(asignacionService.priorizarRepartidores(List.of(inactivo), new Coordenada(5, 5), Clima.SOLEADO)).thenReturn(Collections.emptyList());
+
+        // Act
+        Repartidor result = service.asignarRepartidor(new Coordenada(5, 5), Clima.SOLEADO);
+
+        // Assert
+        assertNull(result);
+    }
+
+    // HU5 - Asignar pedido automaticamente
+    @Test
+    @DisplayName("TC-016 - Lluvia fuerte impide asignacion a bicicleta o moto")
+    void shouldBlockAssignmentInHeavyRain_TC016() {
+        // Arrange
+        Repartidor bici = createRepartidor(1L, "Bici", EstadoRepartidor.ACTIVO, TipoVehiculo.BICICLETA, 6, 5);
+        Repartidor moto = createRepartidor(2L, "Moto", EstadoRepartidor.ACTIVO, TipoVehiculo.MOTO, 6, 6);
+        when(repartidorRepository.findByEstado(EstadoRepartidor.ACTIVO)).thenReturn(List.of(bici, moto));
+        when(asignacionService.priorizarRepartidores(List.of(bici, moto), new Coordenada(5, 5), Clima.LLUVIA_FUERTE)).thenReturn(Collections.emptyList());
+
+        // Act
+        Repartidor result = service.asignarRepartidor(new Coordenada(5, 5), Clima.LLUVIA_FUERTE);
+
+        // Assert
+        assertNull(result);
+    }
+
     // HU5 - Asignar pedido automaticamente
     @Test
     @DisplayName("TC-013 - Asignacion exitosa selecciona mejor candidato y cambia estado")
