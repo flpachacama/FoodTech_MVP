@@ -5,6 +5,7 @@ import com.foodtech.domain.model.Pedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.infrastructure.web.dto.OrderResponseDto;
 import com.foodtech.infrastructure.web.dto.ProductoPedidoDto;
@@ -22,6 +23,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +35,9 @@ class OrderApplicationServiceTest {
     @Mock
     private DeliveryClient deliveryClient;
 
+    @Mock
+    private RestauranteJpaRepository restauranteJpaRepository;
+
     @InjectMocks
     private OrderApplicationService service;
 
@@ -40,15 +45,16 @@ class OrderApplicationServiceTest {
 
     @BeforeEach
     void setUp() {
+        lenient().when(restauranteJpaRepository.existsById(anyLong())).thenReturn(true);
         requestBase = OrderRequestDto.builder()
                 .restauranteId(10L)
-                .restauranteX(5)
-                .restauranteY(8)
+                .restauranteX(5.0)
+                .restauranteY(8.0)
                 .clima("SOLEADO")
                 .clienteNombre("Ana García")
                 .clienteTelefono("600000001")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .productos(List.of(ProductoPedidoDto.builder()
                         .id(1L).nombre("Hamburguesa").precio(BigDecimal.valueOf(8.50)).build()))
                 .build();
@@ -61,8 +67,8 @@ class OrderApplicationServiceTest {
                 .id(42L)
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE)
                 .productos(List.of())
                 .build();
@@ -85,8 +91,8 @@ class OrderApplicationServiceTest {
                 .id(43L)
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE)
                 .productos(List.of())
                 .build();
@@ -107,8 +113,8 @@ class OrderApplicationServiceTest {
                 .id(44L)
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE)
                 .productos(List.of())
                 .build();
@@ -129,8 +135,8 @@ class OrderApplicationServiceTest {
                 .restauranteId(null)
                 .clienteNombre("Ana García")
                 .clienteTelefono("600000001")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .productos(List.of(ProductoPedidoDto.builder()
                         .id(1L).nombre("Burger").precio(BigDecimal.ONE).build()))
                 .build();
@@ -149,8 +155,8 @@ class OrderApplicationServiceTest {
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
                 .clienteTelefono("600000001")
-                .clienteCoordenadasX(1)
-                .clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
                 .productos(List.of())
                 .build();
 
@@ -168,7 +174,7 @@ class OrderApplicationServiceTest {
 
         Pedido pedidoGuardado = Pedido.builder()
                 .id(45L).restauranteId(10L).clienteNombre("Ana García")
-                .clienteCoordenadasX(1).clienteCoordenadasY(2)
+                .clienteCoordenadasX(1.0).clienteCoordenadasY(2.0)
                 .estado(EstadoPedido.PENDIENTE).productos(List.of()).build();
 
         when(pedidoRepository.save(any())).thenReturn(pedidoGuardado);

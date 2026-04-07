@@ -10,7 +10,7 @@ public class RestauranteEntityTest {
 
     @Test
     void debeCrearYleerCampos() throws Exception {
-        RestauranteEntity r = new RestauranteEntity(1L, "La Casa", 10, 20, "{\"menu\":[]}");
+        RestauranteEntity r = new RestauranteEntity(1L, "La Casa", 10.0, 20.0, "{\"menu\":[]}");
 
         Field nombre = RestauranteEntity.class.getDeclaredField("nombre");
         nombre.setAccessible(true);

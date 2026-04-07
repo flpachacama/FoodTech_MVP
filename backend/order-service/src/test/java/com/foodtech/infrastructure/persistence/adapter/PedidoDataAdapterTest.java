@@ -37,9 +37,9 @@ public class PedidoDataAdapterTest {
     @Test
     void debeGuardarYPasarARepository_cuandoPedidoValido() {
         ProductoPedido prod = new ProductoPedido(1L, "Pizza", null);
-        Pedido pedido = new Pedido(100L, EstadoPedido.PENDIENTE, 10L, null, List.of(prod), 20L, "Cliente", 1, 2, 15);
+        Pedido pedido = new Pedido(100L, EstadoPedido.PENDIENTE, 10L, null, List.of(prod), 20L, "Cliente", 1.0, 2.0, 15);
 
-        PedidoEntity returned = new PedidoEntity(100L, EstadoPedido.PENDIENTE, 10L, null, 20L, "Cliente", 1, 2, 15, "[{\"id\":1,\"nombre\":\"Pizza\",\"precio\":null}]");
+        PedidoEntity returned = new PedidoEntity(100L, EstadoPedido.PENDIENTE, 10L, null, 20L, "Cliente", 1.0, 2.0, 15, "[{\"id\":1,\"nombre\":\"Pizza\",\"precio\":null}]");
         when(pedidoJpaRepository.save(any())).thenReturn(returned);
 
         Pedido saved = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).save(pedido);
@@ -66,7 +66,7 @@ public class PedidoDataAdapterTest {
 
     @Test
     void debeMapearDesdeRepository_cuandoExiste() {
-        PedidoEntity entity = new PedidoEntity(200L, EstadoPedido.ASIGNADO, 30L, null, 40L, "C", 1, 2, 20, "[]");
+        PedidoEntity entity = new PedidoEntity(200L, EstadoPedido.ASIGNADO, 30L, null, 40L, "C", 1.0, 2.0, 20, "[]");
         when(pedidoJpaRepository.findById(200L)).thenReturn(Optional.of(entity));
 
         Optional<Pedido> found = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findById(200L);

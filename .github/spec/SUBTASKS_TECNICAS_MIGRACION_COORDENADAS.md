@@ -17,7 +17,7 @@ Migrar todo el sistema de coordenadas del proyecto para que use `Double` de extr
 
 ---
 
-## Fase 1: delivery-service
+## Fase 1: delivery-service ✅ COMPLETADA Y PROBADA
 
 ### Subtasks tecnicas
 1. Cambiar el modelo de dominio de coordenadas.
@@ -42,10 +42,10 @@ Migrar todo el sistema de coordenadas del proyecto para que use `Double` de extr
    - Cambiar `CoordenadaTest` para eliminar supuestos de rango `0-100`.
    - Revisar pruebas de persistencia y de controlador.
 
-### Criterio de salida
-- El servicio compila.
-- Los tests pasan.
-- El endpoint de asignacion acepta coordenadas decimales y negativas.
+### Criterio de salida ✅
+- El servicio compila. ✅
+- Los tests pasan (44 tests, 0 fallos). ✅
+- El endpoint de asignacion acepta coordenadas decimales y negativas. ✅
 
 ---
 
