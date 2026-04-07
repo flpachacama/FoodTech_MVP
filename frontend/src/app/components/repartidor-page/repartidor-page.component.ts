@@ -9,7 +9,7 @@ import { OrderResponse } from '../../models/order-response.model';
 @Component({
   selector: 'app-repartidor-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './repartidor-page.component.html',
   styleUrls: ['./repartidor-page.component.css']
 })
@@ -23,7 +23,7 @@ export class RepartidorPageComponent implements OnInit {
   repartidor = signal<Deliver | null>(null);
   pedidoActivo = signal<OrderResponse | null>(null);
 
-  readonly vehiculoEmoji: Record<string, string> = {
+  readonly vehiculoEmoji: Record<string, string | undefined> = {
     BICICLETA: '🚲',
     MOTO: '🏍️',
     AUTO: '🚗'
