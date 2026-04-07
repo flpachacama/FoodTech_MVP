@@ -20,6 +20,7 @@ export class RepartidorPageComponent implements OnInit {
   readonly REPARTIDOR_ID = 1;
 
   isLoading = signal(true);
+  isDelivering = signal(false);
   repartidor = signal<Deliver | null>(null);
   pedidoActivo = signal<OrderResponse | null>(null);
 
@@ -54,6 +55,26 @@ export class RepartidorPageComponent implements OnInit {
       error: () => {
         this.pedidoActivo.set(null);
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  marcarEntregado(): void {
+    const pedido = this.pedidoActivo();
+    if (!pedido) return;
+
+    this.isDelivering.set(true);
+    this.repartidorOrderService.deliver(pedido.id).subscribe({
+      next: () => {
+        this.pedidoActivo.set(null);
+        const rep = this.repartidor();
+        if (rep) {
+          this.repartidor.set({ ...rep, estado: 'ACTIVO' });
+        }
+        this.isDelivering.set(false);
+      },
+      error: () => {
+        this.isDelivering.set(false);
       }
     });
   }

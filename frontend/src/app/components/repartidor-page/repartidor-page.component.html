@@ -1,7 +1,7 @@
 <div class="page">
 
   <div class="page-header">
-    <h1 class="page-title">Footechs </h1>
+    <h1 class="page-title">Foodtechs </h1>
   </div>
 
   @if (isLoading()) {
@@ -59,6 +59,13 @@
           </div>
         }
       </div>
+
+      <button
+        class="btn-entregar"
+        (click)="marcarEntregado()"
+        [disabled]="isDelivering()">
+        {{ isDelivering() ? 'Procesando...' : 'Marcar como Entregado' }}
+      </button>
     </div>
   }
 

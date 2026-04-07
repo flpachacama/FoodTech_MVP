@@ -44,7 +44,7 @@ docker compose up -d --build
 
 | Microservicio | URL | Endpoints usados |
 |---------------|-----|------------------|
-| order-service | http://localhost:8081 | `GET /restaurants`, `POST /orders`, `PUT /orders/{id}/cancel`, `GET /orders/repartidor/{id}` |
+| order-service | http://localhost:8081 | `GET /restaurants`, `POST /orders`, `PUT /orders/{id}/cancel`, `PUT /orders/{id}/deliver`, `GET /orders/repartidor/{id}` |
 | delivery-service | http://localhost:8080 | `GET /delivers`, `GET /delivers/{id}` |
 
 Configuración en `src/environments/environment.ts`:
@@ -72,12 +72,13 @@ frontend/
 │   │   │   ├── deliver.model.ts
 │   │   │   ├── cart-item.model.ts
 │   │   │   ├── order-request.model.ts
-│   │   │   └── order-response.model.ts
+│   │   │   ├── order-response.model.ts
+│   │   │   └── deliver-order-response.model.ts
 │   │   ├── services/                  # Servicios HTTP y estado
 │   │   │   ├── restaurante.service.ts     # GET /restaurants
 │   │   │   ├── deliver.service.ts         # GET /delivers, GET /delivers/{id}
 │   │   │   ├── order.service.ts           # POST /orders
-│   │   │   ├── repartidor-order.service.ts # GET /orders/repartidor/{id}
+│   │   │   ├── repartidor-order.service.ts # GET /orders/repartidor/{id}, PUT /orders/{id}/deliver
 │   │   │   ├── active-orders.service.ts   # Gestión pedidos activos
 │   │   │   └── cart.service.ts            # Carrito de compras (signals)
 │   │   └── components/
@@ -117,9 +118,10 @@ Formulario para completar pedido:
 - Envío del pedido al backend
 
 ### RepartidorPageComponent
-Vista de la ruta `/repartidor` (HU11):
+Vista de la ruta `/repartidor` (HU11 + HU12):
 - Muestra datos del repartidor ID=1 (nombre, vehículo, estado)
 - Si el repartidor está `EN_ENTREGA`: muestra datos del cliente y tiempo estimado
+- Botón **"✅ Marcar como Entregado"**: llama `PUT /orders/{id}/deliver`, limpia el pedido activo y actualiza el badge del repartidor a `ACTIVO`
 - Si no tiene pedido activo: mensaje informativo
 - Botón "← Volver al mapa" con `routerLink="/"`
 
@@ -161,3 +163,4 @@ ng generate component components/nombre-componente
 | 3.3  | MenuModalComponent con lista de productos | ✅ |
 | 3.4  | Integración completa en AppComponent con signals | ✅ |
 | HU11 — Fase B | Routing Angular (`/` y `/repartidor`), `mock-user.ts`, `RepartidorPageComponent`, `RepartidorOrderService`, selector de favoritos en `OrderFormModalComponent`, link a `/repartidor` en `MapaPageComponent` | ✅ |
+| HU12 | Botón "Marcar como Entregado" en `RepartidorPageComponent`, método `deliver()` en `RepartidorOrderService`, modelo `DeliverOrderResponse` | ✅ |

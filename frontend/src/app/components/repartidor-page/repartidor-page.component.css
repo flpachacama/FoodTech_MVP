@@ -62,7 +62,7 @@
 
 /* Cards */
 .card {
-  background: #fff;
+  background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   padding: 20px;
@@ -197,4 +197,28 @@
   font-size: 0.85rem;
   color: #999;
   margin: 0;
+}
+
+/* Botón entregar */
+.btn-entregar {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.btn-entregar:hover:not(:disabled) {
+  background-color: #15803d;
+}
+
+.btn-entregar:disabled {
+  background-color: #86efac;
+  cursor: not-allowed;
 }
