@@ -51,10 +51,15 @@ curl http://localhost:8080/delivers
     "nombre": "Carlos Mendoza",
     "estado": "ACTIVO",
     "vehiculo": "MOTO",
-    "x": 25,
-    "y": 40
+    "ubicacionX": -74.0627,
+    "ubicacionY": 4.6482
   }
 ]
+```
+
+**Ejemplo — obtener repartidor por ID:**
+```bash
+curl http://localhost:8080/delivers/1
 ```
 
 ### Asignación de pedidos
@@ -115,10 +120,36 @@ Respuesta 200 OK (ejemplo):
   "nombre": "Carlos Mendoza",
   "estado": "ACTIVO",
   "vehiculo": "MOTO",
-  "x": 25,
-  "y": 40
+  "x": -74.0627,
+  "y": 4.6482
 }
 ```
+
+---
+
+## Lógica de negocio destacada
+
+### Algoritmo de asignación
+
+1. Filtra repartidores en estado `ACTIVO`
+2. Aplica restricciones climáticas (lluvia excluye BICICLETA; lluvia fuerte excluye también MOTO)
+3. Calcula distancia repartidor → restaurante con aproximación plana (flat-earth, en **km**)
+4. Ordena por tiempo estimado = distancia / velocidad del vehículo
+5. Asigna al de menor tiempo y cambia su estado a `EN_ENTREGA`
+
+### Velocidades por vehículo
+
+| Vehículo | km/h |
+|----------|------|
+| BICICLETA | 15 |
+| MOTO | 40 |
+| AUTO | 60 |
+
+### Coordenadas
+
+Todas las coordenadas son **longitud/latitud reales de Bogotá** (`Double`). Los 19 repartidores de ejemplo están distribuidos en Chapinero, Usaquén, Zona Rosa y Teusaquillo.
+
+---
 
 Notas rápidas
 - Los datos de ejemplo provienen de `src/main/resources/data.sql` que se carga al iniciar la aplicación.
