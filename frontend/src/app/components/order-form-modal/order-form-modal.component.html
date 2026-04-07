@@ -47,34 +47,32 @@
 
           <div class="coords-row">
             <div class="field">
-              <label class="field-label" for="ubicacionX">Ubicación X * <span class="hint">(0-100)</span></label>
+              <label class="field-label" for="ubicacionX">Coordenada X *</label>
               <input
                 id="ubicacionX"
                 type="number"
+                step="any"
                 class="field-input"
                 [class.field-input--error]="isInvalid('ubicacionX')"
                 formControlName="ubicacionX"
-                placeholder="0 - 100"
-                min="0"
-                max="100">
+                placeholder="Ej: -74.12">
               @if (isInvalid('ubicacionX')) {
-                <span class="field-error">Número entre 0 y 100</span>
+                <span class="field-error">Se requiere un valor numérico</span>
               }
             </div>
 
             <div class="field">
-              <label class="field-label" for="ubicacionY">Ubicación Y * <span class="hint">(0-100)</span></label>
+              <label class="field-label" for="ubicacionY">Coordenada Y *</label>
               <input
                 id="ubicacionY"
                 type="number"
+                step="any"
                 class="field-input"
                 [class.field-input--error]="isInvalid('ubicacionY')"
                 formControlName="ubicacionY"
-                placeholder="0 - 100"
-                min="0"
-                max="100">
+                placeholder="Ej: 4.62">
               @if (isInvalid('ubicacionY')) {
-                <span class="field-error">Número entre 0 y 100</span>
+                <span class="field-error">Se requiere un valor numérico</span>
               }
             </div>
           </div>

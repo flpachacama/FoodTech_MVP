@@ -18,10 +18,6 @@ export class MapaComponent implements OnInit, OnDestroy {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly destroy$ = new Subject<void>();
 
-  private readonly BASE_LAT = 4.55;
-  private readonly BASE_LNG = -74.15;
-  private readonly LAT_RANGE = 0.20;
-  private readonly LNG_RANGE = 0.15;
   private readonly DEFAULT_LAT = 4.6248;
   private readonly DEFAULT_LNG = -74.0863;
 
@@ -35,10 +31,8 @@ export class MapaComponent implements OnInit, OnDestroy {
     let lat = this.DEFAULT_LAT;
     let lng = this.DEFAULT_LNG;
     let zoom = 14;
-
+    
     if (r) {
-      lat = this.BASE_LAT + (r.coordenadaY / 100) * this.LAT_RANGE;
-      lng = this.BASE_LNG + (r.coordenadaX / 100) * this.LNG_RANGE;
       zoom = 16;
     }
 
