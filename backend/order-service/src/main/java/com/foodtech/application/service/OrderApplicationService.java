@@ -65,6 +65,14 @@ public class OrderApplicationService implements OrderUseCase {
 
         EstadoPedido estadoFinal = resolveEstado(deliveryResponse.estado());
 
+        int tiempoRestauranteCliente = calcularTiempoRestauranteClienteMinutos(
+                request.getRestauranteX(), request.getRestauranteY(),
+                request.getClienteCoordenadasX(), request.getClienteCoordenadasY());
+        int tiempoTotal = (deliveryResponse.tiempoEstimado() != null ? deliveryResponse.tiempoEstimado() : 0)
+                + tiempoRestauranteCliente;
+        log.info("[createOrder] tiempoRepartidorRestaurante={} min, tiempoRestauranteCliente={} min, tiempoTotal={} min",
+                deliveryResponse.tiempoEstimado(), tiempoRestauranteCliente, tiempoTotal);
+
         Pedido pedidoActualizado = Pedido.builder()
                 .id(pedidoGuardado.getId())
                 .restauranteId(pedidoGuardado.getRestauranteId())
@@ -75,7 +83,7 @@ public class OrderApplicationService implements OrderUseCase {
                 .clienteCoordenadasY(pedidoGuardado.getClienteCoordenadasY())
                 .productos(pedidoGuardado.getProductos())
                 .estado(estadoFinal)
-                .tiempoEstimado(deliveryResponse.tiempoEstimado())
+                .tiempoEstimado(tiempoTotal)
                 .build();
 
         pedidoRepository.save(pedidoActualizado);
@@ -124,6 +132,20 @@ public class OrderApplicationService implements OrderUseCase {
                 .productos(productos)
                 .estado(EstadoPedido.PENDIENTE)
                 .build();
+    }
+
+    /**
+     * Calcula el tiempo en minutos desde el restaurante hasta el cliente
+     * usando la aproximación plana (flat-earth) a 20 km/h de velocidad promedio.
+     */
+    private int calcularTiempoRestauranteClienteMinutos(Double restX, Double restY,
+                                                        Double cliX, Double cliY) {
+        if (restX == null || restY == null || cliX == null || cliY == null) return 0;
+        double deltaLatKm = (cliY - restY) * 111.0;
+        double latMediaRad = Math.toRadians((restY + cliY) / 2.0);
+        double deltaLngKm = (cliX - restX) * 111.0 * Math.cos(latMediaRad);
+        double distanciaKm = Math.sqrt(deltaLatKm * deltaLatKm + deltaLngKm * deltaLngKm);
+        return (int) Math.round((distanciaKm / 20.0) * 60);
     }
 
     private EstadoPedido resolveEstado(String estadoDelivery) {
