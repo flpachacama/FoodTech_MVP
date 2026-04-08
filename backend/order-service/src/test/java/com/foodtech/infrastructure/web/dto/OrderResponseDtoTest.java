@@ -99,4 +99,43 @@ class OrderResponseDtoTest {
 
         assertThat(dto.toString()).isNotNull().contains("10");
     }
+
+    @Test
+    void equals_conNull_retornaFalse() {
+        assertThat(buildSample().equals(null)).isFalse();
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        OrderResponseDto dto = buildSample();
+        assertThat(dto.equals(dto)).isTrue();
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertThat(buildSample().equals("distinto")).isFalse();
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        OrderResponseDto empty = new OrderResponseDto();
+        OrderResponseDto full = buildSample();
+        assertThat(empty.equals(full)).isFalse();
+        assertThat(full.equals(empty)).isFalse();
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertThat(new OrderResponseDto().equals(new OrderResponseDto())).isTrue();
+    }
+
+    @Test
+    void hashCode_objetoVacio_noLanzaExcepcion() {
+        assertThat(new OrderResponseDto().hashCode()).isEqualTo(new OrderResponseDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertThat(OrderResponseDto.builder().build()).isNotNull();
+    }
 }

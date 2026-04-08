@@ -68,4 +68,43 @@ class DeliverOrderResponseDtoTest {
         assertTrue(str.contains("ENTREGADO"));
         assertTrue(str.contains("entregado"));
     }
+
+    @Test
+    void equals_conNull_retornaFalse() {
+        assertFalse(new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "m").equals(null));
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        DeliverOrderResponseDto dto = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "m");
+        assertTrue(dto.equals(dto));
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertFalse(new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "m").equals(42));
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        DeliverOrderResponseDto empty = new DeliverOrderResponseDto();
+        DeliverOrderResponseDto full = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "msg");
+        assertNotEquals(empty, full);
+        assertNotEquals(full, empty);
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertEquals(new DeliverOrderResponseDto(), new DeliverOrderResponseDto());
+    }
+
+    @Test
+    void hashCode_objetoVacio_esConsistente() {
+        assertEquals(new DeliverOrderResponseDto().hashCode(), new DeliverOrderResponseDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertNotNull(DeliverOrderResponseDto.builder().build());
+    }
 }

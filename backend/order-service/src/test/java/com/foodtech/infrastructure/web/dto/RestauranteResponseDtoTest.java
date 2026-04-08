@@ -76,4 +76,43 @@ class RestauranteResponseDtoTest {
         assertTrue(str.contains("10"));
         assertTrue(str.contains("Italiano"));
     }
+
+    @Test
+    void equals_conNull_retornaFalse() {
+        assertFalse(new RestauranteResponseDto(1L, "R", 1.0, 2.0, List.of()).equals(null));
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        RestauranteResponseDto dto = new RestauranteResponseDto(1L, "R", 1.0, 2.0, List.of());
+        assertTrue(dto.equals(dto));
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertFalse(new RestauranteResponseDto(1L, "R", 1.0, 2.0, List.of()).equals(42));
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        RestauranteResponseDto empty = new RestauranteResponseDto();
+        RestauranteResponseDto full = new RestauranteResponseDto(1L, "R", 1.0, 2.0, List.of());
+        assertNotEquals(empty, full);
+        assertNotEquals(full, empty);
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertEquals(new RestauranteResponseDto(), new RestauranteResponseDto());
+    }
+
+    @Test
+    void hashCode_objetoVacio_esConsistente() {
+        assertEquals(new RestauranteResponseDto().hashCode(), new RestauranteResponseDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertNotNull(RestauranteResponseDto.builder().build());
+    }
 }

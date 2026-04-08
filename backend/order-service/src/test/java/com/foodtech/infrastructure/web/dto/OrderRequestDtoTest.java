@@ -99,4 +99,43 @@ class OrderRequestDtoTest {
 
         assertThat(dto.toString()).isNotNull().contains("1");
     }
+
+    @Test
+    void equals_conNull_retornaFalse() {
+        assertThat(buildSample().equals(null)).isFalse();
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        OrderRequestDto dto = buildSample();
+        assertThat(dto.equals(dto)).isTrue();
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertThat(buildSample().equals("distinto")).isFalse();
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        OrderRequestDto empty = new OrderRequestDto();
+        OrderRequestDto full = buildSample();
+        assertThat(empty.equals(full)).isFalse();
+        assertThat(full.equals(empty)).isFalse();
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertThat(new OrderRequestDto().equals(new OrderRequestDto())).isTrue();
+    }
+
+    @Test
+    void hashCode_objetoVacio_noLanzaExcepcion() {
+        assertThat(new OrderRequestDto().hashCode()).isEqualTo(new OrderRequestDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertThat(OrderRequestDto.builder().build()).isNotNull();
+    }
 }

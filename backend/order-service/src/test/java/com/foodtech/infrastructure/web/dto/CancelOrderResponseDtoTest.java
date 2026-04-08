@@ -68,4 +68,43 @@ class CancelOrderResponseDtoTest {
         assertTrue(str.contains("CANCELADO"));
         assertTrue(str.contains("test"));
     }
+
+    @Test
+    void equals_conNull_retornaFalse() {
+        assertFalse(new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "m").equals(null));
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        CancelOrderResponseDto dto = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "m");
+        assertTrue(dto.equals(dto));
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertFalse(new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "m").equals(42));
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        CancelOrderResponseDto empty = new CancelOrderResponseDto();
+        CancelOrderResponseDto full = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg");
+        assertNotEquals(empty, full);
+        assertNotEquals(full, empty);
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertEquals(new CancelOrderResponseDto(), new CancelOrderResponseDto());
+    }
+
+    @Test
+    void hashCode_objetoVacio_esConsistente() {
+        assertEquals(new CancelOrderResponseDto().hashCode(), new CancelOrderResponseDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertNotNull(CancelOrderResponseDto.builder().build());
+    }
 }

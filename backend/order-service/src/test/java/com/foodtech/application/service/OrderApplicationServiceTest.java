@@ -5,6 +5,7 @@ import com.foodtech.domain.exception.PedidoDeliverException;
 import com.foodtech.domain.exception.PedidoNotFoundException;
 import com.foodtech.domain.model.EstadoPedido;
 import com.foodtech.domain.model.Pedido;
+import com.foodtech.domain.model.ProductoPedido;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
@@ -490,5 +491,76 @@ class OrderApplicationServiceTest {
                 .isInstanceOf(com.foodtech.domain.exception.RestauranteNotFoundException.class);
 
         verifyNoInteractions(pedidoRepository, deliveryClient);
+    }
+
+    @Test
+    void createOrder_cuandoClienteNombreNull_lanzaIllegalArgument() {
+        OrderRequestDto request = OrderRequestDto.builder()
+                .restauranteId(10L)
+                .clienteNombre(null)
+                .clienteTelefono("600000001")
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
+                .productos(List.of(ProductoPedidoDto.builder()
+                        .id(1L).nombre("Burger").precio(BigDecimal.ONE).build()))
+                .build();
+
+        assertThatThrownBy(() -> service.createOrder(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("nombre del cliente");
+    }
+
+    @Test
+    void createOrder_cuandoProductosNull_lanzaIllegalArgument() {
+        OrderRequestDto request = OrderRequestDto.builder()
+                .restauranteId(10L)
+                .clienteNombre("Ana García")
+                .clienteTelefono("600000001")
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
+                .productos(null)
+                .build();
+
+        assertThatThrownBy(() -> service.createOrder(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("producto");
+    }
+
+    @Test
+    void createOrder_conProductosEnRespuesta_mapeoLambdaEsInvocado() {
+        Pedido pedidoConProductos = Pedido.builder()
+                .id(91L).restauranteId(10L).repartidorId(2L)
+                .clienteNombre("Ana García").clienteCoordenadasX(1.0).clienteCoordenadasY(2.0)
+                .estado(EstadoPedido.ASIGNADO).tiempoEstimado(20)
+                .productos(List.of(
+                        ProductoPedido.builder().id(1L).nombre("Taco").precio(BigDecimal.TEN).build()))
+                .build();
+
+        when(pedidoRepository.save(any())).thenReturn(pedidoConProductos);
+        when(deliveryClient.assign(any()))
+                .thenReturn(new DeliveryAssignmentResponse(91L, "ASIGNADO", 2L, "Luis", 15));
+
+        OrderResponseDto response = service.createOrder(requestBase);
+
+        assertThat(response.getProductos()).hasSize(1);
+        assertThat(response.getProductos().get(0).getNombre()).isEqualTo("Taco");
+    }
+
+    @Test
+    void getOrderByRepartidorId_conProductos_mapeoLambdaEsInvocado() {
+        Pedido pedidoConProductos = Pedido.builder()
+                .id(92L).restauranteId(10L).repartidorId(5L)
+                .clienteNombre("Carlos").clienteCoordenadasX(1.0).clienteCoordenadasY(2.0)
+                .estado(EstadoPedido.ASIGNADO).tiempoEstimado(30)
+                .productos(List.of(
+                        ProductoPedido.builder().id(2L).nombre("Sushi").precio(BigDecimal.valueOf(12.0)).build()))
+                .build();
+
+        when(pedidoRepository.findPedidoActivoByRepartidorId(5L)).thenReturn(Optional.of(pedidoConProductos));
+
+        OrderResponseDto response = service.getOrderByRepartidorId(5L);
+
+        assertThat(response.getProductos()).hasSize(1);
+        assertThat(response.getProductos().get(0).getNombre()).isEqualTo("Sushi");
     }
 }

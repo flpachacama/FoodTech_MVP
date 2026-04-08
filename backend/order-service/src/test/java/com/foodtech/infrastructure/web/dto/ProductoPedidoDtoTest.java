@@ -70,4 +70,43 @@ class ProductoPedidoDtoTest {
 
         assertThat(dto.toString()).isNotNull().contains("1");
     }
+
+    @Test
+    void equals_conNull_retornaFalse() {
+        assertThat(buildSample().equals(null)).isFalse();
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        ProductoPedidoDto dto = buildSample();
+        assertThat(dto.equals(dto)).isTrue();
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertThat(buildSample().equals("distinto")).isFalse();
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        ProductoPedidoDto empty = new ProductoPedidoDto();
+        ProductoPedidoDto full = buildSample();
+        assertThat(empty.equals(full)).isFalse();
+        assertThat(full.equals(empty)).isFalse();
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertThat(new ProductoPedidoDto().equals(new ProductoPedidoDto())).isTrue();
+    }
+
+    @Test
+    void hashCode_objetoVacio_noLanzaExcepcion() {
+        assertThat(new ProductoPedidoDto().hashCode()).isEqualTo(new ProductoPedidoDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertThat(ProductoPedidoDto.builder().build()).isNotNull();
+    }
 }

@@ -58,6 +58,45 @@ class ProductoMenuDtoTest {
     }
 
     @Test
+    void equals_conNull_retornaFalse() {
+        assertFalse(new ProductoMenuDto(1L, "P", 5.0).equals(null));
+    }
+
+    @Test
+    void equals_mismaReferencia_retornaTrue() {
+        ProductoMenuDto dto = new ProductoMenuDto(1L, "P", 5.0);
+        assertTrue(dto.equals(dto));
+    }
+
+    @Test
+    void equals_diferenteTipo_retornaFalse() {
+        assertFalse(new ProductoMenuDto(1L, "P", 5.0).equals(42));
+    }
+
+    @Test
+    void equals_objetoVacioContraObjetoPoblado_retornaFalse() {
+        ProductoMenuDto empty = new ProductoMenuDto();
+        ProductoMenuDto full = new ProductoMenuDto(1L, "Pizza", 10.0);
+        assertNotEquals(empty, full);
+        assertNotEquals(full, empty);
+    }
+
+    @Test
+    void equals_dosObjetosVacios_retornaTrue() {
+        assertEquals(new ProductoMenuDto(), new ProductoMenuDto());
+    }
+
+    @Test
+    void hashCode_objetoVacio_esConsistente() {
+        assertEquals(new ProductoMenuDto().hashCode(), new ProductoMenuDto().hashCode());
+    }
+
+    @Test
+    void builder_sinCampos_retornaObjetoNoNulo() {
+        assertNotNull(ProductoMenuDto.builder().build());
+    }
+
+    @Test
     void toString_contieneValoresClave() {
         ProductoMenuDto dto = new ProductoMenuDto(5L, "Empanada", 3.5);
 
