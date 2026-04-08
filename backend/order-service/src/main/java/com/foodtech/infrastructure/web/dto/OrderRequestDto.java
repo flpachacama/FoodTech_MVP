@@ -14,13 +14,13 @@ import java.util.List;
 public class OrderRequestDto {
 
     private Long restauranteId;
-    private Integer restauranteX;
-    private Integer restauranteY;
+    private Double restauranteX;
+    private Double restauranteY;
     private String clima;
     private List<ProductoPedidoDto> productos;
     private Long clienteId;
     private String clienteNombre;
-    private Integer clienteCoordenadasX;
-    private Integer clienteCoordenadasY;
+    private Double clienteCoordenadasX;
+    private Double clienteCoordenadasY;
     private String clienteTelefono;
 }

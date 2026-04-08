@@ -1,5 +1,6 @@
 package com.foodtech.domain.service;
 
+import com.foodtech.domain.exception.RepartidorNotFoundException;
 import com.foodtech.domain.model.Coordenada;
 import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.model.Repartidor;
@@ -91,7 +92,7 @@ class RepartidorServiceTraceabilityTest {
         when(repartidorRepository.findById(99L)).thenReturn(Optional.empty());
 
         // Act + Assert
-        assertThrows(IllegalArgumentException.class, () -> service.cambiarEstado(99L, EstadoRepartidor.ACTIVO));
+        assertThrows(RepartidorNotFoundException.class, () -> service.cambiarEstado(99L, EstadoRepartidor.ACTIVO));
         verify(repartidorRepository, never()).save(any());
     }
 

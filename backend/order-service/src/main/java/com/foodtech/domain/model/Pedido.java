@@ -19,7 +19,7 @@ public class Pedido {
     private List<ProductoPedido> productos;
     private Long clienteId;
     private String clienteNombre;
-    private Integer clienteCoordenadasX;
-    private Integer clienteCoordenadasY;
+    private Double clienteCoordenadasX;
+    private Double clienteCoordenadasY;
     private Integer tiempoEstimado;
 }

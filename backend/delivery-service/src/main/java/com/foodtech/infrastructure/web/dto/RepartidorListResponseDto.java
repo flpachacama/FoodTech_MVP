@@ -14,6 +14,6 @@ public class RepartidorListResponseDto {
     private String nombre;
     private String estado;
     private String vehiculo;
-    private Integer ubicacionX;
-    private Integer ubicacionY;
+    private Double ubicacionX;
+    private Double ubicacionY;
 }

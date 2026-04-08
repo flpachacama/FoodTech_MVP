@@ -8,8 +8,8 @@ public interface DeliveryClient {
 
     record DeliveryAssignmentRequest(
             Long pedidoId,
-            Integer restauranteX,
-            Integer restauranteY,
+            Double restauranteX,
+            Double restauranteY,
             String clima
     ) {}
 

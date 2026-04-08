@@ -7,8 +7,8 @@
 CREATE TABLE IF NOT EXISTS restaurantes (
     id            BIGINT          NOT NULL AUTO_INCREMENT,
     nombre        VARCHAR(255)    NOT NULL,
-    coordenada_x  INTEGER         NULL,
-    coordenada_y  INTEGER         NULL,
+    coordenada_x  DOUBLE          NULL,
+    coordenada_y  DOUBLE          NULL,
     menu          TEXT            NULL,
     PRIMARY KEY (id)
 );

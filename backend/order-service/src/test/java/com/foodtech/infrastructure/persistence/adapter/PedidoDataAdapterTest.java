@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,9 +37,9 @@ public class PedidoDataAdapterTest {
     @Test
     void debeGuardarYPasarARepository_cuandoPedidoValido() {
         ProductoPedido prod = new ProductoPedido(1L, "Pizza", null);
-        Pedido pedido = new Pedido(100L, EstadoPedido.PENDIENTE, 10L, null, List.of(prod), 20L, "Cliente", 1, 2, 15);
+        Pedido pedido = new Pedido(100L, EstadoPedido.PENDIENTE, 10L, null, List.of(prod), 20L, "Cliente", 1.0, 2.0, 15);
 
-        PedidoEntity returned = new PedidoEntity(100L, EstadoPedido.PENDIENTE, 10L, null, 20L, "Cliente", 1, 2, 15, "[{\"id\":1,\"nombre\":\"Pizza\",\"precio\":null}]");
+        PedidoEntity returned = new PedidoEntity(100L, EstadoPedido.PENDIENTE, 10L, null, 20L, "Cliente", 1.0, 2.0, 15, "[{\"id\":1,\"nombre\":\"Pizza\",\"precio\":null}]");
         when(pedidoJpaRepository.save(any())).thenReturn(returned);
 
         Pedido saved = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).save(pedido);
@@ -66,7 +66,7 @@ public class PedidoDataAdapterTest {
 
     @Test
     void debeMapearDesdeRepository_cuandoExiste() {
-        PedidoEntity entity = new PedidoEntity(200L, EstadoPedido.ASIGNADO, 30L, null, 40L, "C", 1, 2, 20, "[]");
+        PedidoEntity entity = new PedidoEntity(200L, EstadoPedido.ASIGNADO, 30L, null, 40L, "C", 1.0, 2.0, 20, "[]");
         when(pedidoJpaRepository.findById(200L)).thenReturn(Optional.of(entity));
 
         Optional<Pedido> found = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findById(200L);
@@ -124,6 +124,41 @@ public class PedidoDataAdapterTest {
     @Test
     void deserialize_debeRetornarListaVacia_cuandoProductosBlank() {
         PedidoEntity e = new PedidoEntity(400L, EstadoPedido.PENDIENTE, 31L, null, 41L, "C2", null, null, 5, "   ");
+        when(pedidoJpaRepository.findAll()).thenReturn(List.of(e));
+
+        List<Pedido> lista = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findAll();
+        assertEquals(1, lista.size());
+        assertTrue(lista.get(0).getProductos().isEmpty());
+    }
+
+    @Test
+    void findPedidoActivoByRepartidorId_cuandoExiste_retornaPedido() {
+        PedidoEntity entity = new PedidoEntity(500L, EstadoPedido.ASIGNADO, 10L, 7L, 20L, "Carlos", -74.06, 4.64, 20, "[]");
+        when(pedidoJpaRepository.findFirstByRepartidorIdAndEstadoIn(
+                eq(7L), anyList())).thenReturn(Optional.of(entity));
+
+        Optional<Pedido> result = new PedidoDataAdapter(pedidoJpaRepository, objectMapper)
+                .findPedidoActivoByRepartidorId(7L);
+
+        assertTrue(result.isPresent());
+        assertEquals(500L, result.get().getId());
+        assertEquals(EstadoPedido.ASIGNADO, result.get().getEstado());
+    }
+
+    @Test
+    void findPedidoActivoByRepartidorId_cuandoNoExiste_retornaVacio() {
+        when(pedidoJpaRepository.findFirstByRepartidorIdAndEstadoIn(
+                eq(99L), anyList())).thenReturn(Optional.empty());
+
+        Optional<Pedido> result = new PedidoDataAdapter(pedidoJpaRepository, objectMapper)
+                .findPedidoActivoByRepartidorId(99L);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void deserialize_debeRetornarListaVacia_cuandoProductosNull() {
+        PedidoEntity e = new PedidoEntity(401L, EstadoPedido.PENDIENTE, 31L, null, 41L, "C3", null, null, 5, null);
         when(pedidoJpaRepository.findAll()).thenReturn(List.of(e));
 
         List<Pedido> lista = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findAll();

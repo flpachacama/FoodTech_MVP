@@ -7,6 +7,7 @@ import com.foodtech.domain.exception.PedidoCancelException;
 import com.foodtech.domain.port.output.DeliveryClient;
 import com.foodtech.domain.port.output.DeliveryClient.DeliveryAssignmentResponse;
 import com.foodtech.domain.port.output.PedidoRepository;
+import com.foodtech.domain.service.TiempoDeliveryCalculator;
 import com.foodtech.infrastructure.persistence.RestauranteJpaRepository;
 import com.foodtech.infrastructure.web.dto.OrderRequestDto;
 import com.foodtech.infrastructure.web.dto.OrderResponseDto;
@@ -45,12 +46,15 @@ class OrderApplicationServiceTraceabilityTest {
     @Mock
     private RestauranteJpaRepository restauranteRepository;
 
+    @Mock
+    private TiempoDeliveryCalculator tiempoCalculator;
+
     @InjectMocks
     private OrderApplicationService service;
 
     @BeforeEach
     void setUp() {
-        // no-op: los stubs se declaran solo en los tests que pasan por esa validación
+        org.mockito.Mockito.lenient().when(tiempoCalculator.calcularMinutos(any(), any(), any(), any())).thenReturn(0);
     }
 
     // HU7 - Generar pedido
@@ -195,7 +199,7 @@ class OrderApplicationServiceTraceabilityTest {
         // Arrange
         stubRestauranteExistente();
         OrderRequestDto request = createValidRequest();
-        request.setClienteCoordenadasX(-1);
+        request.setClienteCoordenadasX(-200.0);
 
         // Act
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
@@ -234,7 +238,7 @@ class OrderApplicationServiceTraceabilityTest {
 
         // Assert
         assertEquals(EstadoPedido.PENDIENTE, response.getEstado());
-        assertEquals(null, response.getTiempoEstimado());
+        assertEquals(0, response.getTiempoEstimado());
     }
 
     // HU6 - Actualizar estado del repartidor / Pedido entregado
@@ -248,8 +252,8 @@ class OrderApplicationServiceTraceabilityTest {
                 .repartidorId(55L)
                 .clienteId(77L)
                 .clienteNombre("Ana Garcia")
-                .clienteCoordenadasX(10)
-                .clienteCoordenadasY(20)
+                .clienteCoordenadasX(10.0)
+                .clienteCoordenadasY(20.0)
                 .productos(List.of())
                 .estado(EstadoPedido.ASIGNADO)
                 .build();
@@ -276,8 +280,8 @@ class OrderApplicationServiceTraceabilityTest {
                 .repartidorId(null)
                 .clienteId(77L)
                 .clienteNombre("Ana Garcia")
-                .clienteCoordenadasX(10)
-                .clienteCoordenadasY(20)
+                .clienteCoordenadasX(10.0)
+                .clienteCoordenadasY(20.0)
                 .productos(List.of())
                 .estado(EstadoPedido.PENDIENTE)
                 .build();
@@ -304,8 +308,8 @@ class OrderApplicationServiceTraceabilityTest {
                 .repartidorId(55L)
                 .clienteId(77L)
                 .clienteNombre("Ana Garcia")
-                .clienteCoordenadasX(10)
-                .clienteCoordenadasY(20)
+                .clienteCoordenadasX(10.0)
+                .clienteCoordenadasY(20.0)
                 .productos(List.of())
                 .estado(EstadoPedido.ASIGNADO)
                 .build();
@@ -332,8 +336,8 @@ class OrderApplicationServiceTraceabilityTest {
                 .repartidorId(55L)
                 .clienteId(77L)
                 .clienteNombre("Ana Garcia")
-                .clienteCoordenadasX(10)
-                .clienteCoordenadasY(20)
+                .clienteCoordenadasX(10.0)
+                .clienteCoordenadasY(20.0)
                 .productos(List.of())
                 .estado(EstadoPedido.ENTREGADO)
                 .build();
@@ -351,14 +355,14 @@ class OrderApplicationServiceTraceabilityTest {
     private OrderRequestDto createValidRequest() {
         return OrderRequestDto.builder()
                 .restauranteId(10L)
-                .restauranteX(5)
-                .restauranteY(8)
+                .restauranteX(5.0)
+                .restauranteY(8.0)
                 .clima("SOLEADO")
                 .clienteId(77L)
                 .clienteNombre("Ana Garcia")
                 .clienteTelefono("3001234567")
-                .clienteCoordenadasX(10)
-                .clienteCoordenadasY(20)
+                .clienteCoordenadasX(10.0)
+                .clienteCoordenadasY(20.0)
                 .productos(List.of(createProduct(1L, "Hamburguesa", "8.50")))
                 .build();
     }

@@ -41,6 +41,15 @@ public class PedidoDataAdapter implements PedidoRepository {
                 .toList();
     }
 
+    @Override
+    public Optional<Pedido> findPedidoActivoByRepartidorId(Long repartidorId) {
+        return pedidoJpaRepository
+                .findFirstByRepartidorIdAndEstadoIn(
+                        repartidorId,
+                        List.of(EstadoPedido.ASIGNADO))
+                .map(this::toDomain);
+    }
+
     // ─── Mappers ────────────────────────────────────────────────────────────────
 
     private PedidoEntity toEntity(Pedido pedido) {

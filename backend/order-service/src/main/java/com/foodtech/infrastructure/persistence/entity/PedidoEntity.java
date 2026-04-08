@@ -34,10 +34,10 @@ public class PedidoEntity {
     private String clienteNombre;
 
     @Column(name = "cliente_coordenadas_x")
-    private Integer clienteCoordenadasX;
+    private Double clienteCoordenadasX;
 
     @Column(name = "cliente_coordenadas_y")
-    private Integer clienteCoordenadasY;
+    private Double clienteCoordenadasY;
 
     @Column(name = "tiempo_estimado")
     private Integer tiempoEstimado;
