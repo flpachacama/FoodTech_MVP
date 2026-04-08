@@ -433,4 +433,62 @@ class OrderApplicationServiceTest {
 
         assertThat(response.getTiempoEstimado()).isEqualTo(5);
     }
+
+    @Test
+    void createOrder_cuandoTelefonoBlank_lanzaIllegalArgument() {
+        OrderRequestDto requestTelefonoBlank = OrderRequestDto.builder()
+                .restauranteId(10L)
+                .clienteNombre("Ana García")
+                .clienteTelefono("   ")
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
+                .productos(List.of(ProductoPedidoDto.builder()
+                        .id(1L).nombre("Burger").precio(BigDecimal.ONE).build()))
+                .build();
+
+        assertThatThrownBy(() -> service.createOrder(requestTelefonoBlank))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("teléfono");
+
+        verifyNoInteractions(pedidoRepository, deliveryClient);
+    }
+
+    @Test
+    void createOrder_cuandoCoordenadasYNull_lanzaIllegalArgument() {
+        OrderRequestDto requestSinCoordY = OrderRequestDto.builder()
+                .restauranteId(10L)
+                .clienteNombre("Ana García")
+                .clienteTelefono("600000001")
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(null)
+                .productos(List.of(ProductoPedidoDto.builder()
+                        .id(1L).nombre("Burger").precio(BigDecimal.ONE).build()))
+                .build();
+
+        assertThatThrownBy(() -> service.createOrder(requestSinCoordY))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("coordenadas");
+
+        verifyNoInteractions(pedidoRepository, deliveryClient);
+    }
+
+    @Test
+    void createOrder_cuandoRestauranteNoExiste_lanzaRestauranteNotFoundException() {
+        lenient().when(restauranteJpaRepository.existsById(99L)).thenReturn(false);
+
+        OrderRequestDto requestRestauranteInexistente = OrderRequestDto.builder()
+                .restauranteId(99L)
+                .clienteNombre("Ana García")
+                .clienteTelefono("600000001")
+                .clienteCoordenadasX(1.0)
+                .clienteCoordenadasY(2.0)
+                .productos(List.of(ProductoPedidoDto.builder()
+                        .id(1L).nombre("Burger").precio(BigDecimal.ONE).build()))
+                .build();
+
+        assertThatThrownBy(() -> service.createOrder(requestRestauranteInexistente))
+                .isInstanceOf(com.foodtech.domain.exception.RestauranteNotFoundException.class);
+
+        verifyNoInteractions(pedidoRepository, deliveryClient);
+    }
 }

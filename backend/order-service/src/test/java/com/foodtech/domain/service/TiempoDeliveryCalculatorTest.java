@@ -20,8 +20,18 @@ class TiempoDeliveryCalculatorTest {
     }
 
     @Test
-    void calcularMinutos_conCoordenadaDestinoNull_retornaCero() {
+    void calcularMinutos_conOrigenYNull_retornaCero() {
+        assertThat(calculator.calcularMinutos(1.0, null, 10.0, 20.0)).isEqualTo(0);
+    }
+
+    @Test
+    void calcularMinutos_conDestinoXNull_retornaCero() {
         assertThat(calculator.calcularMinutos(1.0, 2.0, null, 20.0)).isEqualTo(0);
+    }
+
+    @Test
+    void calcularMinutos_conDestinoYNull_retornaCero() {
+        assertThat(calculator.calcularMinutos(1.0, 2.0, 10.0, null)).isEqualTo(0);
     }
 
     @Test
