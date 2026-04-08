@@ -13,7 +13,7 @@
 | `OrderController` | 0% | ✅ Cubierto (Paso 1) |
 | `OrderExceptionHandler` | 0% | ✅ Cubierto (Paso 1) |
 | `DeliveryClientAdapter` | 0% | ✅ Cubierto (Paso 2) |
-| `OrderApplicationService` | 90% inst / 68% branches | ⬜ Pendiente (Paso 3) |
+| `OrderApplicationService` | 90% inst / 68% branches | ✅ Cubierto (Paso 3) |
 | `OrderRequestDto` | 23% | ⬜ Pendiente (Paso 4) |
 | `OrderResponseDto` | 9% | ⬜ Pendiente (Paso 4) |
 | `ProductoPedidoDto` | 15% | ⬜ Pendiente (Paso 4) |
@@ -65,11 +65,11 @@
 
 ---
 
-## ⬜ Paso 3 — Ampliar OrderApplicationServiceTest (PENDIENTE)
+## ✅ Paso 3 — Ampliar OrderApplicationServiceTest (COMPLETADO)
 
 **Archivo:** `src/test/java/com/foodtech/application/service/OrderApplicationServiceTest.java`  
 **Técnica:** Agregar casos al test existente (Mockito puro)  
-**Objetivo:** Cerrar las 7 ramas sin cubrir de `cancelOrder` y `deliverOrder`
+**Resultado:** 22/22 tests pasando (14 nuevos casos agregados)
 
 | Test a agregar | Rama que cubre | Tipo |
 |---|---|---|
