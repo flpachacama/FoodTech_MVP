@@ -144,4 +144,25 @@ class AsignacionControllerTest {
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).hasSize(1);
     }
+
+    @Test
+    void updateEstado_cuandoRepartidorConCamposNulos_retorna200ConNulos() {
+        Repartidor actualizado = Repartidor.builder()
+                .id(7L).nombre("Diego").estado(null)
+                .vehiculo(null).ubicacion(null).build();
+
+        when(asignacionApplicationService.procesarEventoRepartidor(7L, "ENTREGADO"))
+                .thenReturn(actualizado);
+
+        EstadoUpdateRequest request = new EstadoUpdateRequest("ENTREGADO");
+        ResponseEntity<?> response = controller.updateEstado(7L, request);
+
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+        RepartidorResponseDTO body = (RepartidorResponseDTO) response.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.getEstado()).isNull();
+        assertThat(body.getVehiculo()).isNull();
+        assertThat(body.getX()).isNull();
+        assertThat(body.getY()).isNull();
+    }
 }

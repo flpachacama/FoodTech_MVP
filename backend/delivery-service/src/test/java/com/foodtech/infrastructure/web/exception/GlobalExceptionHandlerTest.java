@@ -2,6 +2,7 @@ package com.foodtech.infrastructure.web.exception;
 
 import com.foodtech.domain.exception.RepartidorNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,5 +57,29 @@ class GlobalExceptionHandlerTest {
         Map<String, String> resp = handler.handleGenericException(ex);
 
         assertThat(resp).containsEntry("error", "Error interno del servidor");
+    }
+
+    @Test
+    void debeRetornarMensajeCausa_cuandoHttpMessageNotReadableConCausa() {
+        HttpMessageNotReadableException ex = mock(HttpMessageNotReadableException.class);
+        Throwable cause = new RuntimeException("causa del error");
+        when(ex.getCause()).thenReturn(cause);
+
+        Map<String, String> resp = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(resp).containsKey("error");
+        assertThat(resp.get("error")).isEqualTo("causa del error");
+    }
+
+    @Test
+    void debeRetornarMensajeEx_cuandoHttpMessageNotReadableSinCausa() {
+        HttpMessageNotReadableException ex = mock(HttpMessageNotReadableException.class);
+        when(ex.getCause()).thenReturn(null);
+        when(ex.getMessage()).thenReturn("mensaje directo de la excepcion");
+
+        Map<String, String> resp = handler.handleHttpMessageNotReadable(ex);
+
+        assertThat(resp).containsKey("error");
+        assertThat(resp.get("error")).isEqualTo("mensaje directo de la excepcion");
     }
 }
