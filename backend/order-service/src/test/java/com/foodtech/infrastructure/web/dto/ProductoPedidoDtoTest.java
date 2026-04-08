@@ -109,4 +109,40 @@ class ProductoPedidoDtoTest {
     void builder_sinCampos_retornaObjetoNoNulo() {
         assertThat(ProductoPedidoDto.builder().build()).isNotNull();
     }
+
+    @Test
+    void hashCode_objetoPoblado_esConsistente() {
+        ProductoPedidoDto dto = buildSample();
+        assertThat(dto.hashCode()).isEqualTo(dto.hashCode());
+    }
+
+    @Test
+    void equals_cuandoNombreEsDistinto_retornaFalse() {
+        ProductoPedidoDto a = new ProductoPedidoDto(1L, "nombre1", BigDecimal.TEN);
+        ProductoPedidoDto b = new ProductoPedidoDto(1L, "nombre2", BigDecimal.TEN);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoPrecioEsDistinto_retornaFalse() {
+        ProductoPedidoDto a = new ProductoPedidoDto(1L, "nombre", BigDecimal.ONE);
+        ProductoPedidoDto b = new ProductoPedidoDto(1L, "nombre", BigDecimal.TEN);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoNombreNullVsNonNull_retornaFalse() {
+        ProductoPedidoDto a = new ProductoPedidoDto(1L, null, BigDecimal.TEN);
+        ProductoPedidoDto b = new ProductoPedidoDto(1L, "nombre", BigDecimal.TEN);
+        assertThat(a).isNotEqualTo(b);
+        assertThat(b).isNotEqualTo(a);
+    }
+
+    @Test
+    void equals_cuandoPrecioNullVsNonNull_retornaFalse() {
+        ProductoPedidoDto a = new ProductoPedidoDto(1L, "nombre", null);
+        ProductoPedidoDto b = new ProductoPedidoDto(1L, "nombre", BigDecimal.TEN);
+        assertThat(a).isNotEqualTo(b);
+        assertThat(b).isNotEqualTo(a);
+    }
 }

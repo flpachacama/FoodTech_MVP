@@ -138,4 +138,98 @@ class OrderResponseDtoTest {
     void builder_sinCampos_retornaObjetoNoNulo() {
         assertThat(OrderResponseDto.builder().build()).isNotNull();
     }
+
+    @Test
+    void hashCode_objetoPoblado_esConsistente() {
+        OrderResponseDto dto = buildSample();
+        assertThat(dto.hashCode()).isEqualTo(dto.hashCode());
+    }
+
+    @Test
+    void equals_cuandoRestauranteIdEsDistinto_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setRestauranteId(99L);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoRepartidorIdEsDistinto_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setRepartidorId(99L);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoProductosDifieren_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample();
+        b.setProductos(List.of(ProductoPedidoDto.builder().id(9L).nombre("X").build()));
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoClienteIdEsDistinto_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setClienteId(99L);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoClienteNombreEsDistinto_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setClienteNombre("Otro");
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoCoordXEsDistinta_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setClienteCoordenadasX(99.0);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoCoordYEsDistinta_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setClienteCoordenadasY(99.0);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoTelefonoEsDistinto_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setClienteTelefono("999");
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoTiempoEstimadoEsDistinto_retornaFalse() {
+        OrderResponseDto a = buildSample();
+        OrderResponseDto b = buildSample(); b.setTiempoEstimado(99);
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void equals_cuandoRestauranteIdNullVsNonNull_retornaFalse() {
+        OrderResponseDto a = buildSample(); a.setRestauranteId(null);
+        OrderResponseDto b = buildSample();
+        assertThat(a.equals(b)).isFalse();
+        assertThat(b.equals(a)).isFalse();
+    }
+
+    @Test
+    void equals_cuandoClienteNombreNullVsNonNull_retornaFalse() {
+        OrderResponseDto a = buildSample(); a.setClienteNombre(null);
+        OrderResponseDto b = buildSample();
+        assertThat(a.equals(b)).isFalse();
+        assertThat(b.equals(a)).isFalse();
+    }
+
+    @Test
+    void equals_cuandoEstadoNullVsNonNull_retornaFalse() {
+        OrderResponseDto a = buildSample(); a.setEstado(null);
+        OrderResponseDto b = buildSample();
+        assertThat(a.equals(b)).isFalse();
+        assertThat(b.equals(a)).isFalse();
+    }
 }

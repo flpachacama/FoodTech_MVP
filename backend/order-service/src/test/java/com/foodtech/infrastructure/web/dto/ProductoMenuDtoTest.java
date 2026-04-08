@@ -97,6 +97,42 @@ class ProductoMenuDtoTest {
     }
 
     @Test
+    void hashCode_objetoPoblado_esConsistente() {
+        ProductoMenuDto dto = new ProductoMenuDto(1L, "Pizza", 15.0);
+        assertEquals(dto.hashCode(), dto.hashCode());
+    }
+
+    @Test
+    void equals_cuandoNombreEsDistinto_retornaFalse() {
+        ProductoMenuDto a = new ProductoMenuDto(1L, "nombre1", 5.0);
+        ProductoMenuDto b = new ProductoMenuDto(1L, "nombre2", 5.0);
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoPrecioEsDistinto_retornaFalse() {
+        ProductoMenuDto a = new ProductoMenuDto(1L, "nombre", 5.0);
+        ProductoMenuDto b = new ProductoMenuDto(1L, "nombre", 10.0);
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoNombreNullVsNonNull_retornaFalse() {
+        ProductoMenuDto a = new ProductoMenuDto(1L, null, 5.0);
+        ProductoMenuDto b = new ProductoMenuDto(1L, "nombre", 5.0);
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
+    void equals_cuandoPrecioNullVsNonNull_retornaFalse() {
+        ProductoMenuDto a = new ProductoMenuDto(1L, "nombre", null);
+        ProductoMenuDto b = new ProductoMenuDto(1L, "nombre", 5.0);
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
     void toString_contieneValoresClave() {
         ProductoMenuDto dto = new ProductoMenuDto(5L, "Empanada", 3.5);
 

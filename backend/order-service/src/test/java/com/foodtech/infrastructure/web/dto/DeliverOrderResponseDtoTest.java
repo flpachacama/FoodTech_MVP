@@ -107,4 +107,40 @@ class DeliverOrderResponseDtoTest {
     void builder_sinCampos_retornaObjetoNoNulo() {
         assertNotNull(DeliverOrderResponseDto.builder().build());
     }
+
+    @Test
+    void hashCode_objetoPoblado_esConsistente() {
+        DeliverOrderResponseDto dto = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "ok");
+        assertEquals(dto.hashCode(), dto.hashCode());
+    }
+
+    @Test
+    void equals_cuandoEstadoEsDistinto_retornaFalse() {
+        DeliverOrderResponseDto a = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "msg");
+        DeliverOrderResponseDto b = new DeliverOrderResponseDto(1L, EstadoPedido.PENDIENTE, "msg");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoMensajeEsDistinto_retornaFalse() {
+        DeliverOrderResponseDto a = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "msg1");
+        DeliverOrderResponseDto b = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "msg2");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoEstadoNullVsNonNull_retornaFalse() {
+        DeliverOrderResponseDto a = new DeliverOrderResponseDto(1L, null, "msg");
+        DeliverOrderResponseDto b = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "msg");
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
+    void equals_cuandoMensajeNullVsNonNull_retornaFalse() {
+        DeliverOrderResponseDto a = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, null);
+        DeliverOrderResponseDto b = new DeliverOrderResponseDto(1L, EstadoPedido.ENTREGADO, "msg");
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
 }

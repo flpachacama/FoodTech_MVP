@@ -115,4 +115,71 @@ class RestauranteResponseDtoTest {
     void builder_sinCampos_retornaObjetoNoNulo() {
         assertNotNull(RestauranteResponseDto.builder().build());
     }
+
+    @Test
+    void hashCode_objetoPoblado_esConsistente() {
+        RestauranteResponseDto dto = new RestauranteResponseDto(1L, "Rest", 4.6, -74.0, List.of());
+        assertEquals(dto.hashCode(), dto.hashCode());
+    }
+
+    @Test
+    void equals_cuandoNombreEsDistinto_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Nombre1", 1.0, 2.0, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Nombre2", 1.0, 2.0, List.of());
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoCoordenadaXEsDistinta_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 9.0, 2.0, List.of());
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoCoordenadaYEsDistinta_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 1.0, 9.0, List.of());
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoMenuEsDistinto_retornaFalse() {
+        ProductoMenuDto prod = new ProductoMenuDto(1L, "Pizza", 15.0);
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of(prod));
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoNombreNullVsNonNull_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, null, 1.0, 2.0, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
+    void equals_cuandoCoordenadaXNullVsNonNull_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Rest", null, 2.0, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
+    void equals_cuandoCoordenadaYNullVsNonNull_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Rest", 1.0, null, List.of());
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
+    void equals_cuandoMenuNullVsNonNull_retornaFalse() {
+        RestauranteResponseDto a = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, null);
+        RestauranteResponseDto b = new RestauranteResponseDto(1L, "Rest", 1.0, 2.0, List.of());
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
 }

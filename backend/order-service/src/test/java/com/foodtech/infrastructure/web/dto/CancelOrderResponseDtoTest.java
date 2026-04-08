@@ -107,4 +107,40 @@ class CancelOrderResponseDtoTest {
     void builder_sinCampos_retornaObjetoNoNulo() {
         assertNotNull(CancelOrderResponseDto.builder().build());
     }
+
+    @Test
+    void hashCode_objetoPoblado_esConsistente() {
+        CancelOrderResponseDto dto = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg");
+        assertEquals(dto.hashCode(), dto.hashCode());
+    }
+
+    @Test
+    void equals_cuandoEstadoEsDistinto_retornaFalse() {
+        CancelOrderResponseDto a = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg");
+        CancelOrderResponseDto b = new CancelOrderResponseDto(1L, EstadoPedido.PENDIENTE, "msg");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoMensajeEsDistinto_retornaFalse() {
+        CancelOrderResponseDto a = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg1");
+        CancelOrderResponseDto b = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg2");
+        assertNotEquals(a, b);
+    }
+
+    @Test
+    void equals_cuandoEstadoNullVsNonNull_retornaFalse() {
+        CancelOrderResponseDto a = new CancelOrderResponseDto(1L, null, "msg");
+        CancelOrderResponseDto b = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg");
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
+
+    @Test
+    void equals_cuandoMensajeNullVsNonNull_retornaFalse() {
+        CancelOrderResponseDto a = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, null);
+        CancelOrderResponseDto b = new CancelOrderResponseDto(1L, EstadoPedido.CANCELADO, "msg");
+        assertNotEquals(a, b);
+        assertNotEquals(b, a);
+    }
 }
