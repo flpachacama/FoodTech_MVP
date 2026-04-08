@@ -124,7 +124,7 @@ public class OrderApplicationService implements OrderUseCase {
     }
 
     private boolean isValidCoordinate(Double coordinate) {
-        return coordinate >= 0 && coordinate <= 100;
+        return coordinate >= -180 && coordinate <= 180;
     }
 
     private Pedido toDomain(OrderRequestDto request) {

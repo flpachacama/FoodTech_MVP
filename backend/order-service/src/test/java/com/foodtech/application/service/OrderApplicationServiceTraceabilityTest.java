@@ -199,7 +199,7 @@ class OrderApplicationServiceTraceabilityTest {
         // Arrange
         stubRestauranteExistente();
         OrderRequestDto request = createValidRequest();
-        request.setClienteCoordenadasX(-1.0);
+        request.setClienteCoordenadasX(-200.0);
 
         // Act
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
