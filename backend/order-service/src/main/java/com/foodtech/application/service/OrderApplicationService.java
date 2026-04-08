@@ -123,7 +123,7 @@ public class OrderApplicationService implements OrderUseCase {
         }
     }
 
-    private boolean isValidCoordinate(Integer coordinate) {
+    private boolean isValidCoordinate(Double coordinate) {
         return coordinate >= 0 && coordinate <= 100;
     }
 

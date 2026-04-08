@@ -36,8 +36,8 @@ class RestauranteServiceTraceabilityTest {
         // Arrange
         RestauranteService service = new RestauranteService(restauranteRepository, objectMapper);
         when(restauranteRepository.findAll()).thenReturn(List.of(
-                restaurante(1L, "La Parrilla", 10, 20, "[]"),
-                restaurante(2L, "Sushi Go", 30, 40, "[]")
+                restaurante(1L, "La Parrilla", 10.0, 20.0, "[]"),
+                restaurante(2L, "Sushi Go", 30.0, 40.0, "[]")
         ));
 
         // Act
@@ -57,7 +57,7 @@ class RestauranteServiceTraceabilityTest {
         // Arrange
         RestauranteService service = new RestauranteService(restauranteRepository, objectMapper);
         String menuJson = "[{\"id\":1,\"nombre\":\"Hamburguesa\",\"precio\":8.5},{\"id\":2,\"nombre\":\"Papas\",\"precio\":4.0}]";
-        when(restauranteRepository.findById(1L)).thenReturn(Optional.of(restaurante(1L, "La Parrilla", 10, 20, menuJson)));
+        when(restauranteRepository.findById(1L)).thenReturn(Optional.of(restaurante(1L, "La Parrilla", 10.0, 20.0, menuJson)));
 
         // Act
         RestauranteResponseDto result = service.getRestauranteById(1L);
@@ -96,7 +96,7 @@ class RestauranteServiceTraceabilityTest {
         assertThrows(RestauranteNotFoundException.class, () -> service.getRestauranteById(99L));
     }
 
-    private RestauranteEntity restaurante(Long id, String nombre, Integer x, Integer y, String menu) {
+    private RestauranteEntity restaurante(Long id, String nombre, Double x, Double y, String menu) {
         return RestauranteEntity.builder()
                 .id(id)
                 .nombre(nombre)

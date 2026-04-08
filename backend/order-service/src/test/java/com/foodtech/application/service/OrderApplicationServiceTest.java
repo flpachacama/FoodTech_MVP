@@ -573,4 +573,8 @@ class OrderApplicationServiceTest {
         assertThat(response.getProductos()).hasSize(1);
         assertThat(response.getProductos().get(0).getNombre()).isEqualTo("Sushi");
     }
+
+    private void stubRestauranteExistente() {
+        when(restauranteJpaRepository.existsById(anyLong())).thenReturn(true);
+    }
 }
