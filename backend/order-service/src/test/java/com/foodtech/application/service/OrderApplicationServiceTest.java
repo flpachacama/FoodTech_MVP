@@ -74,6 +74,8 @@ class OrderApplicationServiceTest {
 
     @Test
     void createOrder_whenDeliveryAsigna_returnsEstadoAsignado() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(42L)
                 .restauranteId(10L)
@@ -97,6 +99,8 @@ class OrderApplicationServiceTest {
 
     @Test
     void createOrder_whenDeliveryPendiente_returnsEstadoPendiente() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(43L)
                 .restauranteId(10L)
@@ -118,6 +122,8 @@ class OrderApplicationServiceTest {
 
     @Test
     void createOrder_whenDeliveryFails_throwsIllegalStateException() {
+        stubRestauranteExistente();
+
         Pedido pedidoGuardado = Pedido.builder()
                 .id(44L)
                 .restauranteId(10L)
@@ -158,6 +164,8 @@ class OrderApplicationServiceTest {
 
     @Test
     void createOrder_whenProductosEmpty_throwsIllegalArgumentException() {
+        stubRestauranteExistente();
+
         OrderRequestDto requestSinProductos = OrderRequestDto.builder()
                 .restauranteId(10L)
                 .clienteNombre("Ana García")
@@ -176,6 +184,8 @@ class OrderApplicationServiceTest {
 
     @Test
     void createOrder_whenClimaNull_usesFallbackSoleado() {
+        stubRestauranteExistente();
+
         requestBase.setClima(null);
 
         Pedido pedidoGuardado = Pedido.builder()

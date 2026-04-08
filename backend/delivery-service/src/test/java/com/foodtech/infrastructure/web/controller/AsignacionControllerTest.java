@@ -5,6 +5,7 @@ import com.foodtech.domain.model.Coordenada;
 import com.foodtech.domain.model.Repartidor;
 import com.foodtech.domain.model.EstadoRepartidor;
 import com.foodtech.domain.model.TipoVehiculo;
+import com.foodtech.domain.service.AsignacionService;
 import com.foodtech.domain.port.input.AsignacionUseCase;
 import com.foodtech.infrastructure.web.dto.AsignacionRequestDTO;
 import com.foodtech.infrastructure.web.dto.AsignacionResponseDTO;
