@@ -14,10 +14,10 @@
 | `OrderExceptionHandler` | 0% | ✅ Cubierto (Paso 1) |
 | `DeliveryClientAdapter` | 0% | ✅ Cubierto (Paso 2) |
 | `OrderApplicationService` | 90% inst / 68% branches | ✅ Cubierto (Paso 3) |
-| `OrderRequestDto` | 23% | ⬜ Pendiente (Paso 4) |
-| `OrderResponseDto` | 9% | ⬜ Pendiente (Paso 4) |
-| `ProductoPedidoDto` | 15% | ⬜ Pendiente (Paso 4) |
-| `RestauranteEntity` | 50% | ⬜ Pendiente (Paso 4) |
+| `OrderRequestDto` | 23% | ✅ Cubierto (Paso 4) |
+| `OrderResponseDto` | 9% | ✅ Cubierto (Paso 4) |
+| `ProductoPedidoDto` | 15% | ✅ Cubierto (Paso 4) |
+| `RestauranteEntity` | 50% | ✅ Cubierto (Paso 4) |
 
 ---
 
@@ -90,7 +90,7 @@
 
 ---
 
-## ⬜ Paso 4 — DTO Tests (PENDIENTE)
+## ✅ Paso 4 — DTO Tests (COMPLETADO)
 
 **Archivos nuevos a crear:**
 - `src/test/java/com/foodtech/infrastructure/web/dto/OrderRequestDtoTest.java`
@@ -98,7 +98,7 @@
 - `src/test/java/com/foodtech/infrastructure/web/dto/ProductoPedidoDtoTest.java`
 
 **Técnica:** Tests unitarios directos, sin Spring  
-**Objetivo:** Cubrir los builders, getters, setters, `equals` y `toString` de Lombok (~900 instrucciones)
+**Resultado:** 18/18 tests pasando (6 por cada DTO)
 
 | Test por DTO | Qué cubre |
 |---|---|

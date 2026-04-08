@@ -1,0 +1,102 @@
+package com.foodtech.infrastructure.web.dto;
+
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class OrderRequestDtoTest {
+
+    private OrderRequestDto buildSample() {
+        return OrderRequestDto.builder()
+                .restauranteId(1L)
+                .restauranteX(10.0)
+                .restauranteY(20.0)
+                .clima("SOLEADO")
+                .clienteId(5L)
+                .clienteNombre("Ana García")
+                .clienteCoordenadasX(3.0)
+                .clienteCoordenadasY(4.0)
+                .clienteTelefono("600000001")
+                .productos(List.of(
+                        ProductoPedidoDto.builder().id(1L).nombre("Burger").precio(BigDecimal.valueOf(8.50)).build()))
+                .build();
+    }
+
+    @Test
+    void builder_conTodosLosCampos_gettersRetornanValoresCorrectos() {
+        OrderRequestDto dto = buildSample();
+
+        assertThat(dto.getRestauranteId()).isEqualTo(1L);
+        assertThat(dto.getRestauranteX()).isEqualTo(10.0);
+        assertThat(dto.getRestauranteY()).isEqualTo(20.0);
+        assertThat(dto.getClima()).isEqualTo("SOLEADO");
+        assertThat(dto.getClienteId()).isEqualTo(5L);
+        assertThat(dto.getClienteNombre()).isEqualTo("Ana García");
+        assertThat(dto.getClienteCoordenadasX()).isEqualTo(3.0);
+        assertThat(dto.getClienteCoordenadasY()).isEqualTo(4.0);
+        assertThat(dto.getClienteTelefono()).isEqualTo("600000001");
+        assertThat(dto.getProductos()).hasSize(1);
+    }
+
+    @Test
+    void allArgsConstructor_conTodosLosCampos_gettersRetornanValoresCorrectos() {
+        List<ProductoPedidoDto> productos = List.of(
+                ProductoPedidoDto.builder().id(2L).nombre("Pizza").precio(BigDecimal.TEN).build());
+
+        OrderRequestDto dto = new OrderRequestDto(2L, 5.0, 6.0, "LLUVIOSO",
+                productos, 8L, "Luis", 1.0, 2.0, "611111111");
+
+        assertThat(dto.getRestauranteId()).isEqualTo(2L);
+        assertThat(dto.getClima()).isEqualTo("LLUVIOSO");
+        assertThat(dto.getClienteNombre()).isEqualTo("Luis");
+        assertThat(dto.getClienteTelefono()).isEqualTo("611111111");
+        assertThat(dto.getProductos()).hasSize(1);
+    }
+
+    @Test
+    void setters_modificanCamposCorrectamente() {
+        OrderRequestDto dto = new OrderRequestDto();
+
+        dto.setRestauranteId(3L);
+        dto.setRestauranteX(7.0);
+        dto.setRestauranteY(8.0);
+        dto.setClima("NUBLADO");
+        dto.setClienteId(9L);
+        dto.setClienteNombre("Pedro");
+        dto.setClienteCoordenadasX(5.0);
+        dto.setClienteCoordenadasY(6.0);
+        dto.setClienteTelefono("622222222");
+        dto.setProductos(List.of());
+
+        assertThat(dto.getRestauranteId()).isEqualTo(3L);
+        assertThat(dto.getClima()).isEqualTo("NUBLADO");
+        assertThat(dto.getClienteNombre()).isEqualTo("Pedro");
+    }
+
+    @Test
+    void equals_dosObjetosConMismosCampos_retornaTrue() {
+        OrderRequestDto a = buildSample();
+        OrderRequestDto b = buildSample();
+
+        assertThat(a).isEqualTo(b);
+    }
+
+    @Test
+    void equals_objetosDistintos_retornaFalse() {
+        OrderRequestDto a = buildSample();
+        OrderRequestDto b = buildSample();
+        b.setClienteNombre("Otro nombre");
+
+        assertThat(a).isNotEqualTo(b);
+    }
+
+    @Test
+    void toString_noEsNuloYContieneRestauranteId() {
+        OrderRequestDto dto = buildSample();
+
+        assertThat(dto.toString()).isNotNull().contains("1");
+    }
+}
