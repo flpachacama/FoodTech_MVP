@@ -22,10 +22,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-/**
- * Tests para el servicio de aplicación AsignacionApplicationService.
- * Verifica la correcta coordinación entre puerto de salida y servicio de dominio.
- */
 @ExtendWith(MockitoExtension.class)
 class AsignacionApplicationServiceTest {
 
@@ -59,7 +55,6 @@ class AsignacionApplicationServiceTest {
 
     @Test
     void obtenerRepartidoresPriorizados_ConActivos_delegaAlServicioDeDominio() {
-        // Given: repartidores activos en BD
         Repartidor r1 = Repartidor.builder()
             .id(1L).nombre("R1").estado(EstadoRepartidor.ACTIVO)
             .vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(10,10)).build();
@@ -68,7 +63,7 @@ class AsignacionApplicationServiceTest {
             .vehiculo(TipoVehiculo.AUTO).ubicacion(new Coordenada(20,20)).build();
         
         List<Repartidor> activos = Arrays.asList(r1, r2);
-        List<Repartidor> priorizados = List.of(r1); // El servicio de dominio devuelve r1 primero
+        List<Repartidor> priorizados = List.of(r1);
         
         Coordenada restaurante = new Coordenada(5, 5);
         Clima clima = Clima.LLUVIA_SUAVE;
@@ -77,10 +72,8 @@ class AsignacionApplicationServiceTest {
         when(asignacionService.priorizarRepartidores(activos, restaurante, clima))
             .thenReturn(priorizados);
 
-        // When: llamamos al caso de uso
         List<Repartidor> result = applicationService.obtenerRepartidoresPriorizados(restaurante, clima);
 
-        // Then: debe coordinar correctamente
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("R1", result.get(0).getNombre());
@@ -105,7 +98,6 @@ class AsignacionApplicationServiceTest {
 
     @Test
     void obtenerRepartidoresPriorizados_ConVariosActivos_delegaListaCompleta() {
-        // Given: múltiples repartidores activos
         Repartidor r1 = Repartidor.builder()
             .id(1L).nombre("Bici").estado(EstadoRepartidor.ACTIVO)
             .vehiculo(TipoVehiculo.BICICLETA).ubicacion(new Coordenada(1,1)).build();
@@ -117,7 +109,7 @@ class AsignacionApplicationServiceTest {
             .vehiculo(TipoVehiculo.AUTO).ubicacion(new Coordenada(20,20)).build();
         
         List<Repartidor> activos = Arrays.asList(r1, r2, r3);
-        List<Repartidor> priorizados = Arrays.asList(r2, r3); // Servicio filtra por clima
+        List<Repartidor> priorizados = Arrays.asList(r2, r3);
         
         Coordenada restaurante = new Coordenada(0, 0);
         Clima clima = Clima.LLUVIA_FUERTE;
@@ -126,10 +118,8 @@ class AsignacionApplicationServiceTest {
         when(asignacionService.priorizarRepartidores(activos, restaurante, clima))
             .thenReturn(priorizados);
 
-        // When
         List<Repartidor> result = applicationService.obtenerRepartidoresPriorizados(restaurante, clima);
 
-        // Then: debe pasar la lista completa al servicio de dominio
         assertEquals(2, result.size());
         verify(repartidorRepository).findByEstado(EstadoRepartidor.ACTIVO);
         verify(asignacionService).priorizarRepartidores(
@@ -202,5 +192,67 @@ class AsignacionApplicationServiceTest {
         assertNotNull(result);
         assertEquals(EstadoRepartidor.EN_ENTREGA, result.getEstado());
         verify(repartidorUseCase, times(1)).cambiarEstado(eq(10L), eq(EstadoRepartidor.EN_ENTREGA));
+    }
+
+    @Test
+    void procesarEventoRepartidor_cuandoEventoValido_delegaAlUseCase() {
+        Repartidor actualizado = Repartidor.builder()
+            .id(7L).nombre("Eva").estado(EstadoRepartidor.ACTIVO)
+            .vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(3, 3)).build();
+
+        when(repartidorUseCase.cambiarEstado(7L, EstadoRepartidor.ACTIVO)).thenReturn(actualizado);
+
+        Repartidor result = applicationService.procesarEventoRepartidor(7L, "ENTREGADO");
+
+        assertNotNull(result);
+        assertEquals(EstadoRepartidor.ACTIVO, result.getEstado());
+        verify(repartidorUseCase).cambiarEstado(7L, EstadoRepartidor.ACTIVO);
+    }
+
+    @Test
+    void procesarEventoRepartidor_cuandoEventoInvalido_lanzaIllegalArgument() {
+        assertThrows(IllegalArgumentException.class,
+            () -> applicationService.procesarEventoRepartidor(1L, "INVALIDO"));
+    }
+
+    @Test
+    void getAllRepartidores_retornaListaDeDtos() {
+        Repartidor r = Repartidor.builder()
+            .id(1L).nombre("Carlos").estado(EstadoRepartidor.ACTIVO)
+            .vehiculo(TipoVehiculo.MOTO).ubicacion(new Coordenada(0, 0)).build();
+
+        when(repartidorRepository.findAll()).thenReturn(List.of(r));
+
+        List<com.foodtech.infrastructure.web.dto.RepartidorListResponseDto> result =
+            applicationService.getAllRepartidores();
+
+        assertEquals(1, result.size());
+        assertEquals("Carlos", result.get(0).getNombre());
+        assertEquals("ACTIVO", result.get(0).getEstado());
+    }
+
+    @Test
+    void getRepartidorById_cuandoExiste_retornaOptionalConDto() {
+        Repartidor r = Repartidor.builder()
+            .id(2L).nombre("Lucia").estado(EstadoRepartidor.EN_ENTREGA)
+            .vehiculo(TipoVehiculo.BICICLETA).ubicacion(new Coordenada(5, 5)).build();
+
+        when(repartidorRepository.findById(2L)).thenReturn(java.util.Optional.of(r));
+
+        java.util.Optional<com.foodtech.infrastructure.web.dto.RepartidorListResponseDto> result =
+            applicationService.getRepartidorById(2L);
+
+        assertTrue(result.isPresent());
+        assertEquals("Lucia", result.get().getNombre());
+    }
+
+    @Test
+    void getRepartidorById_cuandoNoExiste_retornaOptionalVacio() {
+        when(repartidorRepository.findById(99L)).thenReturn(java.util.Optional.empty());
+
+        java.util.Optional<com.foodtech.infrastructure.web.dto.RepartidorListResponseDto> result =
+            applicationService.getRepartidorById(99L);
+
+        assertFalse(result.isPresent());
     }
 }

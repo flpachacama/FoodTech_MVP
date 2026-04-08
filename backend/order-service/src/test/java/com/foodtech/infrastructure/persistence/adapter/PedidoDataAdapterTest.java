@@ -156,4 +156,14 @@ public class PedidoDataAdapterTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    void deserialize_debeRetornarListaVacia_cuandoProductosNull() {
+        PedidoEntity e = new PedidoEntity(401L, EstadoPedido.PENDIENTE, 31L, null, 41L, "C3", null, null, 5, null);
+        when(pedidoJpaRepository.findAll()).thenReturn(List.of(e));
+
+        List<Pedido> lista = new PedidoDataAdapter(pedidoJpaRepository, objectMapper).findAll();
+        assertEquals(1, lista.size());
+        assertTrue(lista.get(0).getProductos().isEmpty());
+    }
+
 }
