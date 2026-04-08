@@ -60,4 +60,24 @@ class AsignacionRequestDTOTest {
         assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("restauranteX"));
         assertThat(violations).anyMatch(v -> v.getPropertyPath().toString().equals("restauranteY"));
     }
+
+    @Test
+    void debeCrearConConstructorNoArgs_yCamposNulos() {
+        AsignacionRequestDTO dto = new AsignacionRequestDTO();
+
+        assertThat(dto.getPedidoId()).isNull();
+        assertThat(dto.getRestauranteX()).isNull();
+        assertThat(dto.getRestauranteY()).isNull();
+        assertThat(dto.getClima()).isNull();
+    }
+
+    @Test
+    void debeCrearConConstructorAllArgs() {
+        AsignacionRequestDTO dto = new AsignacionRequestDTO(5L, 10.0, -5.0, "LLUVIA_FUERTE");
+
+        assertThat(dto.getPedidoId()).isEqualTo(5L);
+        assertThat(dto.getRestauranteX()).isEqualTo(10.0);
+        assertThat(dto.getRestauranteY()).isEqualTo(-5.0);
+        assertThat(dto.getClima()).isEqualTo("LLUVIA_FUERTE");
+    }
 }

@@ -255,4 +255,21 @@ class AsignacionApplicationServiceTest {
 
         assertFalse(result.isPresent());
     }
+
+    @Test
+    void getAllRepartidores_cuandoCamposNulos_mapeaNulos() {
+        Repartidor rSinCampos = Repartidor.builder()
+            .id(5L).nombre("Sin datos").estado(null).vehiculo(null).ubicacion(null).build();
+
+        when(repartidorRepository.findAll()).thenReturn(List.of(rSinCampos));
+
+        List<com.foodtech.infrastructure.web.dto.RepartidorListResponseDto> result =
+            applicationService.getAllRepartidores();
+
+        assertEquals(1, result.size());
+        assertNull(result.get(0).getEstado());
+        assertNull(result.get(0).getVehiculo());
+        assertNull(result.get(0).getUbicacionX());
+        assertNull(result.get(0).getUbicacionY());
+    }
 }
