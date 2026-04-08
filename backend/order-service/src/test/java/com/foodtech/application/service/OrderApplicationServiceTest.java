@@ -71,7 +71,6 @@ class OrderApplicationServiceTest {
                 .build();
     }
 
-    // ── Caso 1: flujo completo, delivery responde ASIGNADO ────────────────────
     @Test
     void createOrder_whenDeliveryAsigna_returnsEstadoAsignado() {
         Pedido pedidoGuardado = Pedido.builder()
@@ -92,10 +91,9 @@ class OrderApplicationServiceTest {
 
         assertThat(response.getEstado()).isEqualTo(EstadoPedido.ASIGNADO);
         assertThat(response.getId()).isEqualTo(42L);
-        verify(pedidoRepository, times(2)).save(any()); // guardado + actualizado
+        verify(pedidoRepository, times(2)).save(any());
     }
 
-    // ── Caso 2: delivery responde PENDIENTE (sin repartidor disponible) ────────
     @Test
     void createOrder_whenDeliveryPendiente_returnsEstadoPendiente() {
         Pedido pedidoGuardado = Pedido.builder()
@@ -117,7 +115,6 @@ class OrderApplicationServiceTest {
         assertThat(response.getEstado()).isEqualTo(EstadoPedido.PENDIENTE);
     }
 
-    // ── Caso 3: delivery-service lanza excepción → IllegalStateException ──────
     @Test
     void createOrder_whenDeliveryFails_throwsIllegalStateException() {
         Pedido pedidoGuardado = Pedido.builder()
@@ -139,7 +136,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("Error al comunicarse con el servicio de delivery");
     }
 
-    // ── Caso 4: restauranteId nulo → IllegalArgumentException ─────────────────
     @Test
     void createOrder_whenRestauranteIdNull_throwsIllegalArgumentException() {
         OrderRequestDto requestSinRestaurante = OrderRequestDto.builder()
@@ -159,7 +155,6 @@ class OrderApplicationServiceTest {
         verifyNoInteractions(pedidoRepository, deliveryClient);
     }
 
-    // ── Caso 5: lista de productos vacía → IllegalArgumentException ────────────
     @Test
     void createOrder_whenProductosEmpty_throwsIllegalArgumentException() {
         OrderRequestDto requestSinProductos = OrderRequestDto.builder()
@@ -178,7 +173,6 @@ class OrderApplicationServiceTest {
         verifyNoInteractions(pedidoRepository, deliveryClient);
     }
 
-    // ── Caso 6: clima null usa fallback "SOLEADO" ──────────────────────────────
     @Test
     void createOrder_whenClimaNull_usesFallbackSoleado() {
         requestBase.setClima(null);
@@ -200,7 +194,6 @@ class OrderApplicationServiceTest {
         assertThat(captor.getValue().clima()).isEqualTo("SOLEADO");
     }
 
-    // ── Caso 7: repartidor con pedido activo ──────────────────────────────────
     @Test
     void getOrderByRepartidorId_cuandoPedidoActivo_retornaDto() {
         Pedido pedidoActivo = Pedido.builder()
@@ -219,7 +212,6 @@ class OrderApplicationServiceTest {
         assertThat(response.getEstado()).isEqualTo(EstadoPedido.ASIGNADO);
     }
 
-    // ── Caso 8: repartidor sin pedido activo ─────────────────────────────────
     @Test
     void getOrderByRepartidorId_cuandoSinPedidoActivo_lanzaNotFoundException() {
         when(pedidoRepository.findPedidoActivoByRepartidorId(99L)).thenReturn(Optional.empty());
@@ -229,7 +221,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("99");
     }
 
-    // ── Caso 9: cancelOrder — pedido ASIGNADO con repartidor → cancela y libera ──
     @Test
     void cancelOrder_conPedidoAsignadoYRepartidor_cancelaYLiberaRepartidor() {
         Pedido pedidoAsignado = Pedido.builder()
@@ -248,7 +239,6 @@ class OrderApplicationServiceTest {
         verify(pedidoRepository).save(any());
     }
 
-    // ── Caso 10: cancelOrder — pedido PENDIENTE sin repartidor → cancela sin delivery ──
     @Test
     void cancelOrder_conPedidoPendienteSinRepartidor_cancelaSinLlamarDelivery() {
         Pedido pedidoPendiente = Pedido.builder()
@@ -265,7 +255,6 @@ class OrderApplicationServiceTest {
         verifyNoInteractions(deliveryClient);
     }
 
-    // ── Caso 11: cancelOrder — pedido no encontrado → PedidoNotFoundException ──
     @Test
     void cancelOrder_cuandoPedidoNoEncontrado_lanzaNotFoundException() {
         when(pedidoRepository.findById(999L)).thenReturn(Optional.empty());
@@ -275,7 +264,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("999");
     }
 
-    // ── Caso 12: cancelOrder — estado ENTREGADO → PedidoCancelException ────────
     @Test
     void cancelOrder_cuandoPedidoEntregado_lanzaCancelException() {
         Pedido pedidoEntregado = Pedido.builder()
@@ -290,7 +278,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("entregado");
     }
 
-    // ── Caso 13: cancelOrder — estado CANCELADO → PedidoCancelException ────────
     @Test
     void cancelOrder_cuandoPedidoCancelado_lanzaCancelException() {
         Pedido pedidoCancelado = Pedido.builder()
@@ -305,7 +292,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("cancelado");
     }
 
-    // ── Caso 14: deliverOrder — pedido ASIGNADO → ENTREGADO y libera repartidor ─
     @Test
     void deliverOrder_conPedidoAsignado_marcaEntregadoYLiberaRepartidor() {
         Pedido pedidoAsignado = Pedido.builder()
@@ -324,7 +310,6 @@ class OrderApplicationServiceTest {
         verify(pedidoRepository).save(any());
     }
 
-    // ── Caso 15: deliverOrder — estado PENDIENTE → PedidoDeliverException ──────
     @Test
     void deliverOrder_cuandoPedidoPendiente_lanzaDeliverException() {
         Pedido pedidoPendiente = Pedido.builder()
@@ -339,7 +324,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("repartidor asignado");
     }
 
-    // ── Caso 16: deliverOrder — estado ya ENTREGADO → PedidoDeliverException ───
     @Test
     void deliverOrder_cuandoPedidoYaEntregado_lanzaDeliverException() {
         Pedido pedidoEntregado = Pedido.builder()
@@ -354,7 +338,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("ya ha sido entregado");
     }
 
-    // ── Caso 17: deliverOrder — estado CANCELADO → PedidoDeliverException ──────
     @Test
     void deliverOrder_cuandoPedidoCancelado_lanzaDeliverException() {
         Pedido pedidoCancelado = Pedido.builder()
@@ -369,7 +352,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("cancelado");
     }
 
-    // ── Caso 18: deliverOrder — pedido no encontrado → PedidoNotFoundException ─
     @Test
     void deliverOrder_cuandoPedidoNoEncontrado_lanzaNotFoundException() {
         when(pedidoRepository.findById(998L)).thenReturn(Optional.empty());
@@ -379,7 +361,6 @@ class OrderApplicationServiceTest {
                 .hasMessageContaining("998");
     }
 
-    // ── Caso 19: createOrder — clienteNombre blank → IllegalArgumentException ──
     @Test
     void createOrder_cuandoClienteNombreBlank_lanzaIllegalArgument() {
         OrderRequestDto requestNombreBlank = OrderRequestDto.builder()
@@ -399,7 +380,6 @@ class OrderApplicationServiceTest {
         verifyNoInteractions(pedidoRepository, deliveryClient);
     }
 
-    // ── Caso 20: createOrder — clienteTelefono null → IllegalArgumentException ─
     @Test
     void createOrder_cuandoTelefonoNull_lanzaIllegalArgument() {
         OrderRequestDto requestSinTelefono = OrderRequestDto.builder()
@@ -419,7 +399,6 @@ class OrderApplicationServiceTest {
         verifyNoInteractions(pedidoRepository, deliveryClient);
     }
 
-    // ── Caso 21: createOrder — coordenadasX null → IllegalArgumentException ────
     @Test
     void createOrder_cuandoCoordenadasNull_lanzaIllegalArgument() {
         OrderRequestDto requestSinCoordenadas = OrderRequestDto.builder()
@@ -439,7 +418,6 @@ class OrderApplicationServiceTest {
         verifyNoInteractions(pedidoRepository, deliveryClient);
     }
 
-    // ── Caso 22: createOrder — tiempoEstimado null en delivery → usa cero ──────
     @Test
     void createOrder_cuandoTiempoEstimadoNullEnDelivery_usaCero() {
         Pedido pedidoGuardado = Pedido.builder()
@@ -453,7 +431,6 @@ class OrderApplicationServiceTest {
 
         OrderResponseDto response = service.createOrder(requestBase);
 
-        // tiempoEstimado null del delivery → contribución es 0; tiempoRestauranteCliente = 5 (mock)
         assertThat(response.getTiempoEstimado()).isEqualTo(5);
     }
 }

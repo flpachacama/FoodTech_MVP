@@ -40,10 +40,6 @@ class DeliveryClientAdapterTest {
         requestBase = new DeliveryAssignmentRequest(1L, 10.0, 20.0, "SOLEADO");
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // assign()
-    // ═══════════════════════════════════════════════════════════════
-
     @Test
     void assign_cuandoDeliveryRespondeOk_retornaResponse() {
         DeliveryAssignmentResponse expected =
@@ -88,10 +84,6 @@ class DeliveryClientAdapterTest {
                 .hasMessageContaining("500");
     }
 
-    // ═══════════════════════════════════════════════════════════════
-    // releaseRepartidor()
-    // ═══════════════════════════════════════════════════════════════
-
     @Test
     void releaseRepartidor_cuandoOk_noLanzaExcepcion() {
         doNothing().when(restTemplate).put(anyString(), any());
@@ -110,7 +102,6 @@ class DeliveryClientAdapterTest {
                 java.nio.charset.StandardCharsets.UTF_8))
                 .when(restTemplate).put(anyString(), any());
 
-        // No debe lanzar nada hacia arriba
         adapter.releaseRepartidor(7L, "CANCELADO");
     }
 
@@ -119,7 +110,6 @@ class DeliveryClientAdapterTest {
         doThrow(new RuntimeException("Timeout de red"))
                 .when(restTemplate).put(anyString(), any());
 
-        // No debe lanzar nada hacia arriba
         adapter.releaseRepartidor(7L, "CANCELADO");
     }
 }
