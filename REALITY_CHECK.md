@@ -80,3 +80,27 @@ QA trabajo con enfoque de riesgo, no de cobertura "por volumen". La prioridad fu
 
 ### Resultado practico de QA
 Con el tiempo disponible, QA no busco "probar todo"; busco **probar lo que podia romper el valor de negocio**. Ese enfoque permitio entregar un MVP estable para demostracion, con riesgos conocidos y documentados para la siguiente iteracion.
+
+---
+
+## 4. Story Points vs Tiempo real empleado
+
+La siguiente tabla contrasta el valor definido (SP) por historia con el tiempo real registrado al cierre del MVP:
+
+| HU   | SP Definido | Tiempo Real | Observación |
+|------|-------------|-------------|-------------|
+| HU1  | 3           | 20 min      | Bien calibrado. Modelo de entidad y ENUMs sin lógica adicional. |
+| HU2  | 5           | 30 min      | Ligero sobreestimado. El algoritmo euclidiano fue más directo de lo previsto. |
+| HU3  | 3           | 15 min      | La más rápida; los filtros de clima se apoyaron en los ENUMs de HU2. |
+| HU4  | 3           | 40 min      | Ajustado al SP. Requirió cuidado en el diseño de velocidades por vehículo. |
+| HU5  | 5           | 4 h         | Coherente. Integrar todos los filtros en un único flujo fue el mayor costo de la fase 2. |
+| HU6  | 3           | 2 h         | Subestimado. La sincronización entre eventos de asignación, entrega y cancelación sumó complejidad. |
+| HU7  | 5           | 5 h         | El mejor calibrado del proyecto. La entidad `Pedido` concentra la mayor densidad de relaciones del dominio. |
+| HU8  | 8           | 10 h        | El más costoso del MVP. La comunicación REST entre servicios y el manejo de fallos duplicó el esfuerzo esperado. |
+| HU9  | 3           | 25 min      | Sobreestimado. La lógica de cancelación se resolvió rápido porque los endpoints de HU8 ya gestionaban los estados. |
+| HU10 | 5           | 9 h         | Subestimado. El mapa canvas, carga asíncrona y coordinación frontend–backend casi doblaron lo previsto. |
+| HU11 | 3           | 1 h         | Bien ajustado. El componente se apoyó en endpoints ya existentes. |
+| HU12 | 2           | 30 min      | Rápido. Acción puntual sobre un flujo completamente construido. |
+| **Total** | **48** | **~33 h** | — |
+
+**Patrón general:** las HU de integración entre servicios (HU8, HU6) y las de frontend con estado complejo (HU10) fueron las que más se desviaron al alza. Las HU de lógica pura de dominio (HU1–HU4, HU9, HU12) tendieron a resolverse por debajo del SP estimado.

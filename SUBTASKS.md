@@ -263,4 +263,4 @@ Nota: Para la comunicación entre servicios, si esta llega a fallar se debe cont
 | HU12 | 1        | 3       | 2        |
 | **Total** | **37** | **49** | **48** |
 
-Para ver la justificación de cada storypoint remitirse a los archivos [SUBTASK_DEV.md](SUBTASK_DEV.md) | [SUBTASK_QA.md](SUBTASK_QA.md) respectivamente.   
+Para ver la justificación de cada storypoint remitirse a los archivos [SUBTASK_DEV.md](SUBTASK_DEV.md) | [SUBTASK_QA.md](SUBTASK_QA.md) respectivamente.
